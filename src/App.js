@@ -184,7 +184,7 @@ class App extends Component {
           <h1>Pokemon Mass-Evolution Query Generator</h1>
         </div>
         <div className="Main-body">
-          <h4>Inspired by <a href="https://www.reddit.com/r/TheSilphRoad/comments/6ztyu5/the_ultimate_mass_evolution_search_query/">this</a> Reddit thread. For comments or suggestion, message me <a href="https://www.reddit.com/user/mikeappell/">here.</a></h4>
+          <h4>Inspired by <a href="https://www.reddit.com/r/TheSilphRoad/comments/6ztyu5/the_ultimate_mass_evolution_search_query/">this</a> Reddit thread.</h4>
           <div className="CurrentQuery">
             {this.state.currentQuery}
           </div>
@@ -196,6 +196,10 @@ class App extends Component {
           </CopyToClipboard>
           <div className="PokemonSelection">
             {this.renderPokemonSelection()}
+          </div>
+          <div>
+            <h4>For comments or suggestion, message me <a href="https://www.reddit.com/user/mikeappell/">here.</a></h4>
+            <h4>Built upon <a href="https://github.com/facebookincubator/create-react-app">Create React App</a>. My code can be found <a href="https://github.com/mikeappell/pokemon_evolve_query_react">here</a>.</h4>
           </div>
         </div>
       </div>
