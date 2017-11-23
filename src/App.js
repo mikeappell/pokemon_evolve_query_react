@@ -3,10 +3,11 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import './App.css';
 
 export const Queries = {
-  'Full Query': [1,4,7,10,13,16,19-23,27,29,32,37,41,43,46-60,63,66,69,72,74,77-92,95-116,118-147,152,155,158,161-179,183,187,191-246],
-  'Minimal Query': [10,13,16,19,21,161,163,165,167,177],
-  'Water-Specific Query': [10,13,16,19,21,60,72,86,90,116,161,163,165,167,177,183,194,223],
-  'Forest-Specfic Query': [10,13,16,19,21,29,32,43,69,161,163,165,167,177,191,204],
+  "Compact Full Query (doesn't allow modification)" : ['1','4','7','10','13','16','19-23','27','29','32','37','41','43','46-60','63','66','69','72','74','77-92','95-116','118-147','152','155','158','161-179','183','187','191-246'],
+  'Full Query': ['1','4','7','10','13','16','19','21','23','27','29','32','37','41','43','46','48','68','50','52','54','56','58','60','63','66','69','72','74','77','79','81','84','86','88','90','92','96','98','100','102','104','109','111','113','116','118','120','133','138','140','147','152','155','158','161','163','165','167','170','172','173','174','175','177','179','183','187','194','204','209','216','218','220','223','228','231','238','239','240','246'],
+  'Minimal Query': ['10','13','16','19','21','161','163','165','167','177'],
+  'Water-Specific Query': ['10','13','16','19','21','60','72','86','90','116','161','163','165','167','177','183','194','223'],
+  'Forest-Specfic Query': ['10','13','16','19','21','29','32','43','69','161','163','165','167','177','191','204'],
 };
 
 class App extends Component {
@@ -20,11 +21,13 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    this.handlePreCreatedCheckboxClick('Full Query');
+    this.handlePreCreatedCheckboxClick(Object.keys(Queries)[0]);
   }
 
-  generateQuery = () => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']")
+  generateQuery = (query = null) => {
+    if (query) { return `evolve&${ Queries[query].join(',') }`; }
+
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
     let selectedNumbers = [];
     for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
       const cb = checkboxes[i];
@@ -37,7 +40,7 @@ class App extends Component {
   }
 
   handlePreCreatedCheckboxClick = (query) => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']")
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
     for (let i = 0; i < Object.keys(Queries).length; i++) {
       let cb = checkboxes[i];
       if(cb.id !== query) {
@@ -45,22 +48,29 @@ class App extends Component {
       }
     };
 
-    for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
-      let cb = checkboxes[i];
-      if (Queries[query].includes(parseInt(cb.value))) {
-        cb.checked = true;
-      } else {
-        cb.checked = false;
-      }
-    };
+    // If the user clicked the compact full query, we disable all pokemon checkboxes
+    // Otherwise, we enable them and check/uncheck them as appropriate for the query
+    if (query === "Compact Full Query (doesn't allow modification)") {
+      this.disableButtonsAndCheckboxes();
+    } else {
+      this.enableButtonsAndCheckboxes();
+      for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
+        let cb = checkboxes[i];
+        if (Queries[query].includes(cb.value)) {
+          cb.checked = true;
+        } else {
+          cb.checked = false;
+        }
+      };
+    }
 
     this.setState({
-      currentQuery: this.generateQuery(),
+      currentQuery: this.generateQuery(query),
     })
   }
 
   handleManualCheckboxClick = () => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']")
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
     for(let i = 0; i < Object.keys(Queries).length; i++) {
       checkboxes[i].checked = false;
     };
@@ -70,8 +80,26 @@ class App extends Component {
     })
   }
 
+  enableButtonsAndCheckboxes = () => {
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
+      checkboxes[i].disabled = false;
+    }
+    document.querySelector('button#selectAll').disabled = false;
+    document.querySelector('button#deselectAll').disabled = false;
+  }
+
+  disableButtonsAndCheckboxes = () => {
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
+      checkboxes[i].disabled = true;
+    }
+    document.querySelector('button#selectAll').disabled = true;
+    document.querySelector('button#deselectAll').disabled = true;
+  }
+
   onSelectAllClick = () => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']")
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
     for (let i = 0; i < Object.keys(Queries).length; i++) {
       checkboxes[i].checked = false;
     }
@@ -86,7 +114,7 @@ class App extends Component {
   }
 
   onDeselectAllClick = () => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']")
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
     for (let i = 0; i < Object.keys(Queries).length; i++) {
       checkboxes[i].checked = false;
     }
@@ -123,7 +151,7 @@ class App extends Component {
             className="SelectionCheckbox"
             id={queryName}
             value={queryName}
-            defaultChecked={queryName === 'Full Query'}
+            defaultChecked={queryName === Object.keys(Queries)[0]}
             onChange={this.handlePreCreatedCheckboxClick.bind(this, queryName)}
           />
           <label htmlFor={queryName}>{queryName}</label>
