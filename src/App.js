@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import './App.css';
 
 export const Queries = {
@@ -13,6 +14,8 @@ class App extends Component {
     super(props);
     this.state = {
       currentQuery: null,
+      value: null,
+      copied: false,
     };
   }
 
@@ -69,6 +72,10 @@ class App extends Component {
 
   onSelectAllClick = () => {
     const checkboxes = document.querySelectorAll("input[type='checkbox']")
+    for (let i = 0; i < Object.keys(Queries).length; i++) {
+      checkboxes[i].checked = false;
+    }
+
     for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
       checkboxes[i].checked = true;
     };
@@ -80,6 +87,10 @@ class App extends Component {
 
   onDeselectAllClick = () => {
     const checkboxes = document.querySelectorAll("input[type='checkbox']")
+    for (let i = 0; i < Object.keys(Queries).length; i++) {
+      checkboxes[i].checked = false;
+    }
+
     for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
       checkboxes[i].checked = false;
     };
@@ -145,9 +156,16 @@ class App extends Component {
           <h1>Pokemon Mass-Evolution Query Generator</h1>
         </div>
         <div className="Main-body">
+          <h4>Inspired by <a href="https://www.reddit.com/r/TheSilphRoad/comments/6ztyu5/the_ultimate_mass_evolution_search_query/">this</a> Reddit thread. For comments or suggestion, message me <a href="https://www.reddit.com/user/mikeappell/">here.</a></h4>
           <div className="CurrentQuery">
-            {this.state['currentQuery']}
+            {this.state.currentQuery}
           </div>
+          <CopyToClipboard
+            text={this.state.currentQuery}
+            onCopy={() => this.setState({copied: true})}
+          >
+            <button>Click to Copy</button>
+          </CopyToClipboard>
           <div className="PokemonSelection">
             {this.renderPokemonSelection()}
           </div>

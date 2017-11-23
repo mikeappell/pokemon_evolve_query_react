@@ -7,12 +7,11 @@
   color: white; }
 
 .CurrentQuery {
-  margin: 20px 15% 50px 15%;
+  margin: 30px 15% 10px 15%;
   background-color: white;
   border: 1px solid black;
   border-radius: 5px;
-  padding: 5px;
-  word-wrap: break-word; }
+  padding: 5px; }
 
 .PokemonSelection {
   text-align: left; }
