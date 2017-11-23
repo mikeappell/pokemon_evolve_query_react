@@ -9,18 +9,23 @@
 }
 
 .CurrentQuery {
-  margin: 20px 25% 50px 25%;
+  margin: 20px 15% 50px 15%;
   background-color: white;
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px;
+  word-wrap: break-word;
 }
 
 .PokemonSelection {
   text-align: left;
 }
 
-ul.PokemonList {
+.SelectionButtons {
+  margin-bottom: 10px;
+}
+
+ul.QueryList {
   list-style-type: none;
   li > label {
     padding-left: 10px;
