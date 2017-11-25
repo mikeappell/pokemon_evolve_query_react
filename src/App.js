@@ -51,9 +51,9 @@ class App extends Component {
     // If the user clicked the compact full query, we disable all pokemon checkboxes
     // Otherwise, we enable them and check/uncheck them as appropriate for the query
     if (query === "Compact Full Query (doesn't allow modification)") {
-      this.disableButtonsAndCheckboxes();
+      this.disableCheckboxes();
     } else {
-      this.enableButtonsAndCheckboxes();
+      this.enableCheckboxes();
       for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
         let cb = checkboxes[i];
         if (Queries[query].includes(cb.value)) {
@@ -80,31 +80,32 @@ class App extends Component {
     })
   }
 
-  enableButtonsAndCheckboxes = () => {
+  enableCheckboxes = () => {
     const checkboxes = document.querySelectorAll("input[type='checkbox']");
     for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
       checkboxes[i].disabled = false;
     }
 
-    const buttons = document.querySelectorAll("button[data-select-button='true']")
-    for (let i = 0; i < buttons.length; i++) {
-      buttons[i].disabled = false;
-    }
+    // const buttons = document.querySelectorAll("button[data-select-button='true']")
+    // for (let i = 0; i < buttons.length; i++) {
+    //   buttons[i].disabled = false;
+    // }
   }
 
-  disableButtonsAndCheckboxes = () => {
+  disableCheckboxes = () => {
     const checkboxes = document.querySelectorAll("input[type='checkbox']");
     for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
       checkboxes[i].disabled = true;
     }
 
-    const buttons = document.querySelectorAll("button[data-select-button='true']")
-    for (let i = 0; i < buttons.length; i++) {
-      buttons[i].disabled = true;
-    }
+    // const buttons = document.querySelectorAll("button[data-select-button='true']")
+    // for (let i = 0; i < buttons.length; i++) {
+    //   buttons[i].disabled = true;
+    // }
   }
 
   onSelectAllClick = (evolution) => {
+    this.enableCheckboxes();
     const preCreatedCheckboxes = document.querySelectorAll('input.SelectionCheckbox-preCreated');
     const evolutionCheckboxes = document.querySelectorAll(`input.SelectionCheckbox-${evolution}`);
     for (let i = 0; i < Object.keys(Queries).length; i++) {
@@ -121,6 +122,7 @@ class App extends Component {
   }
 
   onDeselectAllClick = (evolution) => {
+    this.enableCheckboxes();
     const preCreatedCheckboxes = document.querySelectorAll('input.SelectionCheckbox-preCreated');
     const evolutionCheckboxes = document.querySelectorAll(`input.SelectionCheckbox-${evolution}`);
     for (let i = 0; i < Object.keys(Queries).length; i++) {
