@@ -149,35 +149,28 @@ class App extends Component {
           </div>
           <div>
             <span className="SelectionLabel">First Evolutions:</span>
-            <button
-              id="selectAllFirstEvo"
-              data-select-button
-              onClick={this.onSelectAllClick.bind(this, 1)}
-            >
+            <button id="selectAllFirstEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 1)}>
               Select All
             </button>
-            <button
-              id="deselectAllSecondEvo"
-              data-select-button
-              onClick={this.onDeselectAllClick.bind(this, 1)}
-            >
+            <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 1)}>
               De-select All
             </button>
           </div>
           <div>
             <span className="SelectionLabel">Second Evolutions: *</span>
-            <button
-              id="selectAllSecondEvo"
-              data-select-button
-              onClick={this.onSelectAllClick.bind(this, 2)}
-            >
+            <button id="selectAllSecondEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 2)}>
               Select All
             </button>
-            <button
-              id="deselectAllSecondEvo"
-              data-select-button
-              onClick={this.onDeselectAllClick.bind(this, 2)}
-            >
+            <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 2)}>
+              De-select All
+            </button>
+          </div>
+          <div>
+            <span className="SelectionLabel">Third Evolutions: *</span>
+            <button id="selectAllThirdEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 3)}>
+              Select All
+            </button>
+            <button id="deselectAllThirdEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 3)}>
               De-select All
             </button>
           </div>
@@ -260,16 +253,22 @@ export default App;
 export const PokemonPairs = {
   Bulbasaur: ['1', 1],
   Ivysaur: ['2', 2],
+  Venusaur: ['3', 3],
   Charmander : ['4', 1],
   Charmeleon: ['5', 2],
+  Charizard: ['6', 3],
   Squirtle: ['7', 1],
   Wartortle: ['8', 2],
+  Blastoise: ['9', 3],
   Caterpie: ['10', 1],
   Metapod: ['11', 2],
+  Butterfree: ['12', 3],
   Weedle: ['13', 1],
   Kakuna: ['14', 2],
+  Beedrill: ['15', 3],
   Pidgey: ['16', 1],
   Pidgeotto: ['17', 2],
+  Pidgeot: ['18', 3],
   Rattata: ['19', 1],
   Spearow: ['21', 1],
   Ekans: ['23', 1],
@@ -277,15 +276,19 @@ export const PokemonPairs = {
   Sandshrew: ['27', 1],
   'Nidoran♀': ['29', 1],
   Nidorina: ['30', 2],
+  Nidoqueen: ['31', 3],
   'Nidoran♂': ['32', 1],
   Nidorino: ['33', 2],
+  Nidoking: ['34', 3],
   Clefairy: ['35', 1],
   Vulpix: ['37', 1],
   Jigglypuff: ['39', 1],
   Zubat: ['41', 1],
   Golbat: ['42', 2],
+  Crobat: ['169', 3],
   Oddish: ['43', 1],
   Gloom: ['44', 2],
+  Vileplume: ['45', 3],
   Paras: ['46', 1],
   Parasect: ['47', 2],
   Venonat: ['48', 1],
@@ -296,16 +299,20 @@ export const PokemonPairs = {
   Growlithe: ['58', 1],
   Poliwag: ['60', 1],
   Poliwhirl: ['61', 2],
+  Poliwrath: ['62', 3],
   Abra: ['63', 1],
   Kadabra: ['64', 2],
-  Alakazam: ['65', 2],
+  Alakazam: ['65', 3],
   Machop: ['66', 1],
   Machoke: ['67', 2],
+  Machamp: ['68', 3],
   Bellsprout: ['69', 1],
   Weepinbell: ['70', 2],
+  Victreebel: ['71', 3],
   Tentacool: ['72', 1],
   Geodude: ['74', 1],
   Graveler: ['75', 2],
+  Golem: ['76', 3],
   Ponyta: ['77', 1],
   Slowpoke: ['79', 1],
   Magnemite: ['81', 1],
@@ -315,6 +322,7 @@ export const PokemonPairs = {
   Shellder: ['90', 1],
   Gastly: ['92', 1],
   Haunter: ['93', 2],
+  Gengar: ['94', 3],
   Drowzee: ['96', 1],
   Krabby: ['98', 1],
   Voltorb: ['100', 1],
@@ -332,10 +340,13 @@ export const PokemonPairs = {
   Dratini: ['147', 1],
   Chikorita: ['152', 1],
   Bayleef: ['153', 2],
+  Meganium: ['154', 3],
   Cyndaquil: ['155', 1],
   Quilava: ['156', 2],
+  Typhlosion: ['157', 3],
   Totodile: ['158', 1],
   Croconaw: ['159', 2],
+  Feraligatr: ['160', 3],
   Sentret: ['161', 1],
   Hoothoot: ['163', 1],
   Ledyba: ['165', 1],
@@ -348,9 +359,11 @@ export const PokemonPairs = {
   Natu: ['177', 1],
   Mareep: ['179', 1],
   Flaaffy: ['180', 2],
+  Ampharos: ['181', 3],
   Marill: ['183', 1],
-  Skiploom: ['188', 2],
   Hoppip: ['187', 1],
+  Skiploom: ['188', 2],
+  Jumpluff: ['189', 3],
   Wooper: ['194', 1],
   Pineco: ['204', 1],
   Snubbull: ['209', 1],
@@ -365,6 +378,7 @@ export const PokemonPairs = {
   Magby: ['240', 1],
   Larvitar: ['246', 1],
   Pupitar: ['247', 2],
+  Tyranitar: ['248', 3],
   Shuppet: ['353', 1],
   Banette: ['354', 2],
   Duskull: ['355', 1],
