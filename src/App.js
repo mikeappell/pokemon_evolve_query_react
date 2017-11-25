@@ -239,8 +239,12 @@ class App extends Component {
             {this.renderPokemonSelection()}
           </div>
           <div>
-            <h4>For comments or suggestion, message me <a href="https://www.reddit.com/user/mikeappell/">here.</a></h4>
-            <h4>Built upon <a href="https://github.com/facebookincubator/create-react-app">Create React App</a>. My code can be found <a href="https://github.com/mikeappell/pokemon_evolve_query_react">here</a>.</h4>
+            <h5>
+              For comments or suggestion, message me <a href="https://www.reddit.com/user/mikeappell/">here.</a>
+              <br/>
+              <br/>
+              Built using <a href="https://github.com/facebookincubator/create-react-app">Create React App</a>. Code can be found <a href="https://github.com/mikeappell/pokemon_evolve_query_react">here</a>.
+            </h5>
           </div>
         </div>
       </div>
