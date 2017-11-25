@@ -366,5 +366,7 @@ export const PokemonPairs = {
   Larvitar: ['246', 1],
   Pupitar: ['247', 2],
   Shuppet: ['353', 1],
+  Banette: ['354', 2],
   Duskull: ['355', 1],
+  Dusclops: ['356', 2],
 };
