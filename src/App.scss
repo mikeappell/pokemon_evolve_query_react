@@ -31,8 +31,14 @@
 
 .SelectionLabel {
   display: inline-block;
-  width: 120px;
+  width: 125px;
   font-size: small;
+}
+
+.SelectionLabelBlurb {
+  margin-bottom: 15px;
+  font-size: small;
+  font-style: italic;
 }
 
 ul.QueryList {

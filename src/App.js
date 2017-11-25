@@ -144,6 +144,9 @@ class App extends Component {
         {this.renderPrecreatedQueryCheckboxes()}
         <hr/>
         <div className="SelectionButtons">
+          <div className="SelectionLabelBlurb">
+            * Can be used to find just-evolved Pokemon to transfer post-evolution
+          </div>
           <div>
             <span className="SelectionLabel">First Evolutions:</span>
             <button
@@ -162,7 +165,7 @@ class App extends Component {
             </button>
           </div>
           <div>
-            <span className="SelectionLabel">Second Evolutions:</span>
+            <span className="SelectionLabel">Second Evolutions: *</span>
             <button
               id="selectAllSecondEvo"
               data-select-button
@@ -177,7 +180,6 @@ class App extends Component {
             >
               De-select All
             </button>
-            <span style={{fontSize: 'small'}}>* Can be used to find evolved Pokemon to transfer post-evolution</span>
           </div>
         </div>
         {this.renderIndividualPokemonCheckboxes()}
