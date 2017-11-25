@@ -19,11 +19,24 @@
 
 .SelectionButtons {
   margin-bottom: 10px; }
+  .SelectionButtons button {
+    margin-right: 3px; }
+
+.SelectionLabel {
+  display: inline-block;
+  width: 120px;
+  font-size: small; }
 
 ul.QueryList {
   list-style-type: none; }
   ul.QueryList li > label {
     padding-left: 10px; }
+
+.SelectionCheckbox-1 {
+  margin-left: 0px; }
+
+.SelectionCheckbox-2 {
+  margin-left: 30px; }
 
 @keyframes App-logo-spin {
   from {

@@ -85,8 +85,11 @@ class App extends Component {
     for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
       checkboxes[i].disabled = false;
     }
-    document.querySelector('button#selectAll').disabled = false;
-    document.querySelector('button#deselectAll').disabled = false;
+
+    const buttons = document.querySelectorAll("button[data-select-button='true']")
+    for (let i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = false;
+    }
   }
 
   disableButtonsAndCheckboxes = () => {
@@ -94,18 +97,22 @@ class App extends Component {
     for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
       checkboxes[i].disabled = true;
     }
-    document.querySelector('button#selectAll').disabled = true;
-    document.querySelector('button#deselectAll').disabled = true;
+
+    const buttons = document.querySelectorAll("button[data-select-button='true']")
+    for (let i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = true;
+    }
   }
 
-  onSelectAllClick = () => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+  onSelectAllClick = (evolution) => {
+    const preCreatedCheckboxes = document.querySelectorAll('input.SelectionCheckbox-preCreated');
+    const evolutionCheckboxes = document.querySelectorAll(`input.SelectionCheckbox-${evolution}`);
     for (let i = 0; i < Object.keys(Queries).length; i++) {
-      checkboxes[i].checked = false;
+      preCreatedCheckboxes[i].checked = false;
     }
 
-    for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
-      checkboxes[i].checked = true;
+    for (let i = 0; i < evolutionCheckboxes.length; i++) {
+      evolutionCheckboxes[i].checked = true;
     };
 
     this.setState({
@@ -113,14 +120,15 @@ class App extends Component {
     })
   }
 
-  onDeselectAllClick = () => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+  onDeselectAllClick = (evolution) => {
+    const preCreatedCheckboxes = document.querySelectorAll('input.SelectionCheckbox-preCreated');
+    const evolutionCheckboxes = document.querySelectorAll(`input.SelectionCheckbox-${evolution}`);
     for (let i = 0; i < Object.keys(Queries).length; i++) {
-      checkboxes[i].checked = false;
+      preCreatedCheckboxes[i].checked = false;
     }
 
-    for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
-      checkboxes[i].checked = false;
+    for (let i = 0; i < evolutionCheckboxes.length; i++) {
+      evolutionCheckboxes[i].checked = false;
     };
 
     this.setState({
@@ -134,8 +142,41 @@ class App extends Component {
         {this.renderPrecreatedQueryCheckboxes()}
         <hr/>
         <div className="SelectionButtons">
-          <button id="selectAll" onClick={this.onSelectAllClick}>Select All</button>
-          <button id="deselectAll" onClick={this.onDeselectAllClick}>De-select All</button>
+          <div>
+            <span className="SelectionLabel">First Evolutions:</span>
+            <button
+              id="selectAllFirstEvo"
+              data-select-button
+              onClick={this.onSelectAllClick.bind(this, 1)}
+            >
+              Select All
+            </button>
+            <button
+              id="deselectAllSecondEvo"
+              data-select-button
+              onClick={this.onDeselectAllClick.bind(this, 1)}
+            >
+              De-select All
+            </button>
+          </div>
+          <div>
+            <span className="SelectionLabel">Second Evolutions:</span>
+            <button
+              id="selectAllSecondEvo"
+              data-select-button
+              onClick={this.onSelectAllClick.bind(this, 2)}
+            >
+              Select All
+            </button>
+            <button
+              id="deselectAllSecondEvo"
+              data-select-button
+              onClick={this.onDeselectAllClick.bind(this, 2)}
+            >
+              De-select All
+            </button>
+            <span style={{fontSize: 'small'}}>* Can be used to find evolved Pokemon to transfer post-evolution</span>
+          </div>
         </div>
         {this.renderIndividualPokemonCheckboxes()}
       </ul>
@@ -148,7 +189,7 @@ class App extends Component {
         <li key={queryName}>
           <input
             type='checkbox'
-            className="SelectionCheckbox"
+            className="SelectionCheckbox SelectionCheckbox-preCreated"
             id={queryName}
             value={queryName}
             defaultChecked={queryName === Object.keys(Queries)[0]}
@@ -166,9 +207,9 @@ class App extends Component {
         <li key={PokemonPairs[pokemonName]}>
           <input
             type='checkbox'
-            className="SelectionCheckbox"
+            className={"SelectionCheckbox SelectionCheckbox-" + PokemonPairs[pokemonName][1]}
             id={pokemonName}
-            value={PokemonPairs[pokemonName]}
+            value={PokemonPairs[pokemonName][0]}
             onChange={this.handleManualCheckboxClick}
           />
           <label htmlFor={pokemonName}>{pokemonName}</label>
@@ -209,89 +250,113 @@ class App extends Component {
 
 export default App;
 export const PokemonPairs = {
-  Bulbasaur: '1',
-  Charmander : '4',
-  Squirtle: '7',
-  Caterpie: '10',
-  Weedle: '13',
-  Pidgey: '16',
-  Rattata: '19',
-  Spearow: '21',
-  Ekans: '23',
-  Pikachu: '25',
-  Sandshrew: '27',
-  'Nidoran♀': '29',
-  'Nidoran♂': '32',
-  Clefairy: '35',
-  Vulpix: '37',
-  Jigglypuff: '39',
-  Zubat: '41',
-  Oddish: '43',
-  Paras: '46',
-  Venonat: '48',
-  Diglett: '50',
-  Meowth: '52',
-  Psyduck: '54',
-  Mankey: '56',
-  Growlithe: '58',
-  Poliwag: '60',
-  Abra: '63',
-  Machop: '66',
-  Bellsprout: '69',
-  Tentacool: '72',
-  Geodude: '74',
-  Ponyta: '77',
-  Slowpoke: '79',
-  Magnemite: '81',
-  Doduo: '84',
-  Seel: '86',
-  Grimer: '88',
-  Shellder: '90',
-  Gastly: '92',
-  Drowzee: '96',
-  Krabby: '98',
-  Voltorb: '100',
-  Exeggcute: '102',
-  Cubone: '104',
-  Koffing: '109',
-  Rhyhorn: '111',
-  Chansey: '113',
-  Horsea: '116',
-  Goldeen: '118',
-  Staryu: '120',
-  Eevee: '133',
-  Omanyte: '138',
-  Kabuto: '140',
-  Dratini: '147',
-  Chikorita: '152',
-  Cyndaquil: '155',
-  Totodile: '158',
-  Sentret: '161',
-  Hoothoot: '163',
-  Ledyba: '165',
-  Spinarak: '167',
-  Chinchou: '170',
-  Pichu: '172',
-  Cleffa: '173',
-  Igglybuff: '174',
-  Togepi: '175',
-  Natu: '177',
-  Mareep: '179',
-  Marill: '183',
-  Hoppip: '187',
-  Wooper: '194',
-  Pineco: '204',
-  Snubbull: '209',
-  Teddiursa: '216',
-  Slugma: '218',
-  Swinub: '220',
-  Remoraid: '223',
-  Houndour: '228',
-  Phanpy: '231',
-  Smoochum: '238',
-  Elekid: '239',
-  Magby: '240',
-  Larvitar: '246',
-  Shuppet: '353',
-  Duskull: '355',
+  Bulbasaur: ['1', 1],
+  Ivysaur: ['2', 2],
+  Charmander : ['4', 1],
+  Charmeleon: ['5', 2],
+  Squirtle: ['7', 1],
+  Wartortle: ['8', 2],
+  Caterpie: ['10', 1],
+  Metapod: ['11', 2],
+  Weedle: ['13', 1],
+  Kakuna: ['14', 2],
+  Pidgey: ['16', 1],
+  Pidgeotto: ['17', 2],
+  Rattata: ['19', 1],
+  Spearow: ['21', 1],
+  Ekans: ['23', 1],
+  Pikachu: ['25', 1],
+  Sandshrew: ['27', 1],
+  'Nidoran♀': ['29', 1],
+  Nidorina: ['30', 2],
+  'Nidoran♂': ['32', 1],
+  Nidorino: ['33', 2],
+  Clefairy: ['35', 1],
+  Vulpix: ['37', 1],
+  Jigglypuff: ['39', 1],
+  Zubat: ['41', 1],
+  Golbat: ['42', 2],
+  Oddish: ['43', 1],
+  Gloom: ['44', 2],
+  Paras: ['46', 1],
+  Parasect: ['47', 2],
+  Venonat: ['48', 1],
+  Diglett: ['50', 1],
+  Meowth: ['52', 1],
+  Psyduck: ['54', 1],
+  Mankey: ['56', 1],
+  Growlithe: ['58', 1],
+  Poliwag: ['60', 1],
+  Poliwhirl: ['61', 2],
+  Abra: ['63', 1],
+  Kadabra: ['64', 2],
+  Alakazam: ['65', 2],
+  Machop: ['66', 1],
+  Machoke: ['67', 2],
+  Bellsprout: ['69', 1],
+  Weepinbell: ['70', 2],
+  Tentacool: ['72', 1],
+  Geodude: ['74', 1],
+  Graveler: ['75', 2],
+  Ponyta: ['77', 1],
+  Slowpoke: ['79', 1],
+  Magnemite: ['81', 1],
+  Doduo: ['84', 1],
+  Seel: ['86', 1],
+  Grimer: ['88', 1],
+  Shellder: ['90', 1],
+  Gastly: ['92', 1],
+  Haunter: ['93', 2],
+  Drowzee: ['96', 1],
+  Krabby: ['98', 1],
+  Voltorb: ['100', 1],
+  Exeggcute: ['102', 1],
+  Cubone: ['104', 1],
+  Koffing: ['109', 1],
+  Rhyhorn: ['111', 1],
+  Chansey: ['113', 1],
+  Horsea: ['116', 1],
+  Goldeen: ['118', 1],
+  Staryu: ['120', 1],
+  Eevee: ['133', 1],
+  Omanyte: ['138', 1],
+  Kabuto: ['140', 1],
+  Dratini: ['147', 1],
+  Chikorita: ['152', 1],
+  Bayleef: ['153', 2],
+  Cyndaquil: ['155', 1],
+  Quilava: ['156', 2],
+  Totodile: ['158', 1],
+  Croconaw: ['159', 2],
+  Sentret: ['161', 1],
+  Hoothoot: ['163', 1],
+  Ledyba: ['165', 1],
+  Spinarak: ['167', 1],
+  Chinchou: ['170', 1],
+  Pichu: ['172', 1],
+  Cleffa: ['173', 1],
+  Igglybuff: ['174', 1],
+  Togepi: ['175', 1],
+  Natu: ['177', 1],
+  Mareep: ['179', 1],
+  Flaaffy: ['180', 2],
+  Marill: ['183', 1],
+  Skiploom: ['188', 2],
+  Hoppip: ['187', 1],
+  Wooper: ['194', 1],
+  Pineco: ['204', 1],
+  Snubbull: ['209', 1],
+  Teddiursa: ['216', 1],
+  Slugma: ['218', 1],
+  Swinub: ['220', 1],
+  Remoraid: ['223', 1],
+  Houndour: ['228', 1],
+  Phanpy: ['231', 1],
+  Smoochum: ['238', 1],
+  Elekid: ['239', 1],
+  Magby: ['240', 1],
+  Larvitar: ['246', 1],
+  Pupitar: ['247', 2],
+  Shuppet: ['353', 1],
+  Duskull: ['355', 1],
 };
