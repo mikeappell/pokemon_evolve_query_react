@@ -25,6 +25,7 @@ class App extends Component {
   }
 
   generateQuery = (query = null) => {
+    // Explicitly return query, needed for those which include ranges ('110-125')
     if (query) { return `evolve&${ Queries[query].join(',') }`; }
 
     const checkboxes = document.querySelectorAll("input[type='checkbox']");
@@ -69,7 +70,7 @@ class App extends Component {
     })
   }
 
-  handleManualCheckboxClick = () => {
+  handleIndividualCheckboxClick = () => {
     const checkboxes = document.querySelectorAll("input[type='checkbox']");
     for(let i = 0; i < Object.keys(Queries).length; i++) {
       checkboxes[i].checked = false;
@@ -207,7 +208,7 @@ class App extends Component {
             className={"SelectionCheckbox SelectionCheckbox-" + PokemonPairs[pokemonName][1]}
             id={pokemonName}
             value={PokemonPairs[pokemonName][0]}
-            onChange={this.handleManualCheckboxClick}
+            onChange={this.handleIndividualCheckboxClick}
           />
           <label htmlFor={pokemonName}>{pokemonName}</label>
         </li>
