@@ -130,45 +130,40 @@ class App extends Component {
     })
   }
 
-  renderPokemonSelection = () => {
+  renderSelectDeselectAllButtons = () => {
     return (
-      <ul className="QueryList">
-        {this.renderPrecreatedQueryCheckboxes()}
-        <hr/>
-        <div className="SelectionButtons">
-          <div className="SelectionLabelBlurb">
-            * Can be used to find just-evolved Pokemon to transfer post-evolution
-          </div>
-          <div>
-            <span className="SelectionLabel">First Evolutions:</span>
-            <button id="selectAllFirstEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 1)}>
-              Select All
-            </button>
-            <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 1)}>
-              De-select All
-            </button>
-          </div>
-          <div>
-            <span className="SelectionLabel">Second Evolutions: *</span>
-            <button id="selectAllSecondEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 2)}>
-              Select All
-            </button>
-            <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 2)}>
-              De-select All
-            </button>
-          </div>
-          <div>
-            <span className="SelectionLabel">Third Evolutions: *</span>
-            <button id="selectAllThirdEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 3)}>
-              Select All
-            </button>
-            <button id="deselectAllThirdEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 3)}>
-              De-select All
-            </button>
-          </div>
+      <div className="SelectionButtons">
+        <div className="SelectionLabelBlurb">
+          * Can be used to find just-evolved Pokemon to transfer post-evolution
         </div>
-        {this.renderIndividualPokemonCheckboxes()}
-      </ul>
+        <div>
+          <span className="SelectionLabel">First Evolutions:</span>
+          <button id="selectAllFirstEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 1)}>
+            Select All
+          </button>
+          <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 1)}>
+            De-select All
+          </button>
+        </div>
+        <div>
+          <span className="SelectionLabel">Second Evolutions: *</span>
+          <button id="selectAllSecondEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 2)}>
+            Select All
+          </button>
+          <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 2)}>
+            De-select All
+          </button>
+        </div>
+        <div>
+          <span className="SelectionLabel">Third Evolutions: *</span>
+          <button id="selectAllThirdEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 3)}>
+            Select All
+          </button>
+          <button id="deselectAllThirdEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 3)}>
+            De-select All
+          </button>
+        </div>
+      </div>
     )
   }
 
@@ -205,6 +200,17 @@ class App extends Component {
         </li>
       )
     })
+  }
+
+  renderPokemonSelection = () => {
+    return (
+      <ul className="QueryList">
+        {this.renderPrecreatedQueryCheckboxes()}
+        <hr/>
+        {this.renderSelectDeselectAllButtons()}
+        {this.renderIndividualPokemonCheckboxes()}
+      </ul>
+    )
   }
 
   render() {
