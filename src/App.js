@@ -28,10 +28,10 @@ class App extends Component {
     // Explicitly return query, needed for those which include ranges ('110-125')
     if (query) { return `evolve&${ Queries[query].join(',') }`; }
 
-    const checkboxes = document.querySelectorAll("input.SelectionCheckbox-preCreated");
+    const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-pokemon");
     let selectedNumbers = [];
-    for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
-      const cb = checkboxes[i];
+    for (let i = 0; i < pokemonCheckboxes.length; i++) {
+      const cb = pokemonCheckboxes[i];
       if (cb.checked === true) {
         selectedNumbers.push(cb.value);
       }
@@ -41,9 +41,9 @@ class App extends Component {
   }
 
   handlePreCreatedCheckboxClick = (query) => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
-    for (let i = 0; i < Object.keys(Queries).length; i++) {
-      let cb = checkboxes[i];
+    const preCreatedCheckboxes = document.querySelectorAll("input.SelectionCheckbox-preCreated");
+    for (let i = 0; i < preCreatedCheckboxes.length; i++) {
+      let cb = preCreatedCheckboxes[i];
       if(cb.id !== query) {
         cb.checked = false;
       }
@@ -55,8 +55,9 @@ class App extends Component {
       this.disableCheckboxes();
     } else {
       this.enableCheckboxes();
-      for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
-        let cb = checkboxes[i];
+      const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-pokemon");
+      for (let i = 0; i < pokemonCheckboxes.length; i++) {
+        let cb = pokemonCheckboxes[i];
         if (Queries[query].includes(cb.value)) {
           cb.checked = true;
         } else {
@@ -71,9 +72,9 @@ class App extends Component {
   }
 
   handleIndividualCheckboxClick = () => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
-    for(let i = 0; i < Object.keys(Queries).length; i++) {
-      checkboxes[i].checked = false;
+    const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-preCreated");
+    for(let i = 0; i < pokemonCheckboxes.length; i++) {
+      pokemonCheckboxes[i].checked = false;
     };
 
     this.setState({
@@ -82,16 +83,16 @@ class App extends Component {
   }
 
   enableCheckboxes = () => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
-    for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
-      checkboxes[i].disabled = false;
+    const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-pokemon");
+    for (let i = Object.keys(Queries).length; i < pokemonCheckboxes.length; i++) {
+      pokemonCheckboxes[i].disabled = false;
     }
   }
 
   disableCheckboxes = () => {
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
-    for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
-      checkboxes[i].disabled = true;
+    const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-pokemon");
+    for (let i = Object.keys(Queries).length; i < pokemonCheckboxes.length; i++) {
+      pokemonCheckboxes[i].disabled = true;
     }
   }
 
@@ -195,7 +196,7 @@ class App extends Component {
         <li key={PokemonPairs[pokemonName]}>
           <input
             type='checkbox'
-            className={"SelectionCheckbox SelectionCheckbox-" + PokemonPairs[pokemonName][1]}
+            className={"SelectionCheckbox SelectionCheckbox-pokemon SelectionCheckbox-" + PokemonPairs[pokemonName][1]}
             id={pokemonName}
             value={PokemonPairs[pokemonName][0]}
             onChange={this.handleIndividualCheckboxClick}
