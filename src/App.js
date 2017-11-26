@@ -86,11 +86,6 @@ class App extends Component {
     for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
       checkboxes[i].disabled = false;
     }
-
-    // const buttons = document.querySelectorAll("button[data-select-button='true']")
-    // for (let i = 0; i < buttons.length; i++) {
-    //   buttons[i].disabled = false;
-    // }
   }
 
   disableCheckboxes = () => {
@@ -98,11 +93,6 @@ class App extends Component {
     for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
       checkboxes[i].disabled = true;
     }
-
-    // const buttons = document.querySelectorAll("button[data-select-button='true']")
-    // for (let i = 0; i < buttons.length; i++) {
-    //   buttons[i].disabled = true;
-    // }
   }
 
   onSelectAllClick = (evolution) => {
