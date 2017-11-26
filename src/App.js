@@ -238,6 +238,7 @@ class App extends Component {
           <div className="PokemonSelection">
             {this.renderPokemonSelection()}
           </div>
+          <hr/>
           <div>
             <h5>
               For comments or suggestion, message me <a href="https://www.reddit.com/user/mikeappell/">here.</a>
@@ -260,7 +261,7 @@ export default App;
 // * 'baby' - Baby pokemon
 // * 'nohigher' - No higher evolutions available (currently)
 // * 'legend' - Legendary pokemon
-// * - 'special' - Special for some other reason
+// * 'special' - Special for some other reason
 
 export const PokemonPairs = {
   Bulbasaur: { number: '1', evolution: 1 },

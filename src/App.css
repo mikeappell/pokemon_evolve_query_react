@@ -1,5 +1,7 @@
 .App {
   text-align: center; }
+  .App button {
+    font-size: 13px; }
 
 .App-header {
   background-color: #222;
@@ -20,7 +22,8 @@
 .SelectionButtons {
   margin-bottom: 10px; }
   .SelectionButtons button {
-    margin-right: 3px; }
+    margin-right: 3px;
+    margin-bottom: 3px; }
 
 .SelectionLabel {
   display: inline-block;
