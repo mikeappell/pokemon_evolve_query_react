@@ -28,7 +28,7 @@ class App extends Component {
     // Explicitly return query, needed for those which include ranges ('110-125')
     if (query) { return `evolve&${ Queries[query].join(',') }`; }
 
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    const checkboxes = document.querySelectorAll("input.SelectionCheckbox-preCreated");
     let selectedNumbers = [];
     for (let i = Object.keys(Queries).length; i < checkboxes.length; i++) {
       const cb = checkboxes[i];
