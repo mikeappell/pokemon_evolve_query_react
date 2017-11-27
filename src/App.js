@@ -134,7 +134,7 @@ class App extends Component {
     return (
       <div className="SelectionButtons">
         <div className="SelectionLabelBlurb">
-          * Can be used to find just-evolved Pokemon to transfer post-evolution
+          * Higher evolutions can be used to find just-evolved Pokemon to transfer post-evolution
         </div>
         <div>
           <span className="SelectionLabel">First Evolutions:</span>
@@ -146,7 +146,7 @@ class App extends Component {
           </button>
         </div>
         <div>
-          <span className="SelectionLabel">Second Evolutions: *</span>
+          <span className="SelectionLabel">Second Evolutions:</span>
           <button id="selectAllSecondEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 2)}>
             Select All
           </button>
@@ -155,7 +155,7 @@ class App extends Component {
           </button>
         </div>
         <div>
-          <span className="SelectionLabel">Third Evolutions: *</span>
+          <span className="SelectionLabel">Third Evolutions:</span>
           <button id="selectAllThirdEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 3)}>
             Select All
           </button>
