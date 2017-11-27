@@ -35,6 +35,11 @@
   font-size: small;
   font-style: italic; }
 
+.LanguageSelect {
+  margin-bottom: 20px; }
+  .LanguageSelect .LanguageSelectLabel {
+    margin-right: 10px; }
+
 ul.QueryList {
   list-style-type: none; }
   ul.QueryList li > label {

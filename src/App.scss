@@ -43,6 +43,12 @@
   font-style: italic;
 }
 
+.LanguageSelect {
+  margin-bottom: 20px;
+
+  .LanguageSelectLabel { margin-right: 10px; }
+}
+
 ul.QueryList {
   list-style-type: none;
   li > label {
