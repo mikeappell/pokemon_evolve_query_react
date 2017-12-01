@@ -6,24 +6,21 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentQuery: '',
+      currentQuery: `${ EvolveTranslations['English'] }&${ Queries['Compact']['query]'] }`,
       value: null,
       copied: false,
     };
   }
 
-  componentDidMount = () => {
-    this.setCurrentQuery("Compact Full Query (doesn't allow modification)");
-  }
-
+  // TODO: Generalize the concept of queries which include ranges beyond just 'Compact'
   setCurrentQuery = () => {
-    const translatedEvolve = document.querySelector('select#languageSelect').value;
     const compactQuery = document.querySelector('input#Compact');
+    const translatedEvolve = document.querySelector('select#languageSelect').value;
     let currentQuery = "";
 
-    // Explicitly set query; needed for those which include ranges ('110-125')
+    // Explicitly set query; needed for 'Compact' which includes ranges (e.g. '110-125')
     if (compactQuery.checked) {
-      currentQuery = `${translatedEvolve}&${ Queries['Compact']['query'].join(',') }`;
+      currentQuery = `${ translatedEvolve }&${ Queries['Compact']['query'] }`;
     } else {
       const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-pokemon");
       let selectedNumbers = [];
@@ -42,6 +39,7 @@ class App extends Component {
   handlePreCreatedCheckboxClick = (query) => {
     const preCreatedCheckboxes = document.querySelectorAll("input.SelectionCheckbox-preCreated");
     for (let i = 0; i < preCreatedCheckboxes.length; i++) {
+      // Uncheck all other checkboxes
       let cb = preCreatedCheckboxes[i];
       if(cb.id !== query) {
         cb.checked = false;
@@ -49,7 +47,7 @@ class App extends Component {
     };
 
     // If the user clicked the compact full query, we disable all pokemon checkboxes
-    // Otherwise, we enable them and check/uncheck them as appropriate for the query
+    // Otherwise, we enable them and check/uncheck them as contained in the query
     if (query === 'Compact') {
       this.disableCheckboxes();
     } else {
@@ -92,7 +90,8 @@ class App extends Component {
   }
 
   onSelectAllClick = (evolution) => {
-    this.enableCheckboxes();
+    if (document.querySelector('input#Compact').checked) this.enableCheckboxes();
+
     const preCreatedCheckboxes = document.querySelectorAll('input.SelectionCheckbox-preCreated');
     const evolutionCheckboxes = document.querySelectorAll(`input.SelectionCheckbox-${evolution}`);
     for (let i = 0; i < Object.keys(Queries).length; i++) {
@@ -107,7 +106,8 @@ class App extends Component {
   }
 
   onDeselectAllClick = (evolution) => {
-    this.enableCheckboxes();
+    if (document.querySelector('input#Compact').checked) this.enableCheckboxes();
+
     const preCreatedCheckboxes = document.querySelectorAll('input.SelectionCheckbox-preCreated');
     const evolutionCheckboxes = document.querySelectorAll(`input.SelectionCheckbox-${evolution}`);
     for (let i = 0; i < Object.keys(Queries).length; i++) {
@@ -269,7 +269,7 @@ class App extends Component {
 export default App;
 
 export const Queries = {
-  Compact: { label: "Compact Full Query (doesn't allow modification)", query: ['1','4','7','10','13','16','19-23','27','29','32','37','41','43','46-60','63','66','69','72','74','77-92','95-116','118-147','152','155','158','161-179','183','187','191-246','353','355'] },
+  Compact: { label: "Compact Full Query (doesn't allow modification)", query: '1,4,7,10,13,16,19-23,27,29,32,37,41,43,46-60,63,66,69,72,74,77-92,95-116,118-147,152,155,158,161-179,183,187,191-246,353,355' },
   Full: { label: 'Full Query', query: ['1','4','7','10','13','16','19','21','23','27','29','32','37','41','43','46','48','50','52','54','56','58','60','63','66','69','72','74','77','79','81','84','86','88','90','92','96','98','100','102','104','109','111','113','116','118','120','133','138','140','147','152','155','158','161','163','165','167','170','172','173','174','175','177','179','183','187','194','204','209','216','218','220','223','228','231','238','239','240','246','353','355'] },
   Minimal: { label: 'Minimal Query', query: ['10','13','16','19','21','161','163','165','167','177'] },
   Water: { label: 'Water-Specific Query', query: ['10','13','16','19','21','60','72','86','90','116','161','163','165','167','177','183','194','223'] },
