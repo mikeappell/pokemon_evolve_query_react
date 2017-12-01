@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import ToggleButton from 'react-toggle-button'
 import './App.css';
 
 class App extends Component {
+  // TODO: Make default value of currentQuery more programmatic
   constructor(props) {
     super(props);
     this.state = {
-      currentQuery: `${ EvolveTranslations['English'] }&${ Queries['Compact']['query]'] }`,
+      currentQuery: `${ EvolveTranslations['English'] }&${ Queries['Compact']['query'] }`,
       value: null,
       copied: false,
+      evolving: true,
     };
   }
 
   // TODO: Generalize the concept of queries which include ranges beyond just 'Compact'
   setCurrentQuery = () => {
     const compactQuery = document.querySelector('input#Compact');
-    const translatedEvolve = document.querySelector('select#languageSelect').value;
     let currentQuery = "";
+
+    // If the user isn't evolving, don't include the translated 'evolve' value in the query
+    const translatedEvolve = !this.state.evolving ? '' : `${ document.querySelector('select#languageSelect').value }&`;
 
     // Explicitly set query; needed for 'Compact' which includes ranges (e.g. '110-125')
     if (compactQuery.checked) {
-      currentQuery = `${ translatedEvolve }&${ Queries['Compact']['query'] }`;
+      currentQuery = `${ translatedEvolve }${ Queries['Compact']['query'] }`;
     } else {
       const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-pokemon");
       let selectedNumbers = [];
@@ -30,7 +35,7 @@ class App extends Component {
           selectedNumbers.push(cb.value);
         }
       };
-      currentQuery = `${translatedEvolve}&${ selectedNumbers.join(',') }`;
+      currentQuery = `${ translatedEvolve }${ selectedNumbers.join(',') }`;
     }
 
     this.setState({ currentQuery });
@@ -119,6 +124,23 @@ class App extends Component {
     };
 
     this.setCurrentQuery();
+  }
+
+  renderEvolvingSelectionButton = () => {
+    return (
+      <div className="EvolveButtonContainer">
+        <label htmlFor="evolvingButton">Evolving?</label>
+        <ToggleButton
+          inactiveLabel='No'
+          activeLabel='Yes'
+          value={this.state.evolving}
+          id="evolvingButton"
+          onToggle={(value) => {
+            this.setState({ evolving: !value }, this.setCurrentQuery);
+          }}
+        />
+      </div>
+    )
   }
 
   renderLanguageSelection = () =>{
@@ -222,6 +244,7 @@ class App extends Component {
   renderPokemonSelection = () => {
     return (
       <ul className="QueryList">
+        {this.renderEvolvingSelectionButton()}
         {this.renderLanguageSelection()}
         {this.renderPrecreatedQueryCheckboxes()}
         <hr/>
@@ -235,7 +258,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <h1>Pokemon Mass-Evolution Query Generator</h1>
+          <h1>Pokemon Query Generator</h1>
         </div>
         <div className="Main-body">
           <h4>Inspired by <a href="https://www.reddit.com/r/TheSilphRoad/comments/6ztyu5/the_ultimate_mass_evolution_search_query/">this</a> Reddit thread.</h4>

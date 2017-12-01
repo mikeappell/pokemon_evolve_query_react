@@ -9,6 +9,11 @@
   margin-top: 10px;
   color: white; }
 
+.EvolveButtonContainer {
+  display: flex; }
+  .EvolveButtonContainer label {
+    margin-right: 20px; }
+
 .CurrentQuery {
   margin: 30px 14% 10px 14%;
   background-color: white;
@@ -37,7 +42,8 @@
   font-style: italic; }
 
 .LanguageSelect {
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  margin-top: 5px; }
   .LanguageSelect .LanguageSelectLabel {
     margin-right: 10px; }
 

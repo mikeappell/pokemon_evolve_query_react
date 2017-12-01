@@ -7,7 +7,8 @@
     "react": "^16.1.1",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.1.1",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "react-toggle-button": "^2.2.0"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
