@@ -79,14 +79,14 @@ class App extends Component {
 
   enableCheckboxes = () => {
     const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-pokemon");
-    for (let i = Object.keys(Queries).length; i < pokemonCheckboxes.length; i++) {
+    for (let i = 0; i < pokemonCheckboxes.length; i++) {
       pokemonCheckboxes[i].disabled = false;
     }
   }
 
   disableCheckboxes = () => {
     const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-pokemon");
-    for (let i = Object.keys(Queries).length; i < pokemonCheckboxes.length; i++) {
+    for (let i = 0; i < pokemonCheckboxes.length; i++) {
       pokemonCheckboxes[i].disabled = true;
     }
   }
