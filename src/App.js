@@ -242,7 +242,7 @@ class App extends Component {
 
     return PokemonFamilies.map((pf) => {
       // We deep-clone the array of objects
-      const pokemonFamily = JSON.parse(JSON.stringify(pf));
+      const pokemonFamily = pf.map(a => ({...a}));
 
       this.filterBabyPokemon(pokemonFamily);
 
