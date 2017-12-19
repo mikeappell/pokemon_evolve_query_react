@@ -10,8 +10,9 @@
   color: white;
 }
 
-.EvolveButtonContainer {
+.ToggleContainer {
   display: flex;
+  margin-bottom: 5px;
 
   label { margin-right: 20px; }
 }
@@ -53,7 +54,6 @@
 
 .LanguageSelect {
   margin-bottom: 20px;
-  margin-top: 5px;
 
   .LanguageSelectLabel { margin-right: 10px; }
 }

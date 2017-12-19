@@ -12,6 +12,7 @@ class App extends Component {
       value: null,
       copied: false,
       evolving: true,
+      includeBabies: true,
     };
   }
 
@@ -128,7 +129,7 @@ class App extends Component {
 
   renderEvolvingSelectionButton = () => {
     return (
-      <div className="EvolveButtonContainer">
+      <div className="ToggleContainer EvolveButtonContainer">
         <label htmlFor="evolvingButton">Evolving?</label>
         <ToggleButton
           inactiveLabel='No'
@@ -137,6 +138,23 @@ class App extends Component {
           id="evolvingButton"
           onToggle={(value) => {
             this.setState({ evolving: !value }, this.setCurrentQuery);
+          }}
+        />
+      </div>
+    )
+  }
+
+  renderIncludeBabiesSelectionButton = () => {
+    return (
+      <div className="ToggleContainer IncludeBabiesButtonContainer">
+        <label htmlFor="includeBabiesButton">Include Babies?</label>
+        <ToggleButton
+          inactiveLabel='No'
+          activeLabel='Yes'
+          value={this.state.includeBabies}
+          id="includeBabiesButton"
+          onToggle={(value) => {
+            this.setState({ includeBabies: !value }, this.setCurrentQuery);
           }}
         />
       </div>
@@ -222,7 +240,12 @@ class App extends Component {
   renderIndividualPokemonCheckboxes = () => {
     const metaTagsToSkip = ['nohigher', 'legend', 'special'];
 
-    return PokemonFamilies.map((pokemonFamily) => {
+    return PokemonFamilies.map((pf) => {
+      // We deep-clone the array of objects
+      const pokemonFamily = JSON.parse(JSON.stringify(pf));
+
+      this.filterBabyPokemon(pokemonFamily);
+
       return pokemonFamily.map((individualPokemon) => {
         // We skip rendering that pokemon's checkbox if their metadata is on our skiplist
         if (metaTagsToSkip.includes(individualPokemon.meta)) return null;
@@ -243,10 +266,23 @@ class App extends Component {
     })
   }
 
+  // If we're not including babies, we see if the current family has any babies present.
+  // If so, we remove them and decrement the evol # of the remaining pokemon.
+  filterBabyPokemon = (pokemonFamily) => {
+    if (!this.state.includeBabies) {
+      const babyPokemon = pokemonFamily.filter((individualPokemon) => individualPokemon.meta === 'baby')
+      if (babyPokemon.length > 0) {
+        pokemonFamily.splice(pokemonFamily.indexOf(babyPokemon[0]), 1)
+        pokemonFamily.forEach((individualPokemon) => individualPokemon.evolution--)
+      }
+    }
+  }
+
   renderPokemonSelection = () => {
     return (
       <ul className="QueryList">
         {this.renderEvolvingSelectionButton()}
+        {this.renderIncludeBabiesSelectionButton()}
         {this.renderLanguageSelection()}
         {this.renderPrecreatedQueryCheckboxes()}
         <hr/>

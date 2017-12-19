@@ -9,9 +9,10 @@
   margin-top: 10px;
   color: white; }
 
-.EvolveButtonContainer {
-  display: flex; }
-  .EvolveButtonContainer label {
+.ToggleContainer {
+  display: flex;
+  margin-bottom: 5px; }
+  .ToggleContainer label {
     margin-right: 20px; }
 
 .CurrentQuery {
@@ -43,8 +44,7 @@
   font-style: italic; }
 
 .LanguageSelect {
-  margin-bottom: 20px;
-  margin-top: 5px; }
+  margin-bottom: 20px; }
   .LanguageSelect .LanguageSelectLabel {
     margin-right: 10px; }
 
