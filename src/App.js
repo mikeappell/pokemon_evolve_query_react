@@ -127,41 +127,37 @@ class App extends Component {
     this.setCurrentQuery();
   }
 
-  renderEvolvingSelectionButton = () => {
-    return (
-      <div className="ToggleContainer EvolveButtonContainer">
-        <label htmlFor="evolvingButton">Evolving?</label>
-        <ToggleButton
-          inactiveLabel='No'
-          activeLabel='Yes'
-          value={this.state.evolving}
-          id="evolvingButton"
-          onToggle={(value) => {
-            this.setState({ evolving: !value }, this.setCurrentQuery);
-          }}
-        />
-      </div>
-    )
-  }
+  renderEvolvingSelectionButton = () => (
+    <div className="ToggleContainer EvolveButtonContainer">
+      <label htmlFor="evolvingButton">Evolving?</label>
+      <ToggleButton
+        inactiveLabel='No'
+        activeLabel='Yes'
+        value={this.state.evolving}
+        id="evolvingButton"
+        onToggle={(value) => {
+          this.setState({ evolving: !value }, this.setCurrentQuery);
+        }}
+      />
+    </div>
+  )
 
-  renderIncludeBabiesSelectionButton = () => {
-    return (
-      <div className="ToggleContainer IncludeBabiesButtonContainer">
-        <label htmlFor="includeBabiesButton">Include Babies?</label>
-        <ToggleButton
-          inactiveLabel='No'
-          activeLabel='Yes'
-          value={this.state.includeBabies}
-          id="includeBabiesButton"
-          onToggle={(value) => {
-            this.setState({ includeBabies: !value }, this.setCurrentQuery);
-          }}
-        />
-      </div>
-    )
-  }
+  renderIncludeBabiesSelectionButton = () => (
+    <div className="ToggleContainer IncludeBabiesButtonContainer">
+      <label htmlFor="includeBabiesButton">Include Babies?</label>
+      <ToggleButton
+        inactiveLabel='No'
+        activeLabel='Yes'
+        value={this.state.includeBabies}
+        id="includeBabiesButton"
+        onToggle={(value) => {
+          this.setState({ includeBabies: !value }, this.setCurrentQuery);
+        }}
+      />
+    </div>
+  )
 
-  renderLanguageSelection = () =>{
+  renderLanguageSelection = () => {
     const options = Object.keys(EvolveTranslations).map((language) => {
       return (
         <option key={language} value={EvolveTranslations[language]}>{language}</option>
@@ -182,42 +178,40 @@ class App extends Component {
     )
   }
 
-  renderSelectDeselectAllButtons = () => {
-    return (
-      <div className="SelectionButtons">
-        <div className="SelectionLabelBlurb">
-          * Higher evolutions can be used to find just-evolved Pokemon to transfer post-evolution
-        </div>
-        <div>
-          <span className="SelectionLabel">First Evolutions:</span>
-          <button id="selectAllFirstEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 1)}>
-            Select All
-          </button>
-          <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 1)}>
-            De-select All
-          </button>
-        </div>
-        <div>
-          <span className="SelectionLabel">Second Evolutions:</span>
-          <button id="selectAllSecondEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 2)}>
-            Select All
-          </button>
-          <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 2)}>
-            De-select All
-          </button>
-        </div>
-        <div>
-          <span className="SelectionLabel">Third Evolutions:</span>
-          <button id="selectAllThirdEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 3)}>
-            Select All
-          </button>
-          <button id="deselectAllThirdEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 3)}>
-            De-select All
-          </button>
-        </div>
+  renderSelectDeselectAllButtons = () => (
+    <div className="SelectionButtons">
+      <div className="SelectionLabelBlurb">
+        * Higher evolutions can be used to find just-evolved Pokemon to transfer post-evolution
       </div>
-    )
-  }
+      <div>
+        <span className="SelectionLabel">First Evolutions:</span>
+        <button id="selectAllFirstEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 1)}>
+          Select All
+        </button>
+        <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 1)}>
+          De-select All
+        </button>
+      </div>
+      <div>
+        <span className="SelectionLabel">Second Evolutions:</span>
+        <button id="selectAllSecondEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 2)}>
+          Select All
+        </button>
+        <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 2)}>
+          De-select All
+        </button>
+      </div>
+      <div>
+        <span className="SelectionLabel">Third Evolutions:</span>
+        <button id="selectAllThirdEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 3)}>
+          Select All
+        </button>
+        <button id="deselectAllThirdEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 3)}>
+          De-select All
+        </button>
+      </div>
+    </div>
+  )
 
   renderPrecreatedQueryCheckboxes = () => {
     return Object.keys(Queries).map((queryName) => {
@@ -278,20 +272,6 @@ class App extends Component {
     }
   }
 
-  renderPokemonSelection = () => {
-    return (
-      <ul className="QueryList">
-        {this.renderEvolvingSelectionButton()}
-        {this.renderIncludeBabiesSelectionButton()}
-        {this.renderLanguageSelection()}
-        {this.renderPrecreatedQueryCheckboxes()}
-        <hr/>
-        {this.renderSelectDeselectAllButtons()}
-        {this.renderIndividualPokemonCheckboxes()}
-      </ul>
-    )
-  }
-
   render() {
     return (
       <div className="App">
@@ -310,7 +290,15 @@ class App extends Component {
             <button>Click to Copy</button>
           </CopyToClipboard>
           <div className="PokemonSelection">
-            {this.renderPokemonSelection()}
+            <ul className="QueryList">
+              {this.renderEvolvingSelectionButton()}
+              {this.renderIncludeBabiesSelectionButton()}
+              {this.renderLanguageSelection()}
+              {this.renderPrecreatedQueryCheckboxes()}
+              <hr/>
+              {this.renderSelectDeselectAllButtons()}
+              {this.renderIndividualPokemonCheckboxes()}
+            </ul>
           </div>
           <hr/>
           <div>
