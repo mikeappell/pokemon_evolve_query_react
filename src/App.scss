@@ -14,7 +14,10 @@
   display: flex;
   margin-bottom: 5px;
 
-  label { margin-right: 20px; }
+  label {
+    width: 115px;
+    margin-right: 20px;
+  }
 }
 
 .CurrentQuery {
@@ -53,9 +56,7 @@
 }
 
 .LanguageSelect {
-  margin-bottom: 20px;
-
-  .LanguageSelectLabel { margin-right: 10px; }
+  margin: 20px 0;
 }
 
 ul.QueryList {

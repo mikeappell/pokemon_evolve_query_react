@@ -165,7 +165,8 @@ class App extends Component {
     )
 
     return (
-      <div className="LanguageSelect">
+      // TODO: Better classnames for ToggleContainer/LanguageSelect
+      <div className="ToggleContainer LanguageSelect">
         <label className="LanguageSelectLabel" htmlFor="languageSelect">Language:</label>
         <select
           className="LanguageSelectSelect"

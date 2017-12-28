@@ -13,6 +13,7 @@
   display: flex;
   margin-bottom: 5px; }
   .ToggleContainer label {
+    width: 115px;
     margin-right: 20px; }
 
 .CurrentQuery {
@@ -44,9 +45,7 @@
   font-style: italic; }
 
 .LanguageSelect {
-  margin-bottom: 20px; }
-  .LanguageSelect .LanguageSelectLabel {
-    margin-right: 10px; }
+  margin: 20px 0; }
 
 ul.QueryList {
   list-style-type: none; }
