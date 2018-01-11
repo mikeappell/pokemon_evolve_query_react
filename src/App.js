@@ -302,13 +302,17 @@ class App extends Component {
             </ul>
           </div>
           <hr/>
-          <div>
-            <h5>
-              For comments or suggestion, message me <a href="https://www.reddit.com/user/mikeappell/">here.</a>
-              <br/>
-              <br/>
-              Built using <a href="https://github.com/facebookincubator/create-react-app">Create React App</a>. Code can be found <a href="https://github.com/mikeappell/pokemon_evolve_query_react">here</a>.
-            </h5>
+          <div className="Footer">
+            For comments or suggestion, message me <a href="https://www.reddit.com/user/mikeappell/">on Reddit.</a>
+            <br/>
+            <br/>
+            Pokémon And All Respective Names are Trademark & © of Nintendo 1996-2018
+            Pokémon GO is Trademark & © of Niantic, Inc.
+            <br/>
+            This website is not affiliated with Niantic Inc., The Pokemon Company or Nintendo, though I think they're peachy keen.
+            <br/>
+            <br/>
+            Built using <a href="https://github.com/facebookincubator/create-react-app">Create React App</a>. Code can be found <a href="https://github.com/mikeappell/pokemon_evolve_query_react">here</a>.
           </div>
         </div>
       </div>
