@@ -18,7 +18,7 @@ class App extends Component {
       evolving: true,
       includeBabies: true,
       selectedPreCreatedQueryCheckbox: 'Compact',
-      checkboxesEnabled: true,
+      checkboxesEnabled: false,
       language: 'English',
       toggled,
     };
@@ -129,10 +129,8 @@ class App extends Component {
   )
 
   renderLanguageSelection = () => {
-    const options = Object.keys(EvolveTranslations).map((language) => {
-      return (
-        <option key={language} value={language}>{language}</option>
-      )}
+    const options = Object.keys(EvolveTranslations).map((language) =>
+      <option key={language} value={language}>{language}</option>
     )
 
     return (
@@ -157,28 +155,28 @@ class App extends Component {
       </div>
       <div>
         <span className="SelectionLabel">First Evolutions:</span>
-        <button id="selectAllFirstEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 1, true)}>
+        <button id="selectAllFirstEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, true)}>
           Select All
         </button>
-        <button id="deselectAllSecondEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 1, false)}>
+        <button id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, false)}>
           De-select All
         </button>
       </div>
       <div>
         <span className="SelectionLabel">Second Evolutions:</span>
-        <button id="selectAllSecondEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 2, true)}>
+        <button id="selectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, true)}>
           Select All
         </button>
-        <button id="deselectAllSecondEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 2, false)}>
+        <button id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, false)}>
           De-select All
         </button>
       </div>
       <div>
         <span className="SelectionLabel">Third Evolutions:</span>
-        <button id="selectAllThirdEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 3, true)}>
+        <button id="selectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, true)}>
           Select All
         </button>
-        <button id="deselectAllThirdEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 3, false)}>
+        <button id="deselectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, false)}>
           De-select All
         </button>
       </div>
@@ -186,21 +184,19 @@ class App extends Component {
   )
 
   renderPrecreatedQueryCheckboxes = () => {
-    return Object.keys(Queries).map((queryName) => {
-      return (
-        <li key={queryName}>
-          <input
-            type='checkbox'
-            className="SelectionCheckbox SelectionCheckbox-preCreated"
-            id={queryName}
-            value={queryName}
-            checked={this.state.selectedPreCreatedQueryCheckbox === queryName}
-            onChange={this.handlePreCreatedQueryCheckboxClick.bind(this, queryName)}
-          />
-          <label htmlFor={queryName}>{Queries[queryName]['label']}</label>
-        </li>
-      )
-    })
+    return Object.keys(Queries).map((queryName) =>
+      <li key={queryName}>
+        <input
+          type='checkbox'
+          className="SelectionCheckbox SelectionCheckbox-preCreated"
+          id={queryName}
+          value={queryName}
+          checked={this.state.selectedPreCreatedQueryCheckbox === queryName}
+          onChange={this.handlePreCreatedQueryCheckboxClick.bind(this, queryName)}
+        />
+        <label htmlFor={queryName}>{Queries[queryName]['label']}</label>
+      </li>
+    )
   }
 
   renderIndividualPokemonCheckboxes = () => {
@@ -210,7 +206,8 @@ class App extends Component {
       // We deep-clone the array of objects
       const pokemonFamily = pf.map(a => ({...a}));
 
-      this.filterBabyPokemon(pokemonFamily);
+      // Filter out baby pokemon if option selected
+      if (!this.state.includeBabies) this.filterBabyPokemon(pokemonFamily);
 
       return pokemonFamily.map((individualPokemon) => {
         // We skip rendering that pokemon's checkbox if their metadata is on our skiplist
@@ -225,7 +222,7 @@ class App extends Component {
               value={individualPokemon.number}
               checked={this.state.toggled[individualPokemon.number]}
               onChange={this.handleIndividualCheckboxClick.bind(this, individualPokemon.number)}
-              enabled={this.state.checkboxesEnabled}
+              disabled={!this.state.checkboxesEnabled}
             />
             <label htmlFor={individualPokemon.name}>{individualPokemon.name}</label>
           </li>
@@ -236,13 +233,11 @@ class App extends Component {
 
   // If we're not including babies, we see if the current family has any babies present.
   // If so, we remove them and decrement the evol # of the remaining pokemon.
-  filterBabyPokemon = (pokemonFamily) => {
-    if (!this.state.includeBabies) {
-      const babyPokemon = pokemonFamily.filter((individualPokemon) => individualPokemon.meta === 'baby')
-      if (babyPokemon.length > 0) {
-        pokemonFamily.splice(pokemonFamily.indexOf(babyPokemon[0]), 1)
-        pokemonFamily.forEach((individualPokemon) => individualPokemon.evolution--)
-      }
+  filterBabyPokemon(pokemonFamily) {
+    const babyPokemon = pokemonFamily.filter((individualPokemon) => individualPokemon.meta === 'baby')
+    if (babyPokemon.length > 0) {
+      pokemonFamily.splice(pokemonFamily.indexOf(babyPokemon[0]), 1)
+      pokemonFamily.forEach((individualPokemon) => individualPokemon.evolution--)
     }
   }
 
