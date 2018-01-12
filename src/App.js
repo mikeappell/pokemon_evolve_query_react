@@ -14,7 +14,6 @@ class App extends Component {
     }
 
     this.state = {
-      currentQuery: `${ EvolveTranslations['English'] }&${ Queries['Compact']['query'] }`,
       copied: false,
       evolving: true,
       includeBabies: true,
@@ -42,7 +41,7 @@ class App extends Component {
   }
 
   // TODO: Generalize the concept of queries which include ranges beyond just 'Compact'
-  updateCurrentQuery = () => {
+  getCurrentQuery = () => {
     let currentQuery = "";
 
     // If the user isn't evolving, don't include the translated 'evolve' value in the query
@@ -61,18 +60,18 @@ class App extends Component {
       currentQuery = `${ translatedEvolve }${ selectedNumbers.join(',') }`;
     }
 
-    this.setState({ currentQuery });
+    return currentQuery;
   }
 
   handlePreCreatedQueryCheckboxClick = (query) => {
     if (query === 'Compact') {
-      this.setState({ selectedPreCreatedQueryCheckbox: query, checkboxesEnabled: false }, this.updateCurrentQuery)
+      this.setState({ selectedPreCreatedQueryCheckbox: query, checkboxesEnabled: false })
     } else {
       let toggled = {};
       for (let i in Object.keys(this.state.toggled)) {
         toggled[i] = (Queries[query]['query'].includes(i)) ? true : false;
       };
-      this.setState({ toggled, selectedPreCreatedQueryCheckbox: query, checkboxesEnabled: true }, this.updateCurrentQuery);
+      this.setState({ toggled, selectedPreCreatedQueryCheckbox: query, checkboxesEnabled: true });
     }
   }
 
@@ -81,10 +80,10 @@ class App extends Component {
       let toggled = Object.assign({}, prevState.toggled);
       toggled[pokemonNumber] = !toggled[pokemonNumber]
       return { toggled, selectedPreCreatedQueryCheckbox: null };
-    }, this.updateCurrentQuery)
+    })
   }
 
-  handleLanguageSelection = (e) => this.setState({ language: e.target.value}, this.updateCurrentQuery);
+  handleLanguageSelection = (e) => this.setState({ language: e.target.value});
 
   onSelectAllClick = (evolutionNumber) => {
     const evolutionList = this.getEvolutionListOfPokemon(evolutionNumber);
@@ -96,7 +95,7 @@ class App extends Component {
       };
 
       return { toggled, selectedPreCreatedQueryCheckbox: null, checkboxesEnabled: true };
-    }, this.updateCurrentQuery)
+    })
   }
 
   onDeselectAllClick = (evolutionNumber) => {
@@ -109,7 +108,7 @@ class App extends Component {
       };
 
       return { toggled, selectedPreCreatedQueryCheckbox: null, checkboxesEnabled: true };
-    }, this.updateCurrentQuery)
+    })
   }
 
   renderEvolvingSelectionButton = () => (
@@ -261,6 +260,8 @@ class App extends Component {
   }
 
   render() {
+    const currentQuery = this.getCurrentQuery();
+
     return (
       <div className="App">
         <div className="App-header">
@@ -269,10 +270,10 @@ class App extends Component {
         <div className="Main-body">
           <h4>Inspired by <a href="https://www.reddit.com/r/TheSilphRoad/comments/6ztyu5/the_ultimate_mass_evolution_search_query/">this</a> Reddit thread.</h4>
           <div className="CurrentQuery">
-            {this.state.currentQuery}
+            {currentQuery}
           </div>
           <CopyToClipboard
-            text={this.state.currentQuery}
+            text={currentQuery}
             onCopy={() => this.setState({copied: true})}
           >
             <button>Click to Copy</button>
