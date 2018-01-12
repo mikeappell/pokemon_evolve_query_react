@@ -107,26 +107,42 @@ class App extends Component {
         value={this.state.evolving}
         id="evolvingButton"
         onToggle={(value) => {
-          this.setState({ evolving: !value }, this.updateCurrentQuery);
+          this.setState({ evolving: !value, selectedPreCreatedQueryCheckbox: null, checkboxesEnabled: true }, this.updateCurrentQuery);
         }}
       />
     </div>
   )
 
-  renderIncludeBabiesSelectionButton = () => (
-    <div className="ToggleContainer IncludeBabiesButtonContainer">
-      <label htmlFor="includeBabiesButton">Include Babies?</label>
+  renderIncludeBabyPokemonSelectionButton = () => (
+    <div className="ToggleContainer IncludeBabyPokemonButtonContainer">
+      <label htmlFor="includeBabyPokemonButton">Include Babies?</label>
       <ToggleButton
         inactiveLabel='No'
         activeLabel='Yes'
         value={this.state.includeBabies}
-        id="includeBabiesButton"
+        id="includeBabyPokemonButton"
         onToggle={(value) => {
-          this.setState({ includeBabies: !value }, this.updateCurrentQuery);
+          this.setState({ includeBabies: !value, selectedPreCreatedQueryCheckbox: null, checkboxesEnabled: true }, this.toggleBabyPokemon.bind(this, !value));
         }}
       />
     </div>
   )
+
+  toggleBabyPokemon = (toggleOff) => {
+    if (toggleOff) return;
+
+    const babyPokemon = PokemonFamilies.map((pokemonFamily) =>
+      pokemonFamily.filter((individualPokemon) =>
+        individualPokemon.meta == 'baby'
+      ).map(individualPokemon => individualPokemon.number)
+    ).filter(pokemonFamily => pokemonFamily.length > 0);
+
+    this.setState((prevState) => {
+      const toggled = Object.assign({}, prevState.toggled);
+      for (let i = 0; i < babyPokemon.length; i++) toggled[babyPokemon[i]] = false;
+      return { toggled };
+    });
+  }
 
   renderLanguageSelection = () => {
     const options = Object.keys(EvolveTranslations).map((language) =>
@@ -202,13 +218,13 @@ class App extends Component {
   renderIndividualPokemonCheckboxes = () => {
     const metaTagsToSkip = ['nohigher', 'legend', 'special'];
 
-    return PokemonFamilies.map((pf) => {
-      // We deep-clone the array of objects
-      const pokemonFamily = pf.map(a => ({...a}));
+    // We deep-clone the array of objects
+    let pokemonFamilies = JSON.parse(JSON.stringify(PokemonFamilies));
 
-      // Filter out baby pokemon if option selected
-      if (!this.state.includeBabies) this.filterBabyPokemon(pokemonFamily);
+    // Filter out baby pokemon if option selected
+    if (!this.state.includeBabies) pokemonFamilies = this.filterBabyPokemon(pokemonFamilies);
 
+    return pokemonFamilies.map((pokemonFamily) => {
       return pokemonFamily.map((individualPokemon) => {
         // We skip rendering that pokemon's checkbox if their metadata is on our skiplist
         if (metaTagsToSkip.includes(individualPokemon.meta)) return null;
@@ -231,14 +247,23 @@ class App extends Component {
     })
   }
 
-  // If we're not including babies, we see if the current family has any babies present.
+  // If we're filtering baby pokemon, we see if the current family has any babies present.
   // If so, we remove them and decrement the evol # of the remaining pokemon.
-  filterBabyPokemon(pokemonFamily) {
-    const babyPokemon = pokemonFamily.filter((individualPokemon) => individualPokemon.meta === 'baby')
-    if (babyPokemon.length > 0) {
-      pokemonFamily.splice(pokemonFamily.indexOf(babyPokemon[0]), 1)
-      pokemonFamily.forEach((individualPokemon) => individualPokemon.evolution--)
-    }
+  // Unfortunately, we can't call setState in this method as this method runs during a re-rendering
+  // which would cause an infinite loop of setStates. As such, we need the logic for toggling off
+  // baby Pokemon to be called separately, thus the toggleBabyPokemon method above.
+  filterBabyPokemon(pokemonFamilies) {
+    return pokemonFamilies.map((pokemonFamily) => {
+      let hasBaby = false;
+      const filteredFamily = pokemonFamily.filter((individualPokemon) => {
+        const isBaby = individualPokemon.meta === 'baby';
+        if (isBaby) hasBaby = true;
+        return !isBaby;
+      })
+
+      if (hasBaby) filteredFamily.forEach((individualPokemon) => individualPokemon.evolution--);
+      return filteredFamily;
+    })
   }
 
   render() {
@@ -263,7 +288,7 @@ class App extends Component {
           <div className="PokemonSelection">
             <ul className="QueryList">
               {this.renderEvolvingSelectionButton()}
-              {this.renderIncludeBabiesSelectionButton()}
+              {this.renderIncludeBabyPokemonSelectionButton()}
               {this.renderLanguageSelection()}
               {this.renderPrecreatedQueryCheckboxes()}
               <hr/>
