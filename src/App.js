@@ -7,33 +7,54 @@ class App extends Component {
   // TODO: Make default value of currentQuery more programmatic
   constructor(props) {
     super(props);
+
+    let toggled = {};
+    for (let i = 1; i < this.getLastPokemonNumber(); i++) {
+      toggled[i] = (Queries.Full.query.includes(i.toString()) ? true : false);
+    }
+
     this.state = {
       currentQuery: `${ EvolveTranslations['English'] }&${ Queries['Compact']['query'] }`,
-      value: null,
       copied: false,
       evolving: true,
       includeBabies: true,
+      selectedPreCreatedQueryCheckbox: 'Compact',
+      language: 'English',
+      toggled,
     };
   }
 
+  getLastPokemonNumber() {
+    const lastFamily = PokemonFamilies[PokemonFamilies.length - 1];
+    return parseInt(lastFamily[lastFamily.length - 1].number);
+  }
+
+  getEvolutionListOfPokemon(evolutionNumber) {
+    let evolutionList = [];
+    PokemonFamilies.forEach((pokemonFamily) => {
+      pokemonFamily.forEach((individualPokemon) => {
+        if (individualPokemon.evolution === evolutionNumber) evolutionList.push(individualPokemon.number);
+      })
+    })
+
+    return evolutionList;
+  }
+
   // TODO: Generalize the concept of queries which include ranges beyond just 'Compact'
-  setCurrentQuery = () => {
-    const compactQuery = document.querySelector('input#Compact');
+  updateCurrentQuery = () => {
     let currentQuery = "";
 
     // If the user isn't evolving, don't include the translated 'evolve' value in the query
-    const translatedEvolve = !this.state.evolving ? '' : `${ document.querySelector('select#languageSelect').value }&`;
+    const translatedEvolve = !this.state.evolving ? '' : `${ EvolveTranslations[this.state.language] }&`;
 
     // Explicitly set query; needed for 'Compact' which includes ranges (e.g. '110-125')
-    if (compactQuery.checked) {
+    if (this.state.selectedPreCreatedQueryCheckbox === 'Compact') {
       currentQuery = `${ translatedEvolve }${ Queries['Compact']['query'] }`;
     } else {
-      const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-pokemon");
       let selectedNumbers = [];
-      for (let i = 0; i < pokemonCheckboxes.length; i++) {
-        const cb = pokemonCheckboxes[i];
-        if (cb.checked === true) {
-          selectedNumbers.push(cb.value);
+      for (let i in Object.keys(this.state.toggled)) {
+        if (this.state.toggled[i]) {
+          selectedNumbers.push(i);
         }
       };
       currentQuery = `${ translatedEvolve }${ selectedNumbers.join(',') }`;
@@ -42,43 +63,32 @@ class App extends Component {
     this.setState({ currentQuery });
   }
 
-  handlePreCreatedCheckboxClick = (query) => {
-    const preCreatedCheckboxes = document.querySelectorAll("input.SelectionCheckbox-preCreated");
-    for (let i = 0; i < preCreatedCheckboxes.length; i++) {
-      // Uncheck all other checkboxes
-      let cb = preCreatedCheckboxes[i];
-      if(cb.id !== query) {
-        cb.checked = false;
-      }
-    };
-
+  handlePreCreatedQueryCheckboxClick = (query) => {
     // If the user clicked the compact full query, we disable all pokemon checkboxes
-    // Otherwise, we enable them and check/uncheck them as contained in the query
+    // Otherwise, we enable them and modify toggled state per the requested query
     if (query === 'Compact') {
       this.disableCheckboxes();
+      this.setState({ selectedPreCreatedQueryCheckbox: query }, this.updateCurrentQuery)
     } else {
       this.enableCheckboxes();
-      const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-pokemon");
-      for (let i = 0; i < pokemonCheckboxes.length; i++) {
-        let cb = pokemonCheckboxes[i];
-        if (Queries[query]['query'].includes(cb.value)) {
-          cb.checked = true;
-        } else {
-          cb.checked = false;
-        }
+      let toggled = {};
+      for (let i in Object.keys(this.state.toggled)) {
+        toggled[i] = (Queries[query]['query'].includes(i)) ? true : false;
       };
+      this.setState({ toggled, selectedPreCreatedQueryCheckbox: query }, this.updateCurrentQuery);
     }
-
-    this.setCurrentQuery(query);
   }
 
-  handleIndividualCheckboxClick = () => {
-    const pokemonCheckboxes = document.querySelectorAll("input.SelectionCheckbox-preCreated");
-    for(let i = 0; i < pokemonCheckboxes.length; i++) {
-      pokemonCheckboxes[i].checked = false;
-    };
+  handleIndividualCheckboxClick = (pokemonNumber) => {
+    this.setState((prevState) => {
+      let toggled = Object.assign({}, prevState.toggled);
+      toggled[pokemonNumber] = !toggled[pokemonNumber]
+      return { toggled, selectedPreCreatedQueryCheckbox: null };
+    }, this.updateCurrentQuery)
+  }
 
-    this.setCurrentQuery();
+  handleLanguageSelection = (e) => {
+    this.setState({ language: e.target.value}, this.updateCurrentQuery);
   }
 
   enableCheckboxes = () => {
@@ -95,36 +105,34 @@ class App extends Component {
     }
   }
 
-  onSelectAllClick = (evolution) => {
-    if (document.querySelector('input#Compact').checked) this.enableCheckboxes();
+  onSelectAllClick = (evolutionNumber) => {
+    if (this.state.selectedPreCreatedQueryCheckbox === 'Compact') this.enableCheckboxes();
 
-    const preCreatedCheckboxes = document.querySelectorAll('input.SelectionCheckbox-preCreated');
-    const evolutionCheckboxes = document.querySelectorAll(`input.SelectionCheckbox-${evolution}`);
-    for (let i = 0; i < Object.keys(Queries).length; i++) {
-      preCreatedCheckboxes[i].checked = false;
-    }
+    const evolutionList = this.getEvolutionListOfPokemon(evolutionNumber);
 
-    for (let i = 0; i < evolutionCheckboxes.length; i++) {
-      evolutionCheckboxes[i].checked = true;
-    };
+    this.setState((prevState) => {
+      let toggled = {};
+      for (let i in Object.keys(prevState.toggled)) {
+        toggled[i] = (evolutionList.includes(i) ? true : prevState.toggled[i]);
+      };
 
-    this.setCurrentQuery();
+      return { toggled, selectedPreCreatedQueryCheckbox: null };
+    }, this.updateCurrentQuery)
   }
 
-  onDeselectAllClick = (evolution) => {
+  onDeselectAllClick = (evolutionNumber) => {
     if (document.querySelector('input#Compact').checked) this.enableCheckboxes();
 
-    const preCreatedCheckboxes = document.querySelectorAll('input.SelectionCheckbox-preCreated');
-    const evolutionCheckboxes = document.querySelectorAll(`input.SelectionCheckbox-${evolution}`);
-    for (let i = 0; i < Object.keys(Queries).length; i++) {
-      preCreatedCheckboxes[i].checked = false;
-    }
+    const evolutionList = this.getEvolutionListOfPokemon(evolutionNumber);
 
-    for (let i = 0; i < evolutionCheckboxes.length; i++) {
-      evolutionCheckboxes[i].checked = false;
-    };
+    this.setState((prevState) => {
+      let toggled = {};
+      for (let i in Object.keys(prevState.toggled)) {
+        toggled[i] = (evolutionList.includes(i) ? false : prevState.toggled[i]);
+      };
 
-    this.setCurrentQuery();
+      return { toggled, selectedPreCreatedQueryCheckbox: null };
+    }, this.updateCurrentQuery)
   }
 
   renderEvolvingSelectionButton = () => (
@@ -136,7 +144,7 @@ class App extends Component {
         value={this.state.evolving}
         id="evolvingButton"
         onToggle={(value) => {
-          this.setState({ evolving: !value }, this.setCurrentQuery);
+          this.setState({ evolving: !value }, this.updateCurrentQuery);
         }}
       />
     </div>
@@ -151,7 +159,7 @@ class App extends Component {
         value={this.state.includeBabies}
         id="includeBabiesButton"
         onToggle={(value) => {
-          this.setState({ includeBabies: !value }, this.setCurrentQuery);
+          this.setState({ includeBabies: !value }, this.updateCurrentQuery);
         }}
       />
     </div>
@@ -160,7 +168,7 @@ class App extends Component {
   renderLanguageSelection = () => {
     const options = Object.keys(EvolveTranslations).map((language) => {
       return (
-        <option key={language} value={EvolveTranslations[language]}>{language}</option>
+        <option key={language} value={language}>{language}</option>
       )}
     )
 
@@ -171,7 +179,7 @@ class App extends Component {
         <select
           className="LanguageSelectSelect"
           id="languageSelect"
-          onChange={this.setCurrentQuery}
+          onChange={this.handleLanguageSelection}
         >
           {options}
         </select>
@@ -223,8 +231,8 @@ class App extends Component {
             className="SelectionCheckbox SelectionCheckbox-preCreated"
             id={queryName}
             value={queryName}
-            defaultChecked={queryName === 'Compact'}
-            onChange={this.handlePreCreatedCheckboxClick.bind(this, queryName)}
+            checked={this.state.selectedPreCreatedQueryCheckbox === queryName}
+            onChange={this.handlePreCreatedQueryCheckboxClick.bind(this, queryName)}
           />
           <label htmlFor={queryName}>{Queries[queryName]['label']}</label>
         </li>
@@ -252,7 +260,8 @@ class App extends Component {
               className={"SelectionCheckbox SelectionCheckbox-pokemon SelectionCheckbox-" + individualPokemon.evolution}
               id={individualPokemon.name}
               value={individualPokemon.number}
-              onChange={this.handleIndividualCheckboxClick}
+              checked={this.state.toggled[individualPokemon.number]}
+              onChange={this.handleIndividualCheckboxClick.bind(this, individualPokemon.number)}
             />
             <label htmlFor={individualPokemon.name}>{individualPokemon.name}</label>
           </li>
