@@ -85,26 +85,13 @@ class App extends Component {
 
   handleLanguageSelection = (e) => this.setState({ language: e.target.value});
 
-  onSelectAllClick = (evolutionNumber) => {
+  onSelectDeselectAllClick = (evolutionNumber, bool) => {
     const evolutionList = this.getEvolutionListOfPokemon(evolutionNumber);
 
     this.setState((prevState) => {
       let toggled = {};
       for (let i in Object.keys(prevState.toggled)) {
-        toggled[i] = (evolutionList.includes(i) ? true : prevState.toggled[i]);
-      };
-
-      return { toggled, selectedPreCreatedQueryCheckbox: null, checkboxesEnabled: true };
-    })
-  }
-
-  onDeselectAllClick = (evolutionNumber) => {
-    const evolutionList = this.getEvolutionListOfPokemon(evolutionNumber);
-
-    this.setState((prevState) => {
-      let toggled = {};
-      for (let i in Object.keys(prevState.toggled)) {
-        toggled[i] = (evolutionList.includes(i) ? false : prevState.toggled[i]);
+        toggled[i] = (evolutionList.includes(i) ? bool : prevState.toggled[i]);
       };
 
       return { toggled, selectedPreCreatedQueryCheckbox: null, checkboxesEnabled: true };
@@ -170,28 +157,28 @@ class App extends Component {
       </div>
       <div>
         <span className="SelectionLabel">First Evolutions:</span>
-        <button id="selectAllFirstEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 1)}>
+        <button id="selectAllFirstEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 1, true)}>
           Select All
         </button>
-        <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 1)}>
+        <button id="deselectAllSecondEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 1, false)}>
           De-select All
         </button>
       </div>
       <div>
         <span className="SelectionLabel">Second Evolutions:</span>
-        <button id="selectAllSecondEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 2)}>
+        <button id="selectAllSecondEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 2, true)}>
           Select All
         </button>
-        <button id="deselectAllSecondEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 2)}>
+        <button id="deselectAllSecondEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 2, false)}>
           De-select All
         </button>
       </div>
       <div>
         <span className="SelectionLabel">Third Evolutions:</span>
-        <button id="selectAllThirdEvo" data-select-button onClick={this.onSelectAllClick.bind(this, 3)}>
+        <button id="selectAllThirdEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 3, true)}>
           Select All
         </button>
-        <button id="deselectAllThirdEvo" data-select-button onClick={this.onDeselectAllClick.bind(this, 3)}>
+        <button id="deselectAllThirdEvo" data-select-button onClick={this.onSelectDeselectAllClick.bind(this, 3, false)}>
           De-select All
         </button>
       </div>
