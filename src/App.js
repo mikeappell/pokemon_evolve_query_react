@@ -329,7 +329,7 @@ export const EvolveTranslations = {
   English: 'evolve',
   Spanish: 'evolucionar',
   German: 'entwickeln',
-  Italian: 'evolvere',
+  Italian: 'fai evolvere',
   French: 'évoluer',
   Dutch: 'evolueren',
   Greek: 'αναπτύσσω',
