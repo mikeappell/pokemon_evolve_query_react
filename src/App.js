@@ -76,14 +76,15 @@ class App extends Component {
       this.setState({ selectedPreCreatedQueryCheckbox: query, checkboxesEnabled: false })
     } else {
       let toggled = {};
-      for (let i in Object.keys(this.state.toggled)) {
-        toggled[i] = (Queries[query]['query'].includes(i)) ? true : false;
+      const keys = Object.keys(this.state.toggled);
+      for (let i in keys) {
+        toggled[keys[i]] = (Queries[query]['query'].includes(keys[i])) ? true : false;
       };
       this.setState({ toggled, selectedPreCreatedQueryCheckbox: query, checkboxesEnabled: true });
     }
   }
 
-  handleIndividualCheckboxClick = (pokemonNumber) => {
+  handleIndividualPokemonClick = (pokemonNumber) => {
     this.setState((prevState) => {
       let toggled = Object.assign({}, prevState.toggled);
       toggled[pokemonNumber] = !toggled[pokemonNumber]
@@ -108,7 +109,7 @@ class App extends Component {
   }
 
   renderEvolvingSelectionButton = () => (
-    <div className="ToggleContainer EvolveButtonContainer">
+    <div className="ToggleContainer">
       <label htmlFor="evolvingButton">Evolving?</label>
       <ToggleButton
         inactiveLabel='No'
@@ -123,7 +124,7 @@ class App extends Component {
   )
 
   renderIncludeBabyPokemonSelectionButton = () => (
-    <div className="ToggleContainer IncludeBabyPokemonButtonContainer">
+    <div className="ToggleContainer">
       <label htmlFor="includeBabyPokemonButton">Include Babies?</label>
       <ToggleButton
         inactiveLabel='No'
@@ -174,7 +175,7 @@ class App extends Component {
   }
 
   renderSelectDeselectAllButtons = () => (
-    <div className="SelectionButtons">
+    <div className="SelectDeselectButtons">
       <div className="SelectionLabelBlurb">
         * Higher evolutions can be used to find just-evolved Pokemon to transfer post-evolution
       </div>
@@ -224,35 +225,55 @@ class App extends Component {
     )
   }
 
-  renderIndividualPokemonCheckboxes = () => {
-    const metaTagsToSkip = ['nohigher', 'legend', 'special'];
-
-    // We deep-clone the array of objects
-    let pokemonFamilies = JSON.parse(JSON.stringify(PokemonFamilies));
+  renderPokemonGenerations = () => {
+    // We deep-clone the array of objects so we can safely mutate it
+    let pokemonFamilies = JSON.parse(JSON.stringify(this.getAllowedPokemonFamilies()));
 
     // Filter out baby pokemon if option selected
     if (!this.state.includeBabies) pokemonFamilies = this.filterBabyPokemon(pokemonFamilies);
 
-    return pokemonFamilies.map((pokemonFamily) => {
-      return pokemonFamily.map((individualPokemon) => {
-        // We skip rendering that pokemon's checkbox if their metadata is on our skiplist
-        if (metaTagsToSkip.includes(individualPokemon.meta)) return null;
+    return Generations.map((generation) => {
+      const pokemonFamiliesPerGeneration = pokemonFamilies.filter((pokemonFamily) =>
+        pokemonFamily[0].number >= generation.range[0] && pokemonFamily[pokemonFamily.length - 1].number <= generation.range[1]
+      )
 
-        return (
-          <li key={individualPokemon.number}>
-            <input
-              type='checkbox'
-              className={"SelectionCheckbox SelectionCheckbox-pokemon SelectionCheckbox-" + individualPokemon.evolution}
-              id={individualPokemon.name}
-              value={individualPokemon.number}
-              checked={this.state.toggled[individualPokemon.number]}
-              onChange={this.handleIndividualCheckboxClick.bind(this, individualPokemon.number)}
-              disabled={!this.state.checkboxesEnabled}
-            />
-            <label htmlFor={individualPokemon.name}>{individualPokemon.name}</label>
-          </li>
-        )
-      })
+      return (
+        <div className="PokemonGeneration">
+          <div className="PokemonGenerationTitle">{generation.name}</div>
+          {this.renderPokemonFamiliesPerGeneration(pokemonFamiliesPerGeneration)}
+        </div>
+      )
+    })
+  }
+
+  renderPokemonFamiliesPerGeneration = (pokemonFamiliesPerGeneration) => {
+    return pokemonFamiliesPerGeneration.map((pokemonFamily) => {
+      const pokemonButtonsPerFamily = this.renderIndividualPokemonButtonsPerFamily(pokemonFamily);
+
+      return Object.values(pokemonButtonsPerFamily).some(o => o !== null) ? (
+        <div className="PokemonFamilyButtons" key={pokemonFamily[pokemonFamily.length - 1].number}>
+          {pokemonButtonsPerFamily}
+        </div>
+      ) : null;
+    })
+  }
+
+  renderIndividualPokemonButtonsPerFamily = (pokemonFamily) => {
+    return pokemonFamily.map((individualPokemon) => {
+      const selectedStyle = (this.state.toggled[individualPokemon.number] ? 'selected' : 'notSelected');
+
+      return (
+        <button
+          key={individualPokemon.number}
+          className={"PokemonSelectionButton PokemonSelectionButton-" + selectedStyle}
+          id={individualPokemon.name}
+          value={individualPokemon.number}
+          onClick={this.handleIndividualPokemonClick.bind(this, individualPokemon.number)}
+          disabled={!this.state.checkboxesEnabled}
+        >
+          <img src={`/pokemon_icons/${individualPokemon.number}.png`} alt={individualPokemon.name} className='PokemonIcon' />
+        </button>
+      )
     })
   }
 
@@ -294,7 +315,7 @@ class App extends Component {
           >
             <button>Click to Copy</button>
           </CopyToClipboard>
-          <div className="PokemonSelection">
+          <div className="PokemonSelectionContainer">
             <ul className="QueryList">
               {this.renderEvolvingSelectionButton()}
               {this.renderIncludeBabyPokemonSelectionButton()}
@@ -302,7 +323,7 @@ class App extends Component {
               {this.renderPrecreatedQueryCheckboxes()}
               <hr/>
               {this.renderSelectDeselectAllButtons()}
-              {this.renderIndividualPokemonCheckboxes()}
+              {this.renderPokemonGenerations()}
             </ul>
           </div>
           <hr/>
@@ -325,6 +346,14 @@ class App extends Component {
 }
 
 export default App;
+
+export const MetaTagsToSkip = ['nohigher', 'legend', 'special'];
+
+export const Generations = [
+  { name: 'Generation 1', range: [1, 151] },
+  { name: 'Generation 2', range: [152, 251] },
+  { name: 'Generation 3', range: [252, 386] }
+];
 
 export const Queries = {
   Compact: { label: "Compact Full Query (doesn't allow modification)", query: '1,4,7,10,13,16,19-23,27,29,32,37,41,43,46-60,63,66,69,72,74,77-92,95-116,118-147,152,155,158,161-179,183,187,191-246,353,355' },

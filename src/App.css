@@ -24,13 +24,13 @@
   padding: 5px;
   word-wrap: break-word; }
 
-.PokemonSelection {
+.PokemonSelectionContainer {
   margin-top: 30px;
   text-align: left; }
 
-.SelectionButtons {
-  margin-bottom: 10px; }
-  .SelectionButtons button {
+.SelectDeselectButtons {
+  margin-bottom: 40px; }
+  .SelectDeselectButtons button {
     margin-right: 3px;
     margin-bottom: 3px; }
 
@@ -47,20 +47,39 @@
 .LanguageSelect {
   margin: 20px 0; }
 
-ul.QueryList {
+.QueryList {
   list-style-type: none; }
-  ul.QueryList li > label {
+  .QueryList li > label {
     padding-left: 10px; }
 
-.SelectionCheckbox-1 {
-  margin-left: 0px;
-  margin-top: 15px; }
+.PokemonGeneration {
+  margin-bottom: 20px; }
+  .PokemonGeneration .PokemonGenerationTitle {
+    font-size: 24px;
+    margin: 20px 0; }
 
-.SelectionCheckbox-2 {
-  margin-left: 30px; }
+.PokemonFamilyButtons {
+  border: 2px solid slategray;
+  border-radius: 10px;
+  padding: 2px;
+  display: inline-grid;
+  margin: 3px; }
 
-.SelectionCheckbox-3 {
-  margin-left: 60px; }
+.PokemonSelectionButton {
+  border-radius: 10px;
+  padding: 3px; }
+  .PokemonSelectionButton:focus {
+    outline: 0;
+    border: 3px solid lightblue;
+    margin-left: 0px; }
+  .PokemonSelectionButton-selected {
+    background-color: lightblue; }
+  .PokemonSelectionButton-notSelected {
+    background-color: white; }
+
+img.PokemonIcon {
+  height: 38px;
+  width: 38px; }
 
 .Footer {
   margin-bottom: 10px; }
