@@ -9,7 +9,7 @@ class App extends Component {
     super(props);
 
     let toggled = {};
-    for (let i = 1; i < this.getLastPokemonNumber(); i++) {
+    for (let i = 1; i <= this.getLastPokemonNumber(); i++) {
       toggled[i] = (Queries.Full.query.includes(i.toString()) ? true : false);
     }
 
@@ -24,14 +24,21 @@ class App extends Component {
     };
   }
 
+  getAllowedPokemonFamilies() {
+    return PokemonFamilies.map((pokemonFamily) =>
+      pokemonFamily.filter(individualPokemon => !MetaTagsToSkip.includes(individualPokemon.meta))
+    ).filter(pokemonFamily => pokemonFamily.length > 0);
+  }
+
   getLastPokemonNumber() {
-    const lastFamily = PokemonFamilies[PokemonFamilies.length - 1];
+    const allowedPokemonFamilies = this.getAllowedPokemonFamilies();
+    const lastFamily = allowedPokemonFamilies[allowedPokemonFamilies.length - 1];
     return parseInt(lastFamily[lastFamily.length - 1].number);
   }
 
   getEvolutionListOfPokemon(evolutionNumber) {
     let evolutionList = [];
-    PokemonFamilies.forEach((pokemonFamily) => {
+    this.getAllowedPokemonFamilies().forEach((pokemonFamily) => {
       pokemonFamily.forEach((individualPokemon) => {
         if (individualPokemon.evolution === evolutionNumber) evolutionList.push(individualPokemon.number);
       })
@@ -52,9 +59,10 @@ class App extends Component {
       currentQuery = `${ translatedEvolve }${ Queries['Compact']['query'] }`;
     } else {
       let selectedNumbers = [];
-      for (let i in Object.keys(this.state.toggled)) {
-        if (this.state.toggled[i]) {
-          selectedNumbers.push(i);
+      const keys = Object.keys(this.state.toggled);
+      for (let i in keys) {
+        if (this.state.toggled[keys[i]]) {
+          selectedNumbers.push(keys[i]);
         }
       };
       currentQuery = `${ translatedEvolve }${ selectedNumbers.join(',') }`;
@@ -90,8 +98,9 @@ class App extends Component {
 
     this.setState((prevState) => {
       let toggled = {};
-      for (let i in Object.keys(prevState.toggled)) {
-        toggled[i] = (evolutionList.includes(i) ? bool : prevState.toggled[i]);
+      const keys = Object.keys(prevState.toggled)
+      for (let i in keys) {
+        toggled[keys[i]] = (evolutionList.includes(keys[i]) ? bool : prevState.toggled[keys[i]]);
       };
 
       return { toggled, selectedPreCreatedQueryCheckbox: null, checkboxesEnabled: true };
@@ -131,9 +140,9 @@ class App extends Component {
   toggleBabyPokemon = (toggleOff) => {
     if (toggleOff) return;
 
-    const babyPokemon = PokemonFamilies.map((pokemonFamily) =>
+    const babyPokemon = this.getAllowedPokemonFamilies().map((pokemonFamily) =>
       pokemonFamily.filter((individualPokemon) =>
-        individualPokemon.meta == 'baby'
+        individualPokemon.meta === 'baby'
       ).map(individualPokemon => individualPokemon.number)
     ).filter(pokemonFamily => pokemonFamily.length > 0);
 
