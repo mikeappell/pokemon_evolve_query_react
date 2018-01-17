@@ -1,54 +1,49 @@
 @media only screen and (max-width: 1000px) {
-  img.PokemonIcon {
-    height: 72px;
-    width: 72px;
+  div.CurrentQuery {
+    margin-top: 15px;
   }
 
   button.ClickToCopy {
-    font-size: 40px;
-    margin-bottom: 15px;
+    font-size: 20px;
   }
 
   .Main-body h4 {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .SelectDeselectButtons table {
-    font-size: 30px;
+    font-size: 16px;
 
     td.EvolutionHeader {
       padding: 8px 10px 0 0;
     }
 
     td.EvolutionSelection {
-      padding: 10px 5px 0 0;
+      padding: 0 5px 0 0;
     }
 
     button.EvolutionSelectionButton {
-      font-size: 26px;
-      padding: 8px 20px;
-      border-radius: 5px;
+      font-size: 16px;
     }
   }
 
   .PreCreatedQueryLabel {
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .ToggleContainer {
     select.LanguageSelectSelect {
-      font-size: 26px;
-      padding-left: 5px;
+      font-size: 16px;
+      padding: 2px;
       border-radius: 5px;
     }
 
     label.ToggleContainerLabel, label.LanguageSelectLabel {
-      font-size: 30px;
-      width: 230px;
+      font-size: 16px;
     }
 
     label.CheckboxesOrButtonsToggle {
-      font-size: 30px;
+      font-size: 16px;
     }
   }
 
@@ -85,7 +80,9 @@ hr { margin: 15px 0; }
 
   label { margin-top: 2px; }
 
-  .LanguageSelectLabel { margin-right: 10px; }
+  .LanguageSelectLabel {
+    width: 135px;
+  }
 
   .CheckboxesOrButtonsToggle {
     font-size: 16px;
@@ -120,7 +117,7 @@ hr { margin: 15px 0; }
       padding-right: 5px;
     }
 
-    button.EvolutionSelectionButton {
+    .EvolutionSelectionButton {
       padding: 5px;
       border-radius: 5px;
     }
@@ -165,7 +162,7 @@ hr { margin: 15px 0; }
 }
 
 .PokemonFamilyButtons {
-  border: 2px solid slategray;
+  border: 2px solid lightgray;
   border-radius: 10px;
   padding: 2px;
   display: inline-grid;

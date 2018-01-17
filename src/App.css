@@ -1,33 +1,28 @@
 @media only screen and (max-width: 1000px) {
-  img.PokemonIcon {
-    height: 72px;
-    width: 72px; }
+  div.CurrentQuery {
+    margin-top: 15px; }
   button.ClickToCopy {
-    font-size: 40px;
-    margin-bottom: 15px; }
+    font-size: 20px; }
   .Main-body h4 {
-    font-size: 14px; }
+    font-size: 16px; }
   .SelectDeselectButtons table {
-    font-size: 30px; }
+    font-size: 16px; }
     .SelectDeselectButtons table td.EvolutionHeader {
       padding: 8px 10px 0 0; }
     .SelectDeselectButtons table td.EvolutionSelection {
-      padding: 10px 5px 0 0; }
+      padding: 0 5px 0 0; }
     .SelectDeselectButtons table button.EvolutionSelectionButton {
-      font-size: 26px;
-      padding: 8px 20px;
-      border-radius: 5px; }
+      font-size: 16px; }
   .PreCreatedQueryLabel {
-    font-size: 12px; }
+    font-size: 16px; }
   .ToggleContainer select.LanguageSelectSelect {
-    font-size: 26px;
-    padding-left: 5px;
+    font-size: 16px;
+    padding: 2px;
     border-radius: 5px; }
   .ToggleContainer label.ToggleContainerLabel, .ToggleContainer label.LanguageSelectLabel {
-    font-size: 30px;
-    width: 230px; }
+    font-size: 16px; }
   .ToggleContainer label.CheckboxesOrButtonsToggle {
-    font-size: 30px; }
+    font-size: 16px; }
   ul.QueryList .SelectionLabelBlurb {
     font-size: 10px; }
   .Footer {
@@ -55,7 +50,7 @@ hr {
   .ToggleContainer label {
     margin-top: 2px; }
   .ToggleContainer .LanguageSelectLabel {
-    margin-right: 10px; }
+    width: 135px; }
   .ToggleContainer .CheckboxesOrButtonsToggle {
     font-size: 16px;
     margin-right: 10px; }
@@ -79,7 +74,7 @@ hr {
 .SelectDeselectButtons table td.EvolutionHeader {
   padding-right: 5px; }
 
-.SelectDeselectButtons table button.EvolutionSelectionButton {
+.SelectDeselectButtons table .EvolutionSelectionButton {
   padding: 5px;
   border-radius: 5px; }
 
@@ -112,7 +107,7 @@ hr {
     margin: 20px 0; }
 
 .PokemonFamilyButtons {
-  border: 2px solid slategray;
+  border: 2px solid lightgray;
   border-radius: 10px;
   padding: 2px;
   display: inline-grid;

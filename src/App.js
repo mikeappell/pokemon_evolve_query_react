@@ -209,7 +209,7 @@ class App extends Component {
       </div>
       <table >
         <tr>
-          <td className="EvolutionHeader">First Evolutions</td>
+          <td className="EvolutionHeader">First Evolutions:</td>
           <td className="EvolutionSelection">
             <button className="EvolutionSelectionButton" id="selectAllFirstEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, true)}>
               Select All
@@ -222,7 +222,7 @@ class App extends Component {
           </td>
         </tr>
         <tr>
-          <td className="EvolutionHeader">Second Evolutions</td>
+          <td className="EvolutionHeader">Second Evolutions:</td>
           <td className="EvolutionSelection">
             <button className="EvolutionSelectionButton" id="selectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, true)}>
               Select All
@@ -235,7 +235,7 @@ class App extends Component {
           </td>
         </tr>
         <tr>
-          <td className="EvolutionHeader">Third Evolutions</td>
+          <td className="EvolutionHeader">Third Evolutions:</td>
           <td className="EvolutionSelection">
             <button className="EvolutionSelectionButton" id="selectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, true)}>
               Select All
