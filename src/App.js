@@ -368,7 +368,6 @@ class App extends Component {
           <h1>Pokemon Query Generator</h1>
         </div>
         <div className="Main-body">
-          <h4>Inspired by <a href="https://www.reddit.com/r/TheSilphRoad/comments/6ztyu5/the_ultimate_mass_evolution_search_query/">this</a> Reddit thread.</h4>
           <div className="CurrentQuery">
             {currentQuery}
           </div>
@@ -394,6 +393,7 @@ class App extends Component {
           </div>
           <hr/>
           <div className="Footer">
+            <h4>Inspired by <a href="https://www.reddit.com/r/TheSilphRoad/comments/6ztyu5/the_ultimate_mass_evolution_search_query/">this</a> Reddit thread.</h4>
             For comments or suggestions, message me <a href="https://www.reddit.com/user/mikeappell/">on Reddit.</a>
             <br />
             <br />
