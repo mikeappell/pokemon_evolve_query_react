@@ -1,7 +1,47 @@
+@media only screen and (max-width: 1000px) {
+  img.PokemonIcon {
+    height: 72px;
+    width: 72px; }
+  button.ClickToCopy {
+    font-size: 40px;
+    margin-bottom: 15px; }
+  .Main-body h4 {
+    font-size: 14px; }
+  .SelectDeselectButtons table {
+    font-size: 30px; }
+    .SelectDeselectButtons table td.EvolutionHeader {
+      padding: 8px 10px 0 0; }
+    .SelectDeselectButtons table td.EvolutionSelection {
+      padding: 10px 5px 0 0; }
+    .SelectDeselectButtons table button.EvolutionSelectionButton {
+      font-size: 26px;
+      padding: 8px 20px;
+      border-radius: 5px; }
+  .PreCreatedQueryLabel {
+    font-size: 12px; }
+  .ToggleContainer select.LanguageSelectSelect {
+    font-size: 26px;
+    padding-left: 5px;
+    border-radius: 5px; }
+  .ToggleContainer label.ToggleContainerLabel, .ToggleContainer label.LanguageSelectLabel {
+    font-size: 30px;
+    width: 230px; }
+  .ToggleContainer label.CheckboxesOrButtonsToggle {
+    font-size: 30px; }
+  ul.QueryList .SelectionLabelBlurb {
+    font-size: 10px; }
+  .Footer {
+    font-size: 11px; } }
+
 .App {
   text-align: center; }
-  .App button {
-    font-size: 13px; }
+
+button.ClickToCopy {
+  border-radius: 5px;
+  padding: 5px 10px; }
+
+hr {
+  margin: 15px 0; }
 
 .App-header {
   background-color: #222;
@@ -13,6 +53,14 @@
   display: flex;
   margin-bottom: 5px; }
   .ToggleContainer label {
+    margin-top: 2px; }
+  .ToggleContainer .LanguageSelectLabel {
+    margin-right: 10px; }
+  .ToggleContainer .CheckboxesOrButtonsToggle {
+    font-size: 16px;
+    margin-right: 10px; }
+  .ToggleContainer .ToggleContainerLabel {
+    font-size: 16px;
     width: 115px;
     margin-right: 20px; }
 
@@ -28,20 +76,25 @@
   margin-top: 30px;
   text-align: left; }
 
-.SelectDeselectButtons {
-  margin-bottom: 40px; }
-  .SelectDeselectButtons button {
-    margin-right: 3px;
-    margin-bottom: 3px; }
+.SelectDeselectButtons table td.EvolutionHeader {
+  padding-right: 5px; }
+
+.SelectDeselectButtons table button.EvolutionSelectionButton {
+  padding: 5px;
+  border-radius: 5px; }
+
+.SelectDeselectButtons button {
+  margin-right: 3px;
+  margin-bottom: 3px; }
 
 .SelectionLabel {
   display: inline-block;
   width: 125px;
-  font-size: small; }
+  font-size: 14px; }
 
 .SelectionLabelBlurb {
-  margin-bottom: 15px;
-  font-size: small;
+  margin-bottom: 10px;
+  font-size: 12px;
   font-style: italic; }
 
 .LanguageSelect {
@@ -77,9 +130,19 @@
   .PokemonSelectionButton-notSelected {
     background-color: white; }
 
-img.PokemonIcon {
-  height: 38px;
-  width: 38px; }
+.PokemonSelectionCheckbox-1 {
+  margin-left: 0px;
+  margin-top: 15px; }
+
+.PokemonSelectionCheckbox-2 {
+  margin-left: 30px; }
+
+.PokemonSelectionCheckbox-3 {
+  margin-left: 60px; }
+
+.PokemonIcon {
+  height: 32px;
+  width: 32px; }
 
 .Footer {
   margin-bottom: 10px; }

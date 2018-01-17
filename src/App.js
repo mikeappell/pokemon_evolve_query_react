@@ -20,6 +20,7 @@ class App extends Component {
       selectedPreCreatedQueryCheckbox: 'Compact',
       checkboxesEnabled: false,
       language: 'English',
+      selectUsingButtons: true,
       toggled,
     };
   }
@@ -33,7 +34,7 @@ class App extends Component {
   getLastPokemonNumber() {
     const allowedPokemonFamilies = this.getAllowedPokemonFamilies();
     const lastFamily = allowedPokemonFamilies[allowedPokemonFamilies.length - 1];
-    return parseInt(lastFamily[lastFamily.length - 1].number);
+    return parseInt(lastFamily[lastFamily.length - 1].number, 10);
   }
 
   getEvolutionListOfPokemon(evolutionNumber) {
@@ -110,8 +111,9 @@ class App extends Component {
 
   renderEvolvingSelectionButton = () => (
     <div className="ToggleContainer">
-      <label htmlFor="evolvingButton">Evolving?</label>
+      <label className='ToggleContainerLabel' htmlFor="evolvingButton">Evolving?</label>
       <ToggleButton
+        colors={ { active: { base: 'rgb(109,127,145)' } } }
         inactiveLabel='No'
         activeLabel='Yes'
         value={this.state.evolving}
@@ -125,8 +127,9 @@ class App extends Component {
 
   renderIncludeBabyPokemonSelectionButton = () => (
     <div className="ToggleContainer">
-      <label htmlFor="includeBabyPokemonButton">Include Babies?</label>
+      <label className='ToggleContainerLabel' htmlFor="includeBabyPokemonButton">Include Babies?</label>
       <ToggleButton
+        colors={ { active: { base: 'rgb(109,127,145)' } } }
         inactiveLabel='No'
         activeLabel='Yes'
         value={this.state.includeBabies}
@@ -164,7 +167,7 @@ class App extends Component {
       <div className="ToggleContainer LanguageSelect">
         <label className="LanguageSelectLabel" htmlFor="languageSelect">Language:</label>
         <select
-          className="LanguageSelectSelect"
+        className="LanguageSelectSelect"
           id="languageSelect"
           onChange={this.handleLanguageSelection}
         >
@@ -174,38 +177,75 @@ class App extends Component {
     )
   }
 
+  renderCheckboxesOrButtonsSelection = () => {
+    return (
+      <div>
+        <div className="SelectionLabelBlurb">
+          * Reverts to the old way of showing Pokemon as lists of checkboxes
+        </div>
+        <div className='ToggleContainer'>
+          <label className="CheckboxesOrButtonsToggle" htmlFor="checkboxesOrButtonsToggle">Select Pokemon as images?</label>
+          <ToggleButton
+            colors={ { active: { base: 'rgb(109,127,145)' } } }
+            inactiveLabel='No'
+            activeLabel='Yes'
+            value={this.state.selectUsingButtons}
+            id="checkboxesOrButtonsToggle"
+            onToggle={(value) => {
+              this.setState({ selectUsingButtons: (value ? false : true), checkboxesEnabled: true });
+            }}
+          />
+        </div>
+      </div>
+    )
+  }
+
   renderSelectDeselectAllButtons = () => (
     <div className="SelectDeselectButtons">
       <div className="SelectionLabelBlurb">
         * Higher evolutions can be used to find just-evolved Pokemon to transfer post-evolution
       </div>
-      <div>
-        <span className="SelectionLabel">First Evolutions:</span>
-        <button id="selectAllFirstEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, true)}>
-          Select All
-        </button>
-        <button id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, false)}>
-          De-select All
-        </button>
-      </div>
-      <div>
-        <span className="SelectionLabel">Second Evolutions:</span>
-        <button id="selectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, true)}>
-          Select All
-        </button>
-        <button id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, false)}>
-          De-select All
-        </button>
-      </div>
-      <div>
-        <span className="SelectionLabel">Third Evolutions:</span>
-        <button id="selectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, true)}>
-          Select All
-        </button>
-        <button id="deselectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, false)}>
-          De-select All
-        </button>
-      </div>
+      <table >
+        <tr>
+          <td className="EvolutionHeader">First Evolutions</td>
+          <td className="EvolutionSelection">
+            <button className="EvolutionSelectionButton" id="selectAllFirstEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, true)}>
+              Select All
+            </button>
+          </td>
+          <td className="EvolutionSelection">
+            <button className="EvolutionSelectionButton" id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, false)}>
+              De-select All
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td className="EvolutionHeader">Second Evolutions</td>
+          <td className="EvolutionSelection">
+            <button className="EvolutionSelectionButton" id="selectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, true)}>
+              Select All
+            </button>
+          </td>
+          <td className="EvolutionSelection">
+             <button className="EvolutionSelectionButton" id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, false)}>
+              De-select All
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td className="EvolutionHeader">Third Evolutions</td>
+          <td className="EvolutionSelection">
+            <button className="EvolutionSelectionButton" id="selectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, true)}>
+              Select All
+            </button>
+          </td>
+          <td className="EvolutionSelection">
+            <button className="EvolutionSelectionButton" id="deselectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, false)}>
+              De-select All
+            </button>
+          </td>
+        </tr>
+      </table>
     </div>
   )
 
@@ -214,13 +254,13 @@ class App extends Component {
       <li key={queryName}>
         <input
           type='checkbox'
-          className="SelectionCheckbox SelectionCheckbox-preCreated"
+          className="PokemonSelectionCheckbox"
           id={queryName}
           value={queryName}
           checked={this.state.selectedPreCreatedQueryCheckbox === queryName}
           onChange={this.handlePreCreatedQueryCheckboxClick.bind(this, queryName)}
         />
-        <label htmlFor={queryName}>{Queries[queryName]['label']}</label>
+        <label className="PreCreatedQueryLabel" htmlFor={queryName}>{Queries[queryName]['label']}</label>
       </li>
     )
   }
@@ -238,7 +278,7 @@ class App extends Component {
       )
 
       return (
-        <div className="PokemonGeneration">
+        <div key={generation.name} className="PokemonGeneration">
           <div className="PokemonGenerationTitle">{generation.name}</div>
           {this.renderPokemonFamiliesPerGeneration(pokemonFamiliesPerGeneration)}
         </div>
@@ -248,11 +288,15 @@ class App extends Component {
 
   renderPokemonFamiliesPerGeneration = (pokemonFamiliesPerGeneration) => {
     return pokemonFamiliesPerGeneration.map((pokemonFamily) => {
-      const pokemonButtonsPerFamily = this.renderIndividualPokemonButtonsPerFamily(pokemonFamily);
+      const individualPokemonPerFamily = this.state.selectUsingButtons
+       ? this.renderIndividualPokemonButtonsPerFamily(pokemonFamily)
+       : this.renderIndividualPokemonCheckboxesPerFamily(pokemonFamily);
 
-      return Object.values(pokemonButtonsPerFamily).some(o => o !== null) ? (
-        <div className="PokemonFamilyButtons" key={pokemonFamily[pokemonFamily.length - 1].number}>
-          {pokemonButtonsPerFamily}
+      const pokemonStyle = this.state.selectUsingButtons ? 'PokemonFamilyButtons' : '';
+
+      return Object.values(individualPokemonPerFamily).some(o => o !== null) ? (
+        <div className={pokemonStyle} key={pokemonFamily[pokemonFamily.length - 1].number}>
+          {individualPokemonPerFamily}
         </div>
       ) : null;
     })
@@ -275,6 +319,25 @@ class App extends Component {
         </button>
       )
     })
+  }
+
+  renderIndividualPokemonCheckboxesPerFamily = (pokemonFamily) => {
+    return pokemonFamily.map((individualPokemon) => {
+      return (
+        <li key={individualPokemon.number}>
+          <input
+            type='checkbox'
+            className={"PokemonSelectionCheckbox PokemonSelectionCheckbox-" + individualPokemon.evolution}
+            id={individualPokemon.name}
+            value={individualPokemon.number}
+            checked={this.state.toggled[individualPokemon.number]}
+            onChange={this.handleIndividualPokemonClick.bind(this, individualPokemon.number)}
+            disabled={!this.state.checkboxesEnabled}
+          />
+          <label htmlFor={individualPokemon.name}>{individualPokemon.name}</label>
+        </li>
+      )
+    });
   }
 
   // If we're filtering baby pokemon, we see if the current family has any babies present.
@@ -313,30 +376,34 @@ class App extends Component {
             text={currentQuery}
             onCopy={() => this.setState({copied: true})}
           >
-            <button>Click to Copy</button>
+            <button className="ClickToCopy">Click to Copy</button>
           </CopyToClipboard>
           <div className="PokemonSelectionContainer">
             <ul className="QueryList">
+              {this.renderLanguageSelection()}
               {this.renderEvolvingSelectionButton()}
               {this.renderIncludeBabyPokemonSelectionButton()}
-              {this.renderLanguageSelection()}
+              <hr />
               {this.renderPrecreatedQueryCheckboxes()}
-              <hr/>
+              <hr />
               {this.renderSelectDeselectAllButtons()}
+              <hr />
+              {this.renderCheckboxesOrButtonsSelection()}
               {this.renderPokemonGenerations()}
             </ul>
           </div>
           <hr/>
           <div className="Footer">
-            For comments or suggestion, message me <a href="https://www.reddit.com/user/mikeappell/">on Reddit.</a>
-            <br/>
-            <br/>
+            For comments or suggestions, message me <a href="https://www.reddit.com/user/mikeappell/">on Reddit.</a>
+            <br />
+            <br />
             Pokémon And All Respective Names are Trademark & © of Nintendo 1996-2018
             Pokémon GO is Trademark & © of Niantic, Inc.
-            <br/>
+            <br />
+            <br />
             This website is not affiliated with Niantic Inc., The Pokemon Company or Nintendo, though I think they're peachy keen.
-            <br/>
-            <br/>
+            <br />
+            <br />
             Built using <a href="https://github.com/facebookincubator/create-react-app">Create React App</a>. Code can be found <a href="https://github.com/mikeappell/pokemon_evolve_query_react">here</a>.
           </div>
         </div>
@@ -666,7 +733,7 @@ export const PokemonFamilies = [
     { name: 'Ditto', number: '132', evolution: 1, meta: 'nohigher' },
   ],
   [
-    { name: 'Eevee', number: '133', evolution: 1, meta: 'special' },
+    { name: 'Eevee', number: '133', evolution: 1 },
     { name: 'Vaporeon', number: '134', evolution: 2, meta: 'special' },
     { name: 'Jolteon', number: '135', evolution: 2, meta: 'special' },
     { name: 'Flareon', number: '136', evolution: 2, meta: 'special' },
