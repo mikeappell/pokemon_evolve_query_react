@@ -18,7 +18,6 @@ class App extends Component {
       evolving: true,
       includeBabies: true,
       selectedPreCreatedQueryCheckbox: 'Compact',
-      checkboxesEnabled: false,
       language: 'English',
       selectUsingButtons: true,
       toggled,
@@ -73,16 +72,19 @@ class App extends Component {
   }
 
   handlePreCreatedQueryCheckboxClick = (query) => {
+    this.setState({ selectedPreCreatedQueryCheckbox: query })
+
+    // If Compact is selected, we toggle the boxes as if the query were 'Full'
     if (query === 'Compact') {
-      this.setState({ selectedPreCreatedQueryCheckbox: query, checkboxesEnabled: false })
-    } else {
-      let toggled = {};
-      const keys = Object.keys(this.state.toggled);
-      for (let i in keys) {
-        toggled[keys[i]] = (Queries[query]['query'].includes(keys[i])) ? true : false;
-      };
-      this.setState({ toggled, selectedPreCreatedQueryCheckbox: query, checkboxesEnabled: true });
+      query = 'Full';
     }
+
+    let toggled = {};
+    const keys = Object.keys(this.state.toggled);
+    for (let i in keys) {
+      toggled[keys[i]] = (Queries[query]['query'].includes(keys[i])) ? true : false;
+    };
+    this.setState({ toggled });
   }
 
   handleIndividualPokemonClick = (pokemonNumber) => {
@@ -105,7 +107,7 @@ class App extends Component {
         toggled[keys[i]] = (evolutionList.includes(keys[i]) ? bool : prevState.toggled[keys[i]]);
       };
 
-      return { toggled, selectedPreCreatedQueryCheckbox: null, checkboxesEnabled: true };
+      return { toggled, selectedPreCreatedQueryCheckbox: null };
     })
   }
 
@@ -119,7 +121,7 @@ class App extends Component {
         value={this.state.evolving}
         id="evolvingButton"
         onToggle={(value) => {
-          this.setState({ evolving: !value, selectedPreCreatedQueryCheckbox: null, checkboxesEnabled: true }, this.updateCurrentQuery);
+          this.setState({ evolving: !value, selectedPreCreatedQueryCheckbox: null }, this.updateCurrentQuery);
         }}
       />
     </div>
@@ -135,7 +137,7 @@ class App extends Component {
         value={this.state.includeBabies}
         id="includeBabyPokemonButton"
         onToggle={(value) => {
-          this.setState({ includeBabies: !value, selectedPreCreatedQueryCheckbox: null, checkboxesEnabled: true }, this.toggleBabyPokemon.bind(this, !value));
+          this.setState({ includeBabies: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleBabyPokemon.bind(this, !value));
         }}
       />
     </div>
@@ -192,7 +194,7 @@ class App extends Component {
             value={this.state.selectUsingButtons}
             id="checkboxesOrButtonsToggle"
             onToggle={(value) => {
-              this.setState({ selectUsingButtons: (value ? false : true), checkboxesEnabled: true });
+              this.setState({ selectUsingButtons: (value ? false : true) });
             }}
           />
         </div>
@@ -313,7 +315,6 @@ class App extends Component {
           id={individualPokemon.name}
           value={individualPokemon.number}
           onClick={this.handleIndividualPokemonClick.bind(this, individualPokemon.number)}
-          disabled={!this.state.checkboxesEnabled}
         >
           <img src={`/pokemon_icons/${individualPokemon.number}.png`} alt={individualPokemon.name} className='PokemonIcon' />
         </button>
@@ -332,7 +333,6 @@ class App extends Component {
             value={individualPokemon.number}
             checked={this.state.toggled[individualPokemon.number]}
             onChange={this.handleIndividualPokemonClick.bind(this, individualPokemon.number)}
-            disabled={!this.state.checkboxesEnabled}
           />
           <label htmlFor={individualPokemon.name}>{individualPokemon.name}</label>
         </li>
@@ -423,7 +423,7 @@ export const Generations = [
 ];
 
 export const Queries = {
-  Compact: { label: "Compact Full Query (doesn't allow modification)", query: '1,4,7,10,13,16,19-23,27,29,32,37,41,43,46-60,63,66,69,72,74,77-92,95-116,118-147,152,155,158,161-179,183,187,191-246,353,355' },
+  Compact: { label: "Compact Full Query", query: '1,4,7,10,13,16,19-23,27,29,32,37,41,43,46-60,63,66,69,72,74,77-92,95-116,118-147,152,155,158,161-179,183,187,191-246,353,355' },
   Full: { label: 'Full Query', query: ['1','4','7','10','13','16','19','21','23','27','29','32','37','41','43','46','48','50','52','54','56','58','60','63','66','69','72','74','77','79','81','84','86','88','90','92','96','98','100','102','104','109','111','113','116','118','120','133','138','140','147','152','155','158','161','163','165','167','170','172','173','174','175','177','179','183','187','194','204','209','216','218','220','223','228','231','238','239','240','246','353','355'] },
   Minimal: { label: 'Minimal Query', query: ['10','13','16','19','21','161','163','165','167','177'] },
   Water: { label: 'Water-Specific Query', query: ['10','13','16','19','21','60','72','86','90','116','161','163','165','167','177','183','194','223'] },
