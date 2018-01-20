@@ -8,6 +8,10 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    // I'm caching these operations as they're moderately expensive. I may move these to state at some point.
+    this.allowedPokemonFamilies = this.getAllowedPokemonFamilies();
+    this.allowedPokemonFamiliesPerGeneration = this.getAllowedPokemonFamiliesPerGeneration();
+
     let toggled = {};
     for (let i = 1; i <= this.getLastPokemonNumber(); i++) {
       toggled[i] = (Queries.Full.query.includes(i.toString()) ? true : false);
@@ -50,14 +54,14 @@ class App extends Component {
   }
 
   getLastPokemonNumber() {
-    const allowedPokemonFamilies = this.getAllowedPokemonFamilies();
+    const allowedPokemonFamilies = this.allowedPokemonFamilies;
     const lastFamily = allowedPokemonFamilies[allowedPokemonFamilies.length - 1];
     return parseInt(lastFamily[lastFamily.length - 1].number, 10);
   }
 
   getEvolutionListOfPokemon(evolutionNumber) {
     let evolutionList = [];
-    this.getAllowedPokemonFamilies().forEach((pokemonFamily) => {
+    this.allowedPokemonFamilies.forEach((pokemonFamily) => {
       pokemonFamily.forEach((individualPokemon) => {
         if (individualPokemon.evolution === evolutionNumber) evolutionList.push(individualPokemon.number);
       })
@@ -165,7 +169,7 @@ class App extends Component {
   toggleBabyPokemon = (toggleOff) => {
     if (toggleOff) return;
 
-    const babyPokemon = this.getAllowedPokemonFamilies().map((pokemonFamily) =>
+    const babyPokemon = this.allowedPokemonFamilies.map((pokemonFamily) =>
       pokemonFamily.filter((individualPokemon) =>
         individualPokemon.meta === 'baby'
       ).map(individualPokemon => individualPokemon.number)
@@ -290,7 +294,7 @@ class App extends Component {
 
   renderPokemonGenerations = () => {
     // We deep-clone the array of objects so we can safely mutate it
-    let pokemonFamilies = JSON.parse(JSON.stringify(this.getAllowedPokemonFamiliesPerGeneration()));
+    let pokemonFamilies = JSON.parse(JSON.stringify(this.allowedPokemonFamiliesPerGeneration));
 
     // Filter out baby pokemon if option selected
 
