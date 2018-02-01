@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import ToggleButton from 'react-toggle-button'
+import ToggleButton from 'react-toggle-button';
+import Collapsible from 'react-collapsible';
 import './App.css';
 
 class App extends Component {
@@ -430,15 +431,23 @@ class App extends Component {
           </CopyToClipboard>
           <div className="PokemonSelectionContainer">
             <ul className="QueryList">
-              {this.renderLanguageSelection()}
-              {this.renderEvolvingSelectionButton()}
-              {this.renderIncludeBabyPokemonSelectionButton()}
-              <hr />
               {this.renderPrecreatedQueryCheckboxes()}
               <hr />
-              {this.renderSelectDeselectAllButtons()}
+              <Collapsible
+                trigger='Advanced Controls &rsaquo;'
+                triggerWhenOpen='Advanced Controls &lsaquo;'
+                transitionTime={ 200 }
+              >
+                <hr />
+                {this.renderLanguageSelection()}
+                {this.renderEvolvingSelectionButton()}
+                {this.renderIncludeBabyPokemonSelectionButton()}
+                <hr />
+                {this.renderSelectDeselectAllButtons()}
+                <hr />
+                {this.renderCheckboxesOrButtonsSelection()}
+              </Collapsible>
               <hr />
-              {this.renderCheckboxesOrButtonsSelection()}
               {this.renderPokemonGenerations()}
             </ul>
           </div>

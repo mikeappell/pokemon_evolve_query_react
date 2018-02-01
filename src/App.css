@@ -23,6 +23,8 @@
     font-size: 16px; }
   .ToggleContainer label.CheckboxesOrButtonsToggle {
     font-size: 16px; }
+  div.PokemonFamilyButtons {
+    padding: 1px; }
   ul.QueryList .SelectionLabelBlurb {
     font-size: 10px; }
   .Footer {
@@ -93,7 +95,7 @@ hr {
   font-style: italic; }
 
 .LanguageSelect {
-  margin: 20px 0; }
+  margin-bottom: 7px; }
 
 .QueryList {
   list-style-type: none; }

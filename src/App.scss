@@ -47,6 +47,10 @@
     }
   }
 
+  div.PokemonFamilyButtons {
+    padding: 1px;
+  }
+
   ul.QueryList .SelectionLabelBlurb {
     font-size: 10px;
   }
@@ -142,7 +146,7 @@ hr { margin: 15px 0; }
 }
 
 .LanguageSelect {
-  margin: 20px 0;
+  margin-bottom: 7px;
 }
 
 .QueryList {
