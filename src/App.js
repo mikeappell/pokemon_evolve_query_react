@@ -8,10 +8,12 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    // I'm caching these operations as they're moderately expensive. I may move these to state at some point.
+    // I'm caching the results of these operations as they're moderately expensive.
+    // I may move these to state at some point.
     this.allowedPokemonFamilies = this.getAllowedPokemonFamilies();
     this.allowedPokemonFamiliesPerGeneration = this.getAllowedPokemonFamiliesPerGeneration();
 
+    // Calculate the initial state of toggled Pokemon based on the default query
     let toggled = {};
     for (let i = 1; i <= this.getLastPokemonNumber(); i++) {
       toggled[i] = (Queries.Full.query.includes(i.toString()) ? true : false);
@@ -28,6 +30,15 @@ class App extends Component {
     };
   }
 
+  // Returns array of Pokemon family arrays, e.g.
+  // [
+  //   [
+  //     { name: "Bulbasaur", number: "1", evolution: 1 },
+  //     { name: "Ivysaur", number: "2", evolution: 2 },
+  //     { name: "Venusaur", number: "3", evolution: 3 }
+  //   ],
+  //   [ ... ], // Next family in list, e.g. Charmander family
+  // ]
   getAllowedPokemonFamilies() {
     const pokemonFamilies = [];
     for (let generation of PokemonGenerations) {
@@ -39,6 +50,21 @@ class App extends Component {
     return pokemonFamilies.filter(pokemonFamily => pokemonFamily.length > 0);
   }
 
+  // Returns array of Pokemon generation objects, each of of similar structure to getAllowedPokemonFamilies(), e.g.
+  // [
+  //   {
+  //     name: 'Generation 1',
+  //     families: [
+  //       [
+  //         { name: "Bulbasaur", number: "1", evolution: 1 },
+  //         { name: "Ivysaur", number: "2", evolution: 2 },
+  //         { name: "Venusaur", number: "3", evolution: 3 }
+  //       ],
+  //       [ ... ], // Next family in list, e.g. Charmander family
+  //     ]
+  //   },
+  //   { ... }, // Next generation in list, e.g. Generation 2
+  // ]
   getAllowedPokemonFamiliesPerGeneration() {
     const pokemonFamiliesPerGeneration = [];
     for (let generation of PokemonGenerations) {
@@ -53,12 +79,15 @@ class App extends Component {
     return pokemonFamiliesPerGeneration;
   }
 
+  // Returns the # of the last allowed Pokemon in all current generations, e.g. 386
   getLastPokemonNumber() {
     const allowedPokemonFamilies = this.allowedPokemonFamilies;
     const lastFamily = allowedPokemonFamilies[allowedPokemonFamilies.length - 1];
     return parseInt(lastFamily[lastFamily.length - 1].number, 10);
   }
 
+  // Returns an array of all allowed pokemon of the supplied evolution,
+  // e.g. for '1' returns ["1", "4", "7", "10", "13", "16", "19", "21" ... ]
   getEvolutionListOfPokemon(evolutionNumber) {
     let evolutionList = [];
     this.allowedPokemonFamilies.forEach((pokemonFamily) => {
@@ -70,6 +99,7 @@ class App extends Component {
     return evolutionList;
   }
 
+  // Returns the current generated query string, which can be copied to clipboard.
   // TODO: Generalize the concept of queries which include ranges beyond just 'Compact'
   getCurrentQuery = () => {
     let currentQuery = "";
@@ -94,6 +124,7 @@ class App extends Component {
     return currentQuery;
   }
 
+  // When the user clicks on one of the pre-created query selections, e.g. 'Full Query' or 'Minimal Query'
   handlePreCreatedQueryCheckboxClick = (query) => {
     this.setState({ selectedPreCreatedQueryCheckbox: query })
 
@@ -160,27 +191,11 @@ class App extends Component {
         value={this.state.includeBabies}
         id="includeBabyPokemonButton"
         onToggle={(value) => {
-          this.setState({ includeBabies: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleBabyPokemon.bind(this, !value));
+          this.setState({ includeBabies: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleBabyPokemonOff.bind(this, value));
         }}
       />
     </div>
   )
-
-  toggleBabyPokemon = (toggleOff) => {
-    if (toggleOff) return;
-
-    const babyPokemon = this.allowedPokemonFamilies.map((pokemonFamily) =>
-      pokemonFamily.filter((individualPokemon) =>
-        individualPokemon.meta === 'baby'
-      ).map(individualPokemon => individualPokemon.number)
-    ).filter(pokemonFamily => pokemonFamily.length > 0);
-
-    this.setState((prevState) => {
-      const toggled = Object.assign({}, prevState.toggled);
-      for (let i = 0; i < babyPokemon.length; i++) toggled[babyPokemon[i]] = false;
-      return { toggled };
-    });
-  }
 
   renderLanguageSelection = () => {
     const options = Object.keys(EvolveTranslations).map((language) =>
@@ -299,7 +314,7 @@ class App extends Component {
     // Filter out baby pokemon if option selected
 
     return pokemonFamilies.map((pokemonGeneration) => {
-      if (!this.state.includeBabies) pokemonGeneration.families = this.filterBabyPokemon(pokemonGeneration.families);
+      if (!this.state.includeBabies) pokemonGeneration.families = this.filterOutBabyPokemon(pokemonGeneration.families);
 
       return (
         <div key={pokemonGeneration.name} className="PokemonGeneration">
@@ -362,12 +377,26 @@ class App extends Component {
     });
   }
 
-  // If we're filtering baby pokemon, we see if the current family has any babies present.
+  // If true, ensure all baby Pokemon are untoggled in state
+  toggleBabyPokemonOff = (toggle) => {
+    if (!toggle) return;
+
+    const babyPokemon = this.allowedPokemonFamilies.map((pokemonFamily) =>
+      pokemonFamily.filter((individualPokemon) =>
+        individualPokemon.meta === 'baby'
+      ).map(individualPokemon => individualPokemon.number)
+    ).filter(pokemonFamily => pokemonFamily.length > 0);
+
+    this.setState((prevState) => {
+      const toggled = Object.assign({}, prevState.toggled);
+      for (let i = 0; i < babyPokemon.length; i++) toggled[babyPokemon[i]] = false;
+      return { toggled };
+    });
+  }
+
+  // If we're filtering out baby pokemon, we see if the current family has any babies present.
   // If so, we remove them and decrement the evol # of the remaining pokemon.
-  // Unfortunately, we can't call setState in this method as this method runs during a re-rendering
-  // which would cause an infinite loop of setStates. As such, we need the logic for toggling off
-  // baby Pokemon to be called separately, thus the toggleBabyPokemon method above.
-  filterBabyPokemon(pokemonFamilies) {
+  filterOutBabyPokemon(pokemonFamilies) {
     return pokemonFamilies.map((pokemonFamily) => {
       let hasBaby = false;
       const filteredFamily = pokemonFamily.filter((individualPokemon) => {
