@@ -69,7 +69,10 @@ button.ClickToCopy {
   padding: 5px 10px;
 }
 
-hr { margin: 15px 0; }
+hr {
+  margin: 15px 5px;
+  height: 1px;
+}
 
 .App-header {
   background-color: #222;
