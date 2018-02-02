@@ -14,15 +14,15 @@
   .SelectDeselectButtons table {
     font-size: 16px;
 
-    td.EvolutionHeader {
+    td.SelectionHeader {
       padding: 8px 10px 0 0;
     }
 
-    td.EvolutionSelection {
+    td.SelectionButtonCell {
       padding: 0 5px 0 0;
     }
 
-    button.EvolutionSelectionButton {
+    button.SelectionButton {
       font-size: 16px;
     }
   }
@@ -120,11 +120,12 @@ hr {
 
 .SelectDeselectButtons {
   table {
-    td.EvolutionHeader {
+    td.SelectionHeader {
       padding-right: 5px;
+      width: 137px;
     }
 
-    .EvolutionSelectionButton {
+    .SelectionButton {
       padding: 5px;
       border-radius: 5px;
     }

@@ -7,11 +7,11 @@
     font-size: 16px; }
   .SelectDeselectButtons table {
     font-size: 16px; }
-    .SelectDeselectButtons table td.EvolutionHeader {
+    .SelectDeselectButtons table td.SelectionHeader {
       padding: 8px 10px 0 0; }
-    .SelectDeselectButtons table td.EvolutionSelection {
+    .SelectDeselectButtons table td.SelectionButtonCell {
       padding: 0 5px 0 0; }
-    .SelectDeselectButtons table button.EvolutionSelectionButton {
+    .SelectDeselectButtons table button.SelectionButton {
       font-size: 16px; }
   .PreCreatedQueryLabel {
     font-size: 16px; }
@@ -74,10 +74,11 @@ hr {
   margin-top: 30px;
   text-align: left; }
 
-.SelectDeselectButtons table td.EvolutionHeader {
-  padding-right: 5px; }
+.SelectDeselectButtons table td.SelectionHeader {
+  padding-right: 5px;
+  width: 137px; }
 
-.SelectDeselectButtons table .EvolutionSelectionButton {
+.SelectDeselectButtons table .SelectionButton {
   padding: 5px;
   border-radius: 5px; }
 

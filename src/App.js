@@ -153,14 +153,16 @@ class App extends Component {
   handleLanguageSelection = (e) => this.setState({ language: e.target.value});
 
   onSelectDeselectAllClick = (evolutionNumber, bool) => {
-    const evolutionList = this.getEvolutionListOfPokemon(evolutionNumber);
-
     this.setState((prevState) => {
       let toggled = {};
       const keys = Object.keys(prevState.toggled)
-      for (let i in keys) {
-        toggled[keys[i]] = (evolutionList.includes(keys[i]) ? bool : prevState.toggled[keys[i]]);
-      };
+
+      if (evolutionNumber === null) {
+        for (let i in keys) toggled[keys[i]] = bool;
+      } else {
+        const evolutionList = this.getEvolutionListOfPokemon(evolutionNumber);
+        for (let i in keys) toggled[keys[i]] = (evolutionList.includes(keys[i]) ? bool : prevState.toggled[keys[i]]);
+      }
 
       return { toggled, selectedPreCreatedQueryCheckbox: null };
     })
@@ -243,46 +245,68 @@ class App extends Component {
 
   renderSelectDeselectAllButtons = () => (
     <div className="SelectDeselectButtons">
+      <table >
+        <tbody>
+          <tr>
+            <td className="SelectionHeader">All Pokemon:</td>
+            <td className="SelectionButtonCell">
+              <button className="SelectionButton" id="selectAllFirstEvo" onClick={this.onSelectDeselectAllClick.bind(this, null, true)}>
+                Select All
+              </button>
+            </td>
+            <td className="SelectionButtonCell">
+              <button className="SelectionButton" id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, null, false)}>
+                De-select All
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
+
+  renderSelectDeselectEvolutionsButtons = () => (
+    <div className="SelectDeselectButtons">
       <div className="SelectionLabelBlurb">
         * Higher evolutions can be used to find just-evolved Pokemon to transfer post-evolution
       </div>
       <table >
         <tbody>
           <tr>
-            <td className="EvolutionHeader">First Evolutions:</td>
-            <td className="EvolutionSelection">
-              <button className="EvolutionSelectionButton" id="selectAllFirstEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, true)}>
+            <td className="SelectionHeader">First Evolutions:</td>
+            <td className="SelectionButtonCell">
+              <button className="SelectionButton" id="selectAllFirstEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, true)}>
                 Select All
               </button>
             </td>
-            <td className="EvolutionSelection">
-              <button className="EvolutionSelectionButton" id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, false)}>
+            <td className="SelectionButtonCell">
+              <button className="SelectionButton" id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, false)}>
                 De-select All
               </button>
             </td>
           </tr>
           <tr>
-            <td className="EvolutionHeader">Second Evolutions:</td>
-            <td className="EvolutionSelection">
-              <button className="EvolutionSelectionButton" id="selectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, true)}>
+            <td className="SelectionHeader">Second Evolutions:</td>
+            <td className="SelectionButtonCell">
+              <button className="SelectionButton" id="selectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, true)}>
                 Select All
               </button>
             </td>
-            <td className="EvolutionSelection">
-               <button className="EvolutionSelectionButton" id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, false)}>
+            <td className="SelectionButtonCell">
+               <button className="SelectionButton" id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, false)}>
                 De-select All
               </button>
             </td>
           </tr>
           <tr>
-            <td className="EvolutionHeader">Third Evolutions:</td>
-            <td className="EvolutionSelection">
-              <button className="EvolutionSelectionButton" id="selectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, true)}>
+            <td className="SelectionHeader">Third Evolutions:</td>
+            <td className="SelectionButtonCell">
+              <button className="SelectionButton" id="selectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, true)}>
                 Select All
               </button>
             </td>
-            <td className="EvolutionSelection">
-              <button className="EvolutionSelectionButton" id="deselectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, false)}>
+            <td className="SelectionButtonCell">
+              <button className="SelectionButton" id="deselectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, false)}>
                 De-select All
               </button>
             </td>
@@ -444,6 +468,8 @@ class App extends Component {
                 {this.renderIncludeBabyPokemonSelectionButton()}
                 <hr />
                 {this.renderSelectDeselectAllButtons()}
+                <hr />
+                {this.renderSelectDeselectEvolutionsButtons()}
                 <hr />
                 {this.renderCheckboxesOrButtonsSelection()}
               </Collapsible>
