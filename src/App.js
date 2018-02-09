@@ -1329,7 +1329,7 @@ export const PokemonGenerations = [
         { name: 'Cacturne', number: '332', evolution: 2 },
       ],
       [
-        { name: 'Swablu', number: '333', evolution: 1, candy: 50 },
+        { name: 'Swablu', number: '333', evolution: 1, candy: 400 },
         { name: 'Altaria', number: '334', evolution: 2 },
       ],
       [
