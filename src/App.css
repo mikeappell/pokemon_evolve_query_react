@@ -74,6 +74,9 @@ hr {
   margin-top: 30px;
   text-align: left; }
 
+.Collapsible__contentOuter {
+  margin-left: 10px; }
+
 .SelectDeselectButtons table td.SelectionHeader {
   padding-right: 5px;
   width: 137px; }

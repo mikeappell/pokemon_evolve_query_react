@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ToggleButton from 'react-toggle-button';
 import Collapsible from 'react-collapsible';
@@ -100,6 +101,51 @@ class App extends Component {
     return evolutionList;
   }
 
+  // Same as getEvolutionListOfPokemon() but for candy number (e.g. 12, 25 etc)
+  getCandyListOfPokemon(candyNumber) {
+    let candyList = [];
+    this.allowedPokemonFamilies.forEach((pokemonFamily) => {
+      pokemonFamily.forEach((individualPokemon) => {
+        if (individualPokemon.candy === candyNumber) candyList.push(individualPokemon.number);
+      })
+    })
+
+    return candyList;
+  }
+
+  // If true, ensure all baby Pokemon are untoggled in state
+  toggleBabyPokemonOff = (toggle) => {
+    if (!toggle) return;
+
+    const babyPokemon = this.allowedPokemonFamilies.map((pokemonFamily) =>
+      pokemonFamily.filter((individualPokemon) =>
+        individualPokemon.meta === 'baby'
+      ).map(individualPokemon => individualPokemon.number)
+    ).filter(pokemonFamily => pokemonFamily.length > 0);
+
+    this.setState((prevState) => {
+      const toggled = Object.assign({}, prevState.toggled);
+      for (let i = 0; i < babyPokemon.length; i++) toggled[babyPokemon[i]] = false;
+      return { toggled };
+    });
+  }
+
+  // If we're filtering out baby pokemon, we see if the current family has any babies present.
+  // If so, we remove them and decrement the evol # of the remaining pokemon.
+  filterOutBabyPokemon(pokemonFamilies) {
+    return pokemonFamilies.map((pokemonFamily) => {
+      let hasBaby = false;
+      const filteredFamily = pokemonFamily.filter((individualPokemon) => {
+        const isBaby = individualPokemon.meta === 'baby';
+        if (isBaby) hasBaby = true;
+        return !isBaby;
+      })
+
+      if (hasBaby) filteredFamily.forEach((individualPokemon) => individualPokemon.evolution--);
+      return filteredFamily;
+    })
+  }
+
   // Returns the current generated query string, which can be copied to clipboard.
   // TODO: Generalize the concept of queries which include ranges beyond just 'Compact'
   getCurrentQuery = () => {
@@ -150,171 +196,31 @@ class App extends Component {
     })
   }
 
-  handleLanguageSelection = (e) => this.setState({ language: e.target.value});
-
-  onSelectDeselectAllClick = (evolutionNumber, bool) => {
+  // selectType: one of ['candy', 'evolution', null]
+  // selectNumber: for evolution e.g. 1, 2, 3; for candy eg. 12, 25, 50
+  // select: boolean, whether we're selecting/deselecting
+  onSelectDeselectAllClick = (selectType, selectNumber, select) => {
     this.setState((prevState) => {
       let toggled = {};
       const keys = Object.keys(prevState.toggled)
 
-      if (evolutionNumber === null) {
-        for (let i in keys) toggled[keys[i]] = bool;
-      } else {
-        const evolutionList = this.getEvolutionListOfPokemon(evolutionNumber);
-        for (let i in keys) toggled[keys[i]] = (evolutionList.includes(keys[i]) ? bool : prevState.toggled[keys[i]]);
+      switch(selectType) {
+        case null:
+          for (let i in keys) toggled[keys[i]] = select;
+          break;
+        case 'evolution':
+          const evolutionList = this.getEvolutionListOfPokemon(selectNumber);
+          for (let i in keys) toggled[keys[i]] = (evolutionList.includes(keys[i]) ? select : prevState.toggled[keys[i]]);
+          break;
+        case 'candy':
+          const candyList = this.getCandyListOfPokemon(selectNumber);
+          for (let i in keys) toggled[keys[i]] = (candyList.includes(keys[i]) ? select : prevState.toggled[keys[i]]);
+          break;
       }
 
       return { toggled, selectedPreCreatedQueryCheckbox: null };
     })
   }
-
-  renderEvolvingSelectionButton = () => (
-    <div className="ToggleContainer">
-      <label className='ToggleContainerLabel' htmlFor="evolvingButton">Evolving?</label>
-      <ToggleButton
-        colors={ { active: { base: 'rgb(109,127,145)' } } }
-        inactiveLabel='No'
-        activeLabel='Yes'
-        value={this.state.evolving}
-        id="evolvingButton"
-        onToggle={(value) => {
-          this.setState({ evolving: !value, selectedPreCreatedQueryCheckbox: null }, this.updateCurrentQuery);
-        }}
-      />
-    </div>
-  )
-
-  renderIncludeBabyPokemonSelectionButton = () => (
-    <div className="ToggleContainer">
-      <label className='ToggleContainerLabel' htmlFor="includeBabyPokemonButton">Include Babies?</label>
-      <ToggleButton
-        colors={ { active: { base: 'rgb(109,127,145)' } } }
-        inactiveLabel='No'
-        activeLabel='Yes'
-        value={this.state.includeBabies}
-        id="includeBabyPokemonButton"
-        onToggle={(value) => {
-          this.setState({ includeBabies: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleBabyPokemonOff.bind(this, value));
-        }}
-      />
-    </div>
-  )
-
-  renderLanguageSelection = () => {
-    const options = Object.keys(EvolveTranslations).map((language) =>
-      <option key={language} value={language}>{language}</option>
-    )
-
-    return (
-      // TODO: Better classnames for ToggleContainer/LanguageSelect
-      <div className="ToggleContainer LanguageSelect">
-        <label className="LanguageSelectLabel" htmlFor="languageSelect">Language:</label>
-        <select
-        className="LanguageSelectSelect"
-          id="languageSelect"
-          onChange={this.handleLanguageSelection}
-        >
-          {options}
-        </select>
-      </div>
-    )
-  }
-
-  renderCheckboxesOrButtonsSelection = () => {
-    return (
-      <div>
-        <div className="SelectionLabelBlurb">
-          * Reverts to the old way of showing Pokemon as lists of checkboxes
-        </div>
-        <div className='ToggleContainer'>
-          <label className="CheckboxesOrButtonsToggle" htmlFor="checkboxesOrButtonsToggle">Select Pokemon as images?</label>
-          <ToggleButton
-            colors={ { active: { base: 'rgb(109,127,145)' } } }
-            inactiveLabel='No'
-            activeLabel='Yes'
-            value={this.state.selectUsingButtons}
-            id="checkboxesOrButtonsToggle"
-            onToggle={(value) => {
-              this.setState({ selectUsingButtons: (value ? false : true) });
-            }}
-          />
-        </div>
-      </div>
-    )
-  }
-
-  renderSelectDeselectAllButtons = () => (
-    <div className="SelectDeselectButtons">
-      <table >
-        <tbody>
-          <tr>
-            <td className="SelectionHeader">All Pokemon:</td>
-            <td className="SelectionButtonCell">
-              <button className="SelectionButton" id="selectAllFirstEvo" onClick={this.onSelectDeselectAllClick.bind(this, null, true)}>
-                Select All
-              </button>
-            </td>
-            <td className="SelectionButtonCell">
-              <button className="SelectionButton" id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, null, false)}>
-                De-select All
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  )
-
-  renderSelectDeselectEvolutionsButtons = () => (
-    <div className="SelectDeselectButtons">
-      <div className="SelectionLabelBlurb">
-        * Higher evolutions can be used to find just-evolved Pokemon to transfer post-evolution
-      </div>
-      <table >
-        <tbody>
-          <tr>
-            <td className="SelectionHeader">First Evolutions:</td>
-            <td className="SelectionButtonCell">
-              <button className="SelectionButton" id="selectAllFirstEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, true)}>
-                Select All
-              </button>
-            </td>
-            <td className="SelectionButtonCell">
-              <button className="SelectionButton" id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 1, false)}>
-                De-select All
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td className="SelectionHeader">Second Evolutions:</td>
-            <td className="SelectionButtonCell">
-              <button className="SelectionButton" id="selectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, true)}>
-                Select All
-              </button>
-            </td>
-            <td className="SelectionButtonCell">
-               <button className="SelectionButton" id="deselectAllSecondEvo" onClick={this.onSelectDeselectAllClick.bind(this, 2, false)}>
-                De-select All
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td className="SelectionHeader">Third Evolutions:</td>
-            <td className="SelectionButtonCell">
-              <button className="SelectionButton" id="selectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, true)}>
-                Select All
-              </button>
-            </td>
-            <td className="SelectionButtonCell">
-              <button className="SelectionButton" id="deselectAllThirdEvo" onClick={this.onSelectDeselectAllClick.bind(this, 3, false)}>
-                De-select All
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  )
 
   renderPrecreatedQueryCheckboxes = () => {
     return Object.keys(Queries).map((queryName) =>
@@ -402,39 +308,6 @@ class App extends Component {
     });
   }
 
-  // If true, ensure all baby Pokemon are untoggled in state
-  toggleBabyPokemonOff = (toggle) => {
-    if (!toggle) return;
-
-    const babyPokemon = this.allowedPokemonFamilies.map((pokemonFamily) =>
-      pokemonFamily.filter((individualPokemon) =>
-        individualPokemon.meta === 'baby'
-      ).map(individualPokemon => individualPokemon.number)
-    ).filter(pokemonFamily => pokemonFamily.length > 0);
-
-    this.setState((prevState) => {
-      const toggled = Object.assign({}, prevState.toggled);
-      for (let i = 0; i < babyPokemon.length; i++) toggled[babyPokemon[i]] = false;
-      return { toggled };
-    });
-  }
-
-  // If we're filtering out baby pokemon, we see if the current family has any babies present.
-  // If so, we remove them and decrement the evol # of the remaining pokemon.
-  filterOutBabyPokemon(pokemonFamilies) {
-    return pokemonFamilies.map((pokemonFamily) => {
-      let hasBaby = false;
-      const filteredFamily = pokemonFamily.filter((individualPokemon) => {
-        const isBaby = individualPokemon.meta === 'baby';
-        if (isBaby) hasBaby = true;
-        return !isBaby;
-      })
-
-      if (hasBaby) filteredFamily.forEach((individualPokemon) => individualPokemon.evolution--);
-      return filteredFamily;
-    })
-  }
-
   render() {
     const currentQuery = this.getCurrentQuery();
 
@@ -455,7 +328,10 @@ class App extends Component {
           </CopyToClipboard>
           <div className="PokemonSelectionContainer">
             <ul className="QueryList">
-              {this.renderPrecreatedQueryCheckboxes()}
+              <PrecreatedQueryCheckboxes
+                selectedPreCreatedQueryCheckbox={this.state.selectedPreCreatedQueryCheckbox}
+                onChange={this.handlePreCreatedQueryCheckboxClick}
+              />
               <hr />
               <Collapsible
                 trigger='Advanced Controls &rsaquo;'
@@ -463,15 +339,44 @@ class App extends Component {
                 transitionTime={ 200 }
               >
                 <hr />
-                {this.renderLanguageSelection()}
-                {this.renderEvolvingSelectionButton()}
-                {this.renderIncludeBabyPokemonSelectionButton()}
+                <SelectionList // Language Selection
+                  optionLabels={Object.keys(EvolveTranslations)}
+                  id="languageSelect"
+                  label="Language:"
+                  selectionClass="LanguageSelect"
+                  onChange={(e) => this.setState({ language: e.target.value})}
+                />
+                <SelectionToggleButton // Evolving text toggle
+                  onToggle={(value) => this.setState({ evolving: !value, selectedPreCreatedQueryCheckbox: null }, this.updateCurrentQuery)}
+                  value={this.state.evolving}
+                  id="evolvingButton"
+                  label="Evolving?"
+                />
+                <SelectionToggleButton // Including baby pokemon toggle
+                  onToggle={(value) => this.setState({ includeBabies: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleBabyPokemonOff.bind(this, value))}
+                  value={this.state.includeBabies}
+                  id="includeBabyPokemonButton"
+                  label="Include Babies?"
+                />
                 <hr />
-                {this.renderSelectDeselectAllButtons()}
+                <SelectDeselectAllButtons onClick={this.onSelectDeselectAllClick} />
                 <hr />
-                {this.renderSelectDeselectEvolutionsButtons()}
+                <SelectDeselectEvolutionButtons onClick={this.onSelectDeselectAllClick} />
                 <hr />
-                {this.renderCheckboxesOrButtonsSelection()}
+                <SelectDeselectCandyButtons onClick={this.onSelectDeselectAllClick} />
+                {
+                  // NOTE: Commenting this out for now; going to see if any users clamor for its return
+                  //
+                  // <hr />
+                  // <SelectionToggleButton // Display pokemon as images or checkboxes (legacy method)
+                  //   onToggle={(value) => this.setState({ selectUsingButtons: (value ? false : true) })}
+                  //   value={this.state.selectUsingButtons}
+                  //   id="checkboxesOrButtonsToggle"
+                  //   label="Select Pokemon as images?"
+                  //   labelClass="CheckboxesOrButtonsToggle"
+                  //   blurb="* Reverts to the old way of showing Pokemon as lists of checkboxes"
+                  // />
+                }
               </Collapsible>
               <hr />
               {this.renderPokemonGenerations()}
@@ -495,6 +400,214 @@ class App extends Component {
         </div>
       </div>
     );
+  }
+}
+
+class PrecreatedQueryCheckboxes extends Component {
+  static PropTypes = {
+    selectedPreCreatedQueryCheckbox: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  }
+
+  render() {
+    return Object.keys(Queries).map((queryName) =>
+      <li key={queryName}>
+        <input
+          type='checkbox'
+          className="PokemonSelectionCheckbox"
+          id={queryName}
+          value={queryName}
+          checked={this.props.selectedPreCreatedQueryCheckbox === queryName}
+          onChange={this.props.onChange.bind(this, queryName)}
+        />
+        <label className="PreCreatedQueryLabel" htmlFor={queryName}>{Queries[queryName]['label']}</label>
+      </li>
+    )
+  }
+}
+
+class SelectionToggleButton extends Component {
+  static propTypes = {
+    onToggle: PropTypes.func.isRequired,
+    value: PropTypes.bool.isRequired,
+    color: PropTypes.object,
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    labelClass: PropTypes.string,
+    blurb: PropTypes.string,
+  }
+
+  static defaultProps = {
+    colors: { active: { base: 'rgb(109,127,145)' } },
+    blurb: null,
+    labelClass: 'ToggleContainerLabel',
+  }
+
+  render() {
+    const blurb = this.props.blurb
+      ? (
+        <div className="SelectionLabelBlurb">
+          {this.props.blurb}
+        </div>
+      ) : null
+
+    return (
+      <div>
+        {blurb}
+        <div className="ToggleContainer">
+          <label className={this.props.labelClass} htmlFor={this.props.id}>{this.props.label}</label>
+          <ToggleButton
+            colors={this.props.colors}
+            inactiveLabel='No'
+            activeLabel='Yes'
+            value={this.props.value}
+            id={this.props.id}
+            onToggle={this.props.onToggle}
+          />
+        </div>
+      </div>
+    )
+  }
+}
+
+class SelectionList extends Component {
+  static PropTypes = {
+    optionLabels: PropTypes.array.isRequired,
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    selectionClass: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  }
+
+  render() {
+    const options = this.props.optionLabels.map((key) =>
+      <option key={key} value={key}>{key}</option>
+    )
+
+    return (
+      <div className={"ToggleContainer " + this.props.selectionClass}>
+        <label className={this.props.selectionClass + 'Label'} htmlFor={this.props.id}>{this.props.label}</label>
+        <select
+          className={this.props.selectionClass + 'Select'}
+          id={this.props.id}
+          onChange={this.props.onChange}
+        >
+          {options}
+        </select>
+      </div>
+    )
+  }
+}
+
+class SelectDeselectEvolutionButtons extends Component {
+  static PropTypes = {
+    onClick: PropTypes.func.isRequired,
+  }
+
+  render() {
+    const buttonsInfo = [
+      { label: 'First Evolutions:', value: 1 },
+      { label: 'Second Evolutions:', value: 2 },
+      { label: 'Third Evolutions:', value: 3 },
+    ]
+
+    return (
+      <SelectDeselectButtons
+        buttonsInfo={buttonsInfo}
+        selectionType="evolution"
+        onClick={this.props.onClick}
+     />
+    )
+  }
+}
+
+class SelectDeselectAllButtons extends Component {
+  static PropTypes = {
+    onClick: PropTypes.func.isRequired,
+  }
+
+
+  render() {
+    const buttonsInfo = [{ label: 'All Pokemon:', value: null }];
+
+    return (
+      <SelectDeselectButtons
+        buttonsInfo={buttonsInfo}
+        onClick={this.props.onClick} />
+    )
+  }
+}
+
+class SelectDeselectCandyButtons extends Component {
+  static PropTypes = {
+    onClick: PropTypes.func.isRequired,
+  }
+
+  render() {
+    const buttonsInfo = [
+      { label: '12 Candy Evos:', value: 12 },
+      { label: '25 Candy Evos:', value: 25 },
+      { label: '50 Candy Evos:', value: 50 },
+      { label: '100 Candy Evos:', value: 100 },
+    ]
+
+    return (
+      <SelectDeselectButtons
+        buttonsInfo={buttonsInfo}
+        selectionType="candy"
+        onClick={this.props.onClick}
+     />
+    )
+  }
+}
+
+class SelectDeselectButtons extends Component {
+  static PropTypes = {
+    buttonsInfo: PropTypes.array.isRequired, // [ { label: 'First Evolutions:', value: 1 }, { ... } ]
+    onClick: PropTypes.func.isRequired,
+    blurb: PropTypes.string,
+    selectionType: PropTypes.string,
+  }
+
+  static defaultProps = {
+    blurb: null,
+    selectionType: null,
+  }
+
+  render() {
+    const blurb = this.props.blurb
+      ? (
+        <div className="SelectionLabelBlurb">
+          {this.props.blurb}
+        </div>
+      ) : null
+
+    const buttons = this.props.buttonsInfo.map((button) => (
+      <tr key={button.label} >
+        <td className="SelectionHeader">{button.label}</td>
+        <td className="SelectionButtonCell">
+          <button className="SelectionButton" onClick={this.props.onClick.bind(this, this.props.selectionType, button.value, true)}>
+            Select All
+          </button>
+        </td>
+        <td className="SelectionButtonCell">
+          <button className="SelectionButton" onClick={this.props.onClick.bind(this, this.props.selectionType, button.value, false)}>
+            De-select All
+          </button>
+        </td>
+      </tr>
+    ))
+
+    return (
+      <div className="SelectDeselectButtons">
+        {blurb}
+        <table>
+          <tbody>
+            {buttons}
+          </tbody>
+        </table>
+      </div>
+    )
   }
 }
 
