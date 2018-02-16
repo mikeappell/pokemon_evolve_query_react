@@ -335,6 +335,12 @@ class App extends Component {
                   id="includeEvoItemPokemonButton"
                   label="Include Evo Items?"
                 />
+                <SelectionToggleButton // Including pokemon needing evolution items toggle
+                  onToggle={(value) => this.setState({ includeLegendaries: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleDisallowedPokemonOff.bind(this, value))}
+                  value={this.state.includeLegendaries}
+                  id="includeLegendaryPokemonButton"
+                  label="Include Legendaries?"
+                />
                 <hr />
                 <SelectDeselectAllButtons onClick={this.onSelectDeselectAllClick} />
                 <hr />
