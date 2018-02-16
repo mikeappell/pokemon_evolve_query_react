@@ -10,26 +10,43 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    // I'm caching the results of these operations as they're moderately expensive.
-    // I may move these to state at some point.
-    this.allowedPokemonFamilies = this.getAllowedPokemonFamilies();
-    this.allowedPokemonFamiliesPerGeneration = this.getAllowedPokemonFamiliesPerGeneration();
-
-    // Calculate the initial state of toggled Pokemon based on the default query
-    let toggled = {};
-    for (let i = 1; i <= this.getLastPokemonNumber(); i++) {
-      toggled[i] = (Queries.Full.query.includes(i.toString()) ? true : false);
-    }
-
     this.state = {
       copied: false,
       evolving: true,
       includeBabies: true,
+      includeSpecial: true,
+      includeEvoItemPokemon: false,
+      includeLegendaries: false,
+      includenoHigherEvolutions: false,
       selectedPreCreatedQueryCheckbox: 'Compact',
       language: 'English',
-      selectUsingButtons: true,
-      toggled,
     };
+
+    // Calculate the initial state of toggled Pokemon based on the default query
+    const allowedPokemonFamiliesPerGeneration = this.getAllowedPokemonFamiliesPerGeneration();
+    const lastGenerationFamilies = allowedPokemonFamiliesPerGeneration[allowedPokemonFamiliesPerGeneration.length - 1].families;
+    const lastFamily = lastGenerationFamilies[lastGenerationFamilies.length - 1];
+    const lastPokemonNumber = parseInt(lastFamily[lastFamily.length - 1].number, 10);
+
+    let toggled = {};
+    for (let i = 1; i <= lastPokemonNumber; i++) {
+      toggled[i] = (Queries.Full.query.includes(i.toString()) ? true : false);
+    }
+
+    this.state = Object.assign({}, this.state, {
+      toggled,
+    });
+  }
+
+  metaTagsToSkip() {
+    let metaTagsToSkip = [];
+    if (!this.state.includenoHigherEvolutions) metaTagsToSkip = metaTagsToSkip.concat('nohigher');
+    if (!this.state.includeEvoItemPokemon) metaTagsToSkip = metaTagsToSkip.concat('needevo', 'isevo');
+    if (!this.state.includeLegendaries) metaTagsToSkip = metaTagsToSkip.concat('legend');
+    if (!this.state.includeBabies) metaTagsToSkip = metaTagsToSkip.concat('baby');
+    if (!this.state.includeSpecial) metaTagsToSkip = metaTagsToSkip.concat('special');
+
+    return metaTagsToSkip;
   }
 
   // Returns array of Pokemon family arrays, e.g.
@@ -43,9 +60,9 @@ class App extends Component {
   // ]
   getAllowedPokemonFamilies() {
     const pokemonFamilies = [];
-    for (let generation of PokemonGenerations) {
+    for (let generation of this.getAllowedPokemonFamiliesPerGeneration()) {
       generation.families.forEach((pokemonFamily) =>
-        pokemonFamilies.push(pokemonFamily.filter(individualPokemon => !MetaTagsToSkip.includes(individualPokemon.meta)))
+        pokemonFamilies.push(pokemonFamily.filter(individualPokemon => !this.metaTagsToSkip().includes(individualPokemon.meta)))
       )
     }
 
@@ -69,11 +86,26 @@ class App extends Component {
   // ]
   getAllowedPokemonFamiliesPerGeneration() {
     const pokemonFamiliesPerGeneration = [];
+    const metaTagsToSkip = this.metaTagsToSkip(); // Caching the results of this function
+
     for (let generation of PokemonGenerations) {
       const pokemonGeneration = { name: generation.name, families: [] };
-      generation.families.forEach((pokemonFamily) =>
-        pokemonGeneration.families.push(pokemonFamily.filter(individualPokemon => !MetaTagsToSkip.includes(individualPokemon.meta)))
-      )
+      generation.families.forEach((pokemonFamily) => {
+        let babyShouldBeFiltered = false;
+        let filteredFamily = pokemonFamily.filter(individualPokemon => {
+          const skippingThisPokemon = metaTagsToSkip.includes(individualPokemon.meta);
+          if (skippingThisPokemon && individualPokemon.meta === 'baby') babyShouldBeFiltered = true;
+          return !skippingThisPokemon;
+        });
+
+        // Specific to filtering baby pokemon, we decrement the evolution number of the subsequent evolutions if we're filtering babies
+        // E.g. { name: 'Pichu', evolution: 1, meta: 'baby' }, { name: 'Pikachu', evolution: 2 }, { name: 'Raichu', evolution: 3 }
+        // Becomes
+        // { name: 'Pikachu', evolution: 1 }, { name: 'Raichu', evolution: 2 }
+        if (babyShouldBeFiltered) filteredFamily.forEach((individualPokemon) => individualPokemon.evolution--);
+        pokemonGeneration.families.push(filteredFamily);
+      })
+
       pokemonGeneration.families = pokemonGeneration.families.filter(pokemonFamily => pokemonFamily.length > 0);
       pokemonFamiliesPerGeneration.push(pokemonGeneration);
     }
@@ -81,69 +113,37 @@ class App extends Component {
     return pokemonFamiliesPerGeneration;
   }
 
-  // Returns the # of the last allowed Pokemon in all current generations, e.g. 386
-  getLastPokemonNumber() {
-    const allowedPokemonFamilies = this.allowedPokemonFamilies;
-    const lastFamily = allowedPokemonFamilies[allowedPokemonFamilies.length - 1];
-    return parseInt(lastFamily[lastFamily.length - 1].number, 10);
-  }
-
-  // Returns an array of all allowed pokemon of the supplied evolution,
-  // e.g. for '1' returns ["1", "4", "7", "10", "13", "16", "19", "21" ... ]
-  getEvolutionListOfPokemon(evolutionNumber) {
-    let evolutionList = [];
-    this.allowedPokemonFamilies.forEach((pokemonFamily) => {
+  // getFilteredListOfPokemon('candy', 12') returns array of Pokemon numbers whose candy property is '12'
+  // e.g. ["1", "4", "7", "10", "13", "16", "19", "21" ... ]
+  getFilteredListOfPokemon(filterType, filterCriteria) {
+    let filteredPokemonList = [];
+    this.getAllowedPokemonFamilies().forEach((pokemonFamily) => {
       pokemonFamily.forEach((individualPokemon) => {
-        if (individualPokemon.evolution === evolutionNumber) evolutionList.push(individualPokemon.number);
+        if (individualPokemon[filterType] === filterCriteria) filteredPokemonList.push(individualPokemon.number);
       })
     })
 
-    return evolutionList;
+    return filteredPokemonList;
   }
 
-  // Same as getEvolutionListOfPokemon() but for candy number (e.g. 12, 25 etc)
-  getCandyListOfPokemon(candyNumber) {
-    let candyList = [];
-    this.allowedPokemonFamilies.forEach((pokemonFamily) => {
-      pokemonFamily.forEach((individualPokemon) => {
-        if (individualPokemon.candy === candyNumber) candyList.push(individualPokemon.number);
-      })
-    })
-
-    return candyList;
-  }
-
-  // If true, ensure all baby Pokemon are untoggled in state
-  toggleBabyPokemonOff = (toggle) => {
+  toggleDisallowedPokemonOff = (toggle) => {
     if (!toggle) return;
 
-    const babyPokemon = this.allowedPokemonFamilies.map((pokemonFamily) =>
-      pokemonFamily.filter((individualPokemon) =>
-        individualPokemon.meta === 'baby'
-      ).map(individualPokemon => individualPokemon.number)
-    ).filter(pokemonFamily => pokemonFamily.length > 0);
+    this.setState(prevState => {
+      let toggled = Object.assign({}, prevState.toggled);
+      const allowedPokemonNumbers = [];
+      this.getAllowedPokemonFamilies().forEach(pokemonFamily =>
+        pokemonFamily.forEach(individualPokemon =>
+          allowedPokemonNumbers.push(individualPokemon.number)
+        )
+      );
 
-    this.setState((prevState) => {
-      const toggled = Object.assign({}, prevState.toggled);
-      for (let i = 0; i < babyPokemon.length; i++) toggled[babyPokemon[i]] = false;
+      Object.keys(toggled).forEach(pokemonNumber => {
+        if (!allowedPokemonNumbers.includes(pokemonNumber)) toggled[pokemonNumber] = false;
+      });
+
       return { toggled };
     });
-  }
-
-  // If we're filtering out baby pokemon, we see if the current family has any babies present.
-  // If so, we remove them and decrement the evol # of the remaining pokemon.
-  filterOutBabyPokemon(pokemonFamilies) {
-    return pokemonFamilies.map((pokemonFamily) => {
-      let hasBaby = false;
-      const filteredFamily = pokemonFamily.filter((individualPokemon) => {
-        const isBaby = individualPokemon.meta === 'baby';
-        if (isBaby) hasBaby = true;
-        return !isBaby;
-      })
-
-      if (hasBaby) filteredFamily.forEach((individualPokemon) => individualPokemon.evolution--);
-      return filteredFamily;
-    })
   }
 
   // Returns the current generated query string, which can be copied to clipboard.
@@ -209,11 +209,11 @@ class App extends Component {
           for (let i in keys) toggled[keys[i]] = select;
           break;
         case 'evolution':
-          const evolutionList = this.getEvolutionListOfPokemon(selectNumber);
+          const evolutionList = this.getFilteredListOfPokemon('evolution', selectNumber);
           for (let i in keys) toggled[keys[i]] = (evolutionList.includes(keys[i]) ? select : prevState.toggled[keys[i]]);
           break;
         case 'candy':
-          const candyList = this.getCandyListOfPokemon(selectNumber);
+          const candyList = this.getFilteredListOfPokemon('candy', selectNumber);
           for (let i in keys) toggled[keys[i]] = (candyList.includes(keys[i]) ? select : prevState.toggled[keys[i]]);
           break;
       }
@@ -239,14 +239,7 @@ class App extends Component {
   }
 
   renderPokemonGenerations = () => {
-    // We deep-clone the array of objects so we can safely mutate it
-    let pokemonFamilies = JSON.parse(JSON.stringify(this.allowedPokemonFamiliesPerGeneration));
-
-    // Filter out baby pokemon if option selected
-
-    return pokemonFamilies.map((pokemonGeneration) => {
-      if (!this.state.includeBabies) pokemonGeneration.families = this.filterOutBabyPokemon(pokemonGeneration.families);
-
+    return this.getAllowedPokemonFamiliesPerGeneration().map((pokemonGeneration) => {
       return (
         <div key={pokemonGeneration.name} className="PokemonGeneration">
           <div className="PokemonGenerationTitle">{pokemonGeneration.name}</div>
@@ -258,14 +251,10 @@ class App extends Component {
 
   renderPokemonFamiliesPerGeneration = (pokemonFamiliesPerGeneration) => {
     return pokemonFamiliesPerGeneration.map((pokemonFamily) => {
-      const individualPokemonPerFamily = this.state.selectUsingButtons
-       ? this.renderIndividualPokemonButtonsPerFamily(pokemonFamily)
-       : this.renderIndividualPokemonCheckboxesPerFamily(pokemonFamily);
-
-      const pokemonStyle = this.state.selectUsingButtons ? 'PokemonFamilyButtons' : '';
+      const individualPokemonPerFamily = this.renderIndividualPokemonButtonsPerFamily(pokemonFamily)
 
       return Object.values(individualPokemonPerFamily).some(o => o !== null) ? (
-        <div className={pokemonStyle} key={pokemonFamily[pokemonFamily.length - 1].number}>
+        <div className='PokemonFamilyButtons' key={pokemonFamily[pokemonFamily.length - 1].number}>
           {individualPokemonPerFamily}
         </div>
       ) : null;
@@ -288,24 +277,6 @@ class App extends Component {
         </button>
       )
     })
-  }
-
-  renderIndividualPokemonCheckboxesPerFamily = (pokemonFamily) => {
-    return pokemonFamily.map((individualPokemon) => {
-      return (
-        <li key={individualPokemon.number}>
-          <input
-            type='checkbox'
-            className={"PokemonSelectionCheckbox PokemonSelectionCheckbox-" + individualPokemon.evolution}
-            id={individualPokemon.name}
-            value={individualPokemon.number}
-            checked={this.state.toggled[individualPokemon.number]}
-            onChange={this.handleIndividualPokemonClick.bind(this, individualPokemon.number)}
-          />
-          <label htmlFor={individualPokemon.name}>{individualPokemon.name}</label>
-        </li>
-      )
-    });
   }
 
   render() {
@@ -353,10 +324,16 @@ class App extends Component {
                   label="Evolving?"
                 />
                 <SelectionToggleButton // Including baby pokemon toggle
-                  onToggle={(value) => this.setState({ includeBabies: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleBabyPokemonOff.bind(this, value))}
+                  onToggle={(value) => this.setState({ includeBabies: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleDisallowedPokemonOff.bind(this, value))}
                   value={this.state.includeBabies}
                   id="includeBabyPokemonButton"
                   label="Include Babies?"
+                />
+                <SelectionToggleButton // Including pokemon needing evolution items toggle
+                  onToggle={(value) => this.setState({ includeEvoItemPokemon: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleDisallowedPokemonOff.bind(this, value))}
+                  value={this.state.includeEvoItemPokemon}
+                  id="includeEvoItemPokemonButton"
+                  label="Include Evo Items?"
                 />
                 <hr />
                 <SelectDeselectAllButtons onClick={this.onSelectDeselectAllClick} />
@@ -364,19 +341,6 @@ class App extends Component {
                 <SelectDeselectEvolutionButtons onClick={this.onSelectDeselectAllClick} />
                 <hr />
                 <SelectDeselectCandyButtons onClick={this.onSelectDeselectAllClick} />
-                {
-                  // NOTE: Commenting this out for now; going to see if any users clamor for its return
-                  //
-                  // <hr />
-                  // <SelectionToggleButton // Display pokemon as images or checkboxes (legacy method)
-                  //   onToggle={(value) => this.setState({ selectUsingButtons: (value ? false : true) })}
-                  //   value={this.state.selectUsingButtons}
-                  //   id="checkboxesOrButtonsToggle"
-                  //   label="Select Pokemon as images?"
-                  //   labelClass="CheckboxesOrButtonsToggle"
-                  //   blurb="* Reverts to the old way of showing Pokemon as lists of checkboxes"
-                  // />
-                }
               </Collapsible>
               <hr />
               {this.renderPokemonGenerations()}
@@ -545,10 +509,11 @@ class SelectDeselectCandyButtons extends Component {
 
   render() {
     const buttonsInfo = [
-      { label: '12 Candy Evos:', value: 12 },
-      { label: '25 Candy Evos:', value: 25 },
+      { label: '12 Candy Evo:', value: 12 },
+      { label: '25 Candy Evo', value: 25 },
       { label: '50 Candy Evos:', value: 50 },
-      { label: '100 Candy Evos:', value: 100 },
+      { label: '100 Candy Evo:', value: 100 },
+      { label: '>100 Candy Evo:', value: '>100' },
     ]
 
     return (
@@ -612,8 +577,6 @@ class SelectDeselectButtons extends Component {
 }
 
 export default App;
-
-export const MetaTagsToSkip = ['nohigher', 'legend', 'special', 'isevo'];
 
 export const Generations = [
   { name: 'Generation 1', range: ['1', '152'] },
@@ -887,7 +850,8 @@ export const PokemonGenerations = [
       ],
       [
         { name: 'Horsea', number: '116', evolution: 1, candy: 50 },
-        { name: 'Seadra', number: '117', evolution: 2, meta: 'needevo', candy: 100 },
+        { name: 'Seadra', number: '117', evolution: 2, candy: 100 },
+        // NOTE: I removed 'needevo' from Seadra so it would still show up as Horsea's evolution
         { name: 'Kingdra', number: '230', evolution: 3, meta: 'isevo' },
       ],
       [
