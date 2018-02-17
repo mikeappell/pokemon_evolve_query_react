@@ -77,6 +77,9 @@ hr {
 .Collapsible__contentOuter {
   margin-left: 10px; }
 
+.Collapsible__trigger {
+  cursor: pointer; }
+
 .SelectDeselectButtons table td.SelectionHeader {
   padding-right: 5px;
   width: 137px; }
