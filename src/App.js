@@ -375,213 +375,204 @@ class App extends Component {
   }
 }
 
-class PrecreatedQueryCheckboxes extends Component {
-  static PropTypes = {
-    selectedPreCreatedQueryCheckbox: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-  }
+// class PrecreatedQueryCheckboxes extends Component {
+//   static PropTypes = {
+//     selectedPreCreatedQueryCheckbox: PropTypes.string.isRequired,
+//     onChange: PropTypes.func.isRequired,
+//   }
+function PrecreatedQueryCheckboxes({ selectedPreCreatedQueryCheckbox, onChange }) {
+  return Object.keys(Queries).map((queryName) =>
+    <li key={queryName}>
+      <input
+        type='checkbox'
+        className="PokemonSelectionCheckbox"
+        id={queryName}
+        value={queryName}
+        checked={selectedPreCreatedQueryCheckbox === queryName}
+        onChange={onChange.bind(this, queryName)}
+      />
+      <label className="PreCreatedQueryLabel" htmlFor={queryName}>{Queries[queryName]['label']}</label>
+    </li>
+  )
+}
 
-  render() {
-    return Object.keys(Queries).map((queryName) =>
-      <li key={queryName}>
-        <input
-          type='checkbox'
-          className="PokemonSelectionCheckbox"
-          id={queryName}
-          value={queryName}
-          checked={this.props.selectedPreCreatedQueryCheckbox === queryName}
-          onChange={this.props.onChange.bind(this, queryName)}
+// class SelectionToggleButton extends Component {
+//   static propTypes = {
+//     onToggle: PropTypes.func.isRequired,
+//     value: PropTypes.bool.isRequired,
+//     colors: PropTypes.object,
+//     id: PropTypes.string.isRequired,
+//     label: PropTypes.string.isRequired,
+//     labelClass: PropTypes.string,
+//     blurb: PropTypes.string,
+//   }
+
+//   static defaultProps = {
+//     colors: { active: { base: 'rgb(109,127,145)' } },
+//     blurb: null,
+//     labelClass: 'ToggleContainerLabel',
+//   }
+function SelectionToggleButton({ onToggle,
+                                 value,
+                                 id,
+                                 label,
+                                 colors = { active: { base: 'rgb(109,127,145)' } },
+                                 labelClass = 'ToggleContainerLabel',
+                                 blurb = null }) {
+  const conditionalBlurb = blurb
+    ? (
+      <div className="SelectionLabelBlurb">
+        {blurb}
+      </div>
+    ) : null
+
+  return (
+    <div>
+      {conditionalBlurb}
+      <div className="ToggleContainer">
+        <label className={labelClass} htmlFor={id}>{label}</label>
+        <ToggleButton
+          colors={colors}
+          inactiveLabel='No'
+          activeLabel='Yes'
+          value={value}
+          id={id}
+          onToggle={onToggle}
         />
-        <label className="PreCreatedQueryLabel" htmlFor={queryName}>{Queries[queryName]['label']}</label>
-      </li>
-    )
-  }
+      </div>
+    </div>
+  )
 }
 
-class SelectionToggleButton extends Component {
-  static propTypes = {
-    onToggle: PropTypes.func.isRequired,
-    value: PropTypes.bool.isRequired,
-    color: PropTypes.object,
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    labelClass: PropTypes.string,
-    blurb: PropTypes.string,
-  }
+// class SelectionList extends Component {
+//   static PropTypes = {
+//     optionLabels: PropTypes.array.isRequired,
+//     id: PropTypes.string.isRequired,
+//     label: PropTypes.string.isRequired,
+//     selectionClass: PropTypes.string.isRequired,
+//     onChange: PropTypes.func.isRequired,
+//   }
+function SelectionList({ optionLabels, id, label, selectionClass, onChange }) {
+  const options = optionLabels.map((key) =>
+    <option key={key} value={key}>{key}</option>
+  )
 
-  static defaultProps = {
-    colors: { active: { base: 'rgb(109,127,145)' } },
-    blurb: null,
-    labelClass: 'ToggleContainerLabel',
-  }
+  return (
+    <div className={"ToggleContainer " + selectionClass}>
+      <label className={selectionClass + 'Label'} htmlFor={id}>{label}</label>
+      <select
+        className={selectionClass + 'Select'}
+        id={id}
+        onChange={onChange}
+      >
+        {options}
+      </select>
+    </div>
+  )
+}
 
-  render() {
-    const blurb = this.props.blurb
-      ? (
-        <div className="SelectionLabelBlurb">
-          {this.props.blurb}
-        </div>
-      ) : null
+// class SelectDeselectEvolutionButtons extends Component {
+//   static PropTypes = {
+//     onClick: PropTypes.func.isRequired,
+//   }
+function SelectDeselectEvolutionButtons({ onClick }) {
+  const buttonsInfo = [
+    { label: 'First Evolutions:', value: 1 },
+    { label: 'Second Evolutions:', value: 2 },
+    { label: 'Third Evolutions:', value: 3 },
+  ]
 
-    return (
-      <div>
+  return (
+    <SelectDeselectButtons
+      buttonsInfo={buttonsInfo}
+      selectionType="evolution"
+      onClick={onClick}
+   />
+  )
+}
+
+// class SelectDeselectAllButtons extends Component {
+//   static PropTypes = {
+//     onClick: PropTypes.func.isRequired,
+//   }
+function SelectDeselectAllButtons({ onClick }) {
+  const buttonsInfo = [{ label: 'All Pokemon:', value: null }];
+
+  return (
+    <SelectDeselectButtons
+      buttonsInfo={buttonsInfo}
+      onClick={onClick} />
+  )
+}
+
+// class SelectDeselectCandyButtons extends Component {
+//   static PropTypes = {
+//     onClick: PropTypes.func.isRequired,
+//   }
+function SelectDeselectCandyButtons({ onClick }) {
+  const buttonsInfo = [
+    { label: '12 Candy Evo:', value: 12 },
+    { label: '25 Candy Evo', value: 25 },
+    { label: '50 Candy Evos:', value: 50 },
+    { label: '100 Candy Evo:', value: 100 },
+    { label: '>100 Candy Evo:', value: '>100' },
+  ]
+
+  return (
+    <SelectDeselectButtons
+      buttonsInfo={buttonsInfo}
+      selectionType="candy"
+      onClick={onClick}
+   />
+  )
+}
+
+// class SelectDeselectButtons extends Component {
+//   static PropTypes = {
+//     buttonsInfo: PropTypes.array.isRequired, // [ { label: 'First Evolutions:', value: 1 }, { ... } ]
+//     onClick: PropTypes.func.isRequired,
+//     blurb: PropTypes.string,
+//     selectionType: PropTypes.string,
+//   }
+
+//   static defaultProps = {
+//     blurb: null,
+//     selectionType: null,
+//   }
+function SelectDeselectButtons({ buttonsInfo, onClick, blurb = null, selectionType = null}) {
+  const conditionalBlurb = blurb
+    ? (
+      <div className="SelectionLabelBlurb">
         {blurb}
-        <div className="ToggleContainer">
-          <label className={this.props.labelClass} htmlFor={this.props.id}>{this.props.label}</label>
-          <ToggleButton
-            colors={this.props.colors}
-            inactiveLabel='No'
-            activeLabel='Yes'
-            value={this.props.value}
-            id={this.props.id}
-            onToggle={this.props.onToggle}
-          />
-        </div>
       </div>
-    )
-  }
-}
+    ) : null
 
-class SelectionList extends Component {
-  static PropTypes = {
-    optionLabels: PropTypes.array.isRequired,
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    selectionClass: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-  }
+  const buttons = buttonsInfo.map((button) => (
+    <tr key={button.label} >
+      <td className="SelectionHeader">{button.label}</td>
+      <td className="SelectionButtonCell">
+        <button className="SelectionButton" onClick={onClick.bind(this, selectionType, button.value, true)}>
+          Select All
+        </button>
+      </td>
+      <td className="SelectionButtonCell">
+        <button className="SelectionButton" onClick={onClick.bind(this, selectionType, button.value, false)}>
+          De-select All
+        </button>
+      </td>
+    </tr>
+  ))
 
-  render() {
-    const options = this.props.optionLabels.map((key) =>
-      <option key={key} value={key}>{key}</option>
-    )
-
-    return (
-      <div className={"ToggleContainer " + this.props.selectionClass}>
-        <label className={this.props.selectionClass + 'Label'} htmlFor={this.props.id}>{this.props.label}</label>
-        <select
-          className={this.props.selectionClass + 'Select'}
-          id={this.props.id}
-          onChange={this.props.onChange}
-        >
-          {options}
-        </select>
-      </div>
-    )
-  }
-}
-
-class SelectDeselectEvolutionButtons extends Component {
-  static PropTypes = {
-    onClick: PropTypes.func.isRequired,
-  }
-
-  render() {
-    const buttonsInfo = [
-      { label: 'First Evolutions:', value: 1 },
-      { label: 'Second Evolutions:', value: 2 },
-      { label: 'Third Evolutions:', value: 3 },
-    ]
-
-    return (
-      <SelectDeselectButtons
-        buttonsInfo={buttonsInfo}
-        selectionType="evolution"
-        onClick={this.props.onClick}
-     />
-    )
-  }
-}
-
-class SelectDeselectAllButtons extends Component {
-  static PropTypes = {
-    onClick: PropTypes.func.isRequired,
-  }
-
-
-  render() {
-    const buttonsInfo = [{ label: 'All Pokemon:', value: null }];
-
-    return (
-      <SelectDeselectButtons
-        buttonsInfo={buttonsInfo}
-        onClick={this.props.onClick} />
-    )
-  }
-}
-
-class SelectDeselectCandyButtons extends Component {
-  static PropTypes = {
-    onClick: PropTypes.func.isRequired,
-  }
-
-  render() {
-    const buttonsInfo = [
-      { label: '12 Candy Evo:', value: 12 },
-      { label: '25 Candy Evo', value: 25 },
-      { label: '50 Candy Evos:', value: 50 },
-      { label: '100 Candy Evo:', value: 100 },
-      { label: '>100 Candy Evo:', value: '>100' },
-    ]
-
-    return (
-      <SelectDeselectButtons
-        buttonsInfo={buttonsInfo}
-        selectionType="candy"
-        onClick={this.props.onClick}
-     />
-    )
-  }
-}
-
-class SelectDeselectButtons extends Component {
-  static PropTypes = {
-    buttonsInfo: PropTypes.array.isRequired, // [ { label: 'First Evolutions:', value: 1 }, { ... } ]
-    onClick: PropTypes.func.isRequired,
-    blurb: PropTypes.string,
-    selectionType: PropTypes.string,
-  }
-
-  static defaultProps = {
-    blurb: null,
-    selectionType: null,
-  }
-
-  render() {
-    const blurb = this.props.blurb
-      ? (
-        <div className="SelectionLabelBlurb">
-          {this.props.blurb}
-        </div>
-      ) : null
-
-    const buttons = this.props.buttonsInfo.map((button) => (
-      <tr key={button.label} >
-        <td className="SelectionHeader">{button.label}</td>
-        <td className="SelectionButtonCell">
-          <button className="SelectionButton" onClick={this.props.onClick.bind(this, this.props.selectionType, button.value, true)}>
-            Select All
-          </button>
-        </td>
-        <td className="SelectionButtonCell">
-          <button className="SelectionButton" onClick={this.props.onClick.bind(this, this.props.selectionType, button.value, false)}>
-            De-select All
-          </button>
-        </td>
-      </tr>
-    ))
-
-    return (
-      <div className="SelectDeselectButtons">
-        {blurb}
-        <table>
-          <tbody>
-            {buttons}
-          </tbody>
-        </table>
-      </div>
-    )
-  }
+  return (
+    <div className="SelectDeselectButtons">
+      {conditionalBlurb}
+      <table>
+        <tbody>
+          {buttons}
+        </tbody>
+      </table>
+    </div>
+  )
 }
 
 export default App;
