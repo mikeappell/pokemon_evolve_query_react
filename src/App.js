@@ -119,7 +119,9 @@ class App extends Component {
     let filteredPokemonList = [];
     this.getAllowedPokemonFamilies().forEach((pokemonFamily) => {
       pokemonFamily.forEach((individualPokemon) => {
-        if (individualPokemon[filterType] === filterCriteria) filteredPokemonList.push(individualPokemon.number);
+        if (individualPokemon[filterType] === filterCriteria || (filterType === 'candy' && filterCriteria === '>100' && individualPokemon['candy'] > 100)) {
+          filteredPokemonList.push(individualPokemon.number);
+        }
       })
     })
 
