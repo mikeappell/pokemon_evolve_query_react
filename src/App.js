@@ -691,7 +691,7 @@ export const PokemonGenerations = [
         { name: 'Wigglytuff', number: '40', evolution: 3 },
       ],
       [
-        { name: 'Zubat', number: '41', evolution: 1, candy: 50 },
+        { name: 'Zubat', number: '41', evolution: 1, candy: 25 },
         { name: 'Golbat', number: '42', evolution: 2, candy: 100 },
         { name: 'Crobat', number: '169', evolution: 3 },
       ],
