@@ -218,6 +218,7 @@ class App extends Component {
           const candyList = this.getFilteredListOfPokemon('candy', selectNumber);
           for (let i in keys) toggled[keys[i]] = (candyList.includes(keys[i]) ? select : prevState.toggled[keys[i]]);
           break;
+        default:
       }
 
       return { toggled, selectedPreCreatedQueryCheckbox: null };
