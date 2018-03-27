@@ -17,7 +17,7 @@ class App extends Component {
       includeSpecial: true,
       includeEvoItemPokemon: false,
       includeLegendaries: false,
-      includenoHigherEvolutions: false,
+      includeNoHigherEvolutions: false,
       selectedPreCreatedQueryCheckbox: 'Compact',
       language: 'English',
     };
@@ -40,7 +40,7 @@ class App extends Component {
 
   metaTagsToSkip() {
     let metaTagsToSkip = [];
-    if (!this.state.includenoHigherEvolutions) metaTagsToSkip = metaTagsToSkip.concat('nohigher');
+    if (!this.state.includeNoHigherEvolutions) metaTagsToSkip = metaTagsToSkip.concat('nohigher');
     if (!this.state.includeEvoItemPokemon) metaTagsToSkip = metaTagsToSkip.concat('needevo', 'isevo');
     if (!this.state.includeLegendaries) metaTagsToSkip = metaTagsToSkip.concat('legend');
     if (!this.state.includeBabies) metaTagsToSkip = metaTagsToSkip.concat('baby');
@@ -198,27 +198,19 @@ class App extends Component {
     })
   }
 
-  // selectType: one of ['candy', 'evolution', null]
-  // selectNumber: for evolution e.g. 1, 2, 3; for candy eg. 12, 25, 50
-  // select: boolean, whether we're selecting/deselecting
-  onSelectDeselectAllClick = (selectType, selectNumber, select) => {
+  // selectType: one of ['candy', 'evolution', 'meta', null]
+  // selectCriteria: for evolution e.g. 1, 2, 3; for candy eg. 12, 25, 50; for meta e.g. 'nohigher'
+  // selectOrDeselect: boolean, whether we're selecting/deselecting
+  onSelectDeselectAllClick = (selectType, selectCriteria, selectOrDeselect) => {
     this.setState((prevState) => {
       let toggled = {};
       const keys = Object.keys(prevState.toggled)
 
-      switch(selectType) {
-        case null:
-          for (let i in keys) toggled[keys[i]] = select;
-          break;
-        case 'evolution':
-          const evolutionList = this.getFilteredListOfPokemon('evolution', selectNumber);
-          for (let i in keys) toggled[keys[i]] = (evolutionList.includes(keys[i]) ? select : prevState.toggled[keys[i]]);
-          break;
-        case 'candy':
-          const candyList = this.getFilteredListOfPokemon('candy', selectNumber);
-          for (let i in keys) toggled[keys[i]] = (candyList.includes(keys[i]) ? select : prevState.toggled[keys[i]]);
-          break;
-        default:
+      if (selectType === null) {
+        for (let i in keys) toggled[keys[i]] = selectOrDeselect;
+      } else {
+        const filteredPokemonList = this.getFilteredListOfPokemon(selectType, selectCriteria);
+        for (let i in keys) toggled[keys[i]] = (filteredPokemonList.includes(keys[i]) ? selectOrDeselect : prevState.toggled[keys[i]]);
       }
 
       return { toggled, selectedPreCreatedQueryCheckbox: null };
@@ -344,14 +336,23 @@ class App extends Component {
                   id="includeLegendaryPokemonButton"
                   label="Include Legendaries?"
                 />
-				<SelectionToggleButton // Including pokemon needing evolution items toggle
-                  onToggle={(value) => this.setState({ includenoHigherEvolutions: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleDisallowedPokemonOff.bind(this, value))}
-                  value={this.state.includenoHigherEvolutions}
+        				<SelectionToggleButton // Including pokemon needing evolution items toggle
+                  onToggle={(value) => this.setState({ includeNoHigherEvolutions: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleDisallowedPokemonOff.bind(this, value))}
+                  value={this.state.includeNoHigherEvolutions}
                   id="includenoHigherEvolutionsPokemonButton"
-                  label="Include pokémon with no evolutions?"
+                  label="Include Pokémon with no evolutions?"
                 />
                 <hr />
                 <SelectDeselectAllButtons onClick={this.onSelectDeselectAllClick} />
+                {this.state.includeBabies &&
+                  <SelectDeselectBabyPokemonButtons onClick={this.onSelectDeselectAllClick} />
+                }
+                {this.state.includeNoHigherEvolutions &&
+                  <SelectDeselectNoHigherEvoButtons onClick={this.onSelectDeselectAllClick} />
+                }
+                {this.state.includeLegendaries &&
+                  <SelectDeselectLegendariesButtons onClick={this.onSelectDeselectAllClick} />
+                }
                 <hr />
                 <SelectDeselectEvolutionButtons onClick={this.onSelectDeselectAllClick} />
                 <hr />
@@ -518,17 +519,61 @@ function SelectDeselectAllButtons({ onClick }) {
 //   }
 function SelectDeselectCandyButtons({ onClick }) {
   const buttonsInfo = [
-    { label: '12 Candy Evo:', value: 12 },
+    { label: '12 Candy Evo', value: 12 },
     { label: '25 Candy Evo', value: 25 },
-    { label: '50 Candy Evos:', value: 50 },
-    { label: '100 Candy Evo:', value: 100 },
-    { label: '>100 Candy Evo:', value: '>100' },
+    { label: '50 Candy Evos', value: 50 },
+    { label: '100 Candy Evo', value: 100 },
+    { label: '>100 Candy Evo', value: '>100' },
   ]
 
   return (
     <SelectDeselectButtons
       buttonsInfo={buttonsInfo}
       selectionType="candy"
+      onClick={onClick}
+   />
+  )
+}
+
+function SelectDeselectBabyPokemonButtons({ onClick }) {
+  return (
+    <SelectDeselectMetaButtons
+      label="Baby Pokémon"
+      value="baby"
+      onClick={onClick}
+   />
+  )
+}
+
+function SelectDeselectNoHigherEvoButtons({ onClick }) {
+  return (
+    <SelectDeselectMetaButtons
+      label="No Higher Evo"
+      value="nohigher"
+      onClick={onClick}
+   />
+  )
+}
+
+function SelectDeselectLegendariesButtons({ onClick }) {
+  return (
+    <SelectDeselectMetaButtons
+      label="Legendaries"
+      value="legend"
+      onClick={onClick}
+   />
+  )
+}
+
+function SelectDeselectMetaButtons({ onClick, label, value }) {
+  const buttonsInfo = [
+    { label, value },
+  ]
+
+  return (
+    <SelectDeselectButtons
+      buttonsInfo={buttonsInfo}
+      selectionType="meta"
       onClick={onClick}
    />
   )
@@ -556,7 +601,7 @@ function SelectDeselectButtons({ buttonsInfo, onClick, blurb = null, selectionTy
 
   const buttons = buttonsInfo.map((button) => (
     <tr key={button.label} >
-      <td className="SelectionHeader">{button.label}</td>
+      <td className="SelectionHeader">{button.label}:</td>
       <td className="SelectionButtonCell">
         <button className="SelectionButton" onClick={onClick.bind(this, selectionType, button.value, true)}>
           Select All
