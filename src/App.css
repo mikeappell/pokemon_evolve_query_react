@@ -19,9 +19,11 @@
     font-size: 16px;
     padding: 2px;
     border-radius: 5px; }
-  .ToggleContainer label.ToggleContainerLabel, .ToggleContainer label.LanguageSelectLabel {
-    font-size: 16px; }
-  .ToggleContainer label.CheckboxesOrButtonsToggle {
+  .ToggleContainer label.ToggleContainerLabel {
+    width: 275px; }
+  .ToggleContainer label.LanguageSelectLabel {
+    width: 228px; }
+  .ToggleContainer .CheckboxesOrButtonsToggle {
     font-size: 16px; }
   div.PokemonFamilyButtons {
     padding: 1px; }
@@ -52,15 +54,15 @@ hr {
   margin-bottom: 5px; }
   .ToggleContainer label {
     margin-top: 2px; }
-  .ToggleContainer .LanguageSelectLabel {
-    width: 135px; }
   .ToggleContainer .CheckboxesOrButtonsToggle {
     font-size: 16px;
     margin-right: 10px; }
+  .ToggleContainer .LanguageSelectLabel {
+    width: 200px; }
   .ToggleContainer .ToggleContainerLabel {
     font-size: 16px;
-    width: 115px;
-    margin-right: 20px; }
+    width: 225px;
+    margin-right: 10px; }
 
 .CurrentQuery {
   margin: 30px 14% 10px 14%;
@@ -73,9 +75,6 @@ hr {
 .PokemonSelectionContainer {
   margin-top: 30px;
   text-align: left; }
-
-.Collapsible__contentOuter {
-  margin-left: 10px; }
 
 .Collapsible__trigger {
   cursor: pointer; }
@@ -103,7 +102,7 @@ hr {
   font-style: italic; }
 
 .LanguageSelect {
-  margin-bottom: 7px; }
+  margin-bottom: 10px; }
 
 .QueryList {
   list-style-type: none; }

@@ -280,7 +280,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <h1>Pokemon Query Generator</h1>
+          <h1>Pokémon Query Generator</h1>
         </div>
         <div className="Main-body">
           <div className="CurrentQuery">
@@ -328,7 +328,7 @@ class App extends Component {
                   onToggle={(value) => this.setState({ includeEvoItemPokemon: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleDisallowedPokemonOff.bind(this, value))}
                   value={this.state.includeEvoItemPokemon}
                   id="includeEvoItemPokemonButton"
-                  label="Include Evo Items?"
+                  label="Include those needing Evo Items?"
                 />
                 <SelectionToggleButton // Including pokemon needing evolution items toggle
                   onToggle={(value) => this.setState({ includeLegendaries: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleDisallowedPokemonOff.bind(this, value))}
@@ -340,7 +340,7 @@ class App extends Component {
                   onToggle={(value) => this.setState({ includeNoHigherEvolutions: !value, selectedPreCreatedQueryCheckbox: null }, this.toggleDisallowedPokemonOff.bind(this, value))}
                   value={this.state.includeNoHigherEvolutions}
                   id="includenoHigherEvolutionsPokemonButton"
-                  label="Include Pokémon with no evolutions?"
+                  label="Include Pokémon with no Evolutions?"
                 />
                 <hr />
                 <SelectDeselectAllButtons onClick={this.onSelectDeselectAllClick} />
@@ -504,7 +504,7 @@ function SelectDeselectEvolutionButtons({ onClick }) {
 //     onClick: PropTypes.func.isRequired,
 //   }
 function SelectDeselectAllButtons({ onClick }) {
-  const buttonsInfo = [{ label: 'All Pokemon:', value: null }];
+  const buttonsInfo = [{ label: 'All Pokémon', value: null }];
 
   return (
     <SelectDeselectButtons
