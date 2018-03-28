@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ToggleButton from 'react-toggle-button';
 import Collapsible from 'react-collapsible';
