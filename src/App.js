@@ -268,7 +268,7 @@ class App extends Component {
           value={individualPokemon.number}
           onClick={this.handleIndividualPokemonClick.bind(this, individualPokemon.number)}
         >
-          <img src={`/pokemon_icons/${individualPokemon.number}.png`} alt={individualPokemon.name} className='PokemonIcon' />
+          <img src={`${process.env.PUBLIC_URL}/pokemon_icons/${individualPokemon.number}.png`} alt={individualPokemon.name} className='PokemonIcon' />
         </button>
       )
     })
