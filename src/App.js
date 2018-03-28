@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ToggleButton from 'react-toggle-button';
 import Collapsible from 'react-collapsible';
-import './App.css';
+import './styles/App.css';
 
 class App extends Component {
   // TODO: Make default value of currentQuery more programmatic
