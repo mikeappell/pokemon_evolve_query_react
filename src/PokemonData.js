@@ -9,7 +9,7 @@
 // NOTES
 // I removed "needevo" from Seadra so it would still show up as Horsea"s "evolution"
 
-module.exports = {
+export const PokeDB = {
 	POKEMON_DB	:	[
 		{ "name": "Generation 1",	"families": [
 			[

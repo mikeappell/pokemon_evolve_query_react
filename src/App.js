@@ -5,8 +5,8 @@ import ToggleButton from 'react-toggle-button';
 import Collapsible from 'react-collapsible';
 import './styles/App.css';
 
-const PokeDB = require('./PokemonData');
-const Constants = require('./Constants');
+import { PokeDB } from './PokemonData';
+import { Constants } from './Constants';
 
 class App extends Component {
   // TODO: Make default value of currentQuery more programmatic

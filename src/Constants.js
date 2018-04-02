@@ -1,4 +1,4 @@
-module.exports = {
+export const Constants = {
 	GENERATIONS	:	[
 		{ name: 'Generation 1', range: ['1', '151'] },
 		{ name: 'Generation 2', range: ['152', '251'] },
