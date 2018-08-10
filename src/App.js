@@ -26,12 +26,16 @@ class App extends Component {
     };
 
     // Calculate the initial state of toggled Pokemon based on the default query
-    const allowedPokemonFamiliesPerGeneration = this.getAllowedPokemonFamiliesPerGeneration();
-    const lastGenerationFamilies = allowedPokemonFamiliesPerGeneration[allowedPokemonFamiliesPerGeneration.length - 1].families;
-    const lastFamily = lastGenerationFamilies[lastGenerationFamilies.length - 1];
-    const lastPokemonNumber = parseInt(lastFamily[lastFamily.length - 1].number, 10);
+    const lastGenerationFamilies = PokeDB.POKEMON_DB[PokeDB.POKEMON_DB.length - 1].families
+    const lastPokemonFamily = lastGenerationFamilies[lastGenerationFamilies.length - 1]
+    const lastPokemonNumber = lastPokemonFamily[lastPokemonFamily.length - 1].number
+    // const allowedPokemonFamiliesPerGeneration = this.getAllowedPokemonFamiliesPerGeneration();
+    // const lastGenerationFamilies = allowedPokemonFamiliesPerGeneration[allowedPokemonFamiliesPerGeneration.length - 1].families;
+    // const lastFamily = lastGenerationFamilies[lastGenerationFamilies.length - 1];
+    // const lastPokemonNumber = parseInt(lastFamily[lastFamily.length - 1].number, 10);
 
     let toggled = {};
+
     for (let i = 1; i <= lastPokemonNumber; i++) {
       toggled[i] = (Constants.QUERIES.Full.query.includes(i.toString()) ? true : false);
     }
@@ -91,8 +95,8 @@ class App extends Component {
     const pokemonFamiliesPerGeneration = [];
     const metaTagsToSkip = this.metaTagsToSkip(); // Caching the results of this function
 
-	let pokemonGenerations = PokeDB.POKEMON_DB;
-	let specialPokemon = ["117"]
+  	let pokemonGenerations = PokeDB.POKEMON_DB;
+  	let specialPokemon = ["117"]
 
     for (let generation of pokemonGenerations) {
       const pokemonGeneration = { name: generation.name, families: [] };
