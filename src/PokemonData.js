@@ -167,7 +167,8 @@ export const PokeDB = {
 			],
 			[
 				{ "name": "Magnemite",	"number": "81",		"evolution": 1,	"candy": 50,	"meta": ""},
-				{ "name": "Magneton",	"number": "82",		"evolution": 2,	"candy": 0,		"meta": ""}
+				{ "name": "Magneton",	"number": "82",		"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Magnezone",	"number": "462",		"evolution": 3,	"candy": 0,	"meta": ""}
 			],
 			[
 				{ "name": "Farfetch'd",	"number": "83",		"evolution": 1,	"candy": 0,		"meta": "nohigher"}
@@ -224,7 +225,8 @@ export const PokeDB = {
 				{ "name": "Hitmontop",	"number": "237",	"evolution": 2,	"candy": 0,		"meta": "special"}
 			],
 			[
-				{ "name": "Lickitung",	"number": "108",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Lickitung",	"number": "108",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Lickilicky",	"number": "463",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Koffing",	"number": "109",	"evolution": 1,	"candy": 50,	"meta": ""},
@@ -232,14 +234,17 @@ export const PokeDB = {
 			],
 			[
 				{ "name": "Rhyhorn",	"number": "111",	"evolution": 1,	"candy": 50,	"meta": ""},
-				{ "name": "Rhydon",		"number": "112",	"evolution": 2,	"candy": 0,		"meta": ""}
+				{ "name": "Rhydon",		"number": "112",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Rhyperior",	"number": "464",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
-				{ "name": "Chansey",	"number": "113",	"evolution": 1,	"candy": 50,	"meta": ""},
-				{ "name": "Blissey",	"number": "242",	"evolution": 2,	"candy": 0,		"meta": ""}
+				{ "name": "Happiny",	"number": "440",	"evolution": 1,	"candy": 25,	"meta": "baby"},
+				{ "name": "Chansey",	"number": "113",	"evolution": 2,	"candy": 50,	"meta": ""},
+				{ "name": "Blissey",	"number": "242",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
-				{ "name": "Tangela",	"number": "114",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Tangela",	"number": "114",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Tangrowth",	"number": "465",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Kangaskhan",	"number": "115",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
@@ -258,7 +263,8 @@ export const PokeDB = {
 				{ "name": "Starmie",	"number": "121",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
-				{ "name": "Mr Mime",	"number": "122",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Mime Jr.",	"number": "439",	"evolution": 1,	"candy": 25,	"meta": ""},
+				{ "name": "Mr Mime",	"number": "122",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Scyther",	"number": "123",	"evolution": 1,	"candy": 50,	"meta": "needevo"},
@@ -270,11 +276,13 @@ export const PokeDB = {
 			],
 			[
 				{ "name": "Elekid",		"number": "239",	"evolution": 1,	"candy": 25,	"meta": "baby"},
-				{ "name": "Electabuzz",	"number": "125",	"evolution": 2,	"candy": 0,		"meta": ""}
+				{ "name": "Electabuzz",	"number": "125",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Electivire",	"number": "466",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Magby",		"number": "240",	"evolution": 1,	"candy": 25,	"meta": "baby"},
-				{ "name": "Magmar",		"number": "126",	"evolution": 2,	"candy": 0,		"meta": ""}
+				{ "name": "Magmar",		"number": "126",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Magmortar",	"number": "467",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Pinsir",		"number": "127",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
@@ -298,11 +306,14 @@ export const PokeDB = {
 				{ "name": "Jolteon",	"number": "135",	"evolution": 2,	"candy": 0,		"meta": "special"},
 				{ "name": "Flareon",	"number": "136",	"evolution": 2,	"candy": 0,		"meta": "special"},
 				{ "name": "Espeon",		"number": "196",	"evolution": 2,	"candy": 0,		"meta": "special"},
-				{ "name": "Umbreon",	"number": "197",	"evolution": 2,	"candy": 0,		"meta": "special"}
+				{ "name": "Umbreon",	"number": "197",	"evolution": 2,	"candy": 0,		"meta": "special"},
+				{ "name": "Leafeon",	"number": "470",	"evolution": 2,	"candy": 0,		"meta": "special"},
+				{ "name": "Glaceon",	"number": "471",	"evolution": 2,	"candy": 0,		"meta": "special"}
 			],
 			[
 				{ "name": "Porygon",	"number": "137",	"evolution": 1,	"candy": 50,	"meta": "needevo"},
-				{ "name": "Porygon2",	"number": "233",	"evolution": 2,	"candy": 0,		"meta": "isevo"}
+				{ "name": "Porygon2",	"number": "233",	"evolution": 2,	"candy": 100,	"meta": "isevo"},
+				{ "name": "Porygon-Z",	"number": "474",	"evolution": 3,	"candy": 0,		"meta": "isevo"}
 			],
 			[
 				{ "name": "Omanyte",	"number": "138",	"evolution": 1,	"candy": 50,	"meta": ""},
@@ -316,7 +327,8 @@ export const PokeDB = {
 				{ "name": "Aerodactyl",	"number": "142",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
 			],
 			[
-				{ "name": "Snorlax",	"number": "143",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Munchlax",	"number": "446",	"evolution": 1,	"candy": 25,	"meta": "baby"},
+				{ "name": "Snorlax",	"number": "143",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Articuno",	"number": "144",	"evolution": 1,	"candy": 0,		"meta": "legend"}
@@ -377,7 +389,8 @@ export const PokeDB = {
 			],
 			[
 				{ "name": "Togepi",		"number": "175",	"evolution": 1,	"candy": 25,	"meta": "baby"},
-				{ "name": "Togetic",	"number": "176",	"evolution": 2,	"candy": 0,		"meta": ""}
+				{ "name": "Togetic",	"number": "176",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Togekiss",	"number": "468",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Natu",		"number": "177",	"evolution": 1,	"candy": 50,	"meta": ""},
@@ -394,7 +407,8 @@ export const PokeDB = {
 				{ "name": "Azumarill",	"number": "184",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
-				{ "name": "Sudowoodo",	"number": "185",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Bonsly",		"number": "438",	"evolution": 1,	"candy": 25,	"meta": "baby"},
+				{ "name": "Sudowoodo",	"number": "185",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Hoppip",		"number": "187",	"evolution": 1,	"candy": 25,	"meta": ""},
@@ -402,24 +416,28 @@ export const PokeDB = {
 				{ "name": "Jumpluff",	"number": "189",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
-				{ "name": "Aipom",		"number": "190",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Aipom",		"number": "190",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Ambipom",	"number": "424",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Sunkern",	"number": "191",	"evolution": 1,	"candy": 50,	"meta": "needevo"},
 				{ "name": "Sunflora",	"number": "192",	"evolution": 2,	"candy": 0,		"meta": "isevo"}
 			],
 			[
-				{ "name": "Yanma",		"number": "193",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Yanma",		"number": "193",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Yanmega",	"number": "469",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Wooper",		"number": "194",	"evolution": 1,	"candy": 50,	"meta": ""},
 				{ "name": "Quagsire",	"number": "195",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
-				{ "name": "Murkrow",	"number": "198",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Murkrow",	"number": "198",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Honchkrow",	"number": "430",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
-				{ "name": "Misdreavus",	"number": "200",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Misdreavus",	"number": "200",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Mismagius",	"number": "429",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Unown",		"number": "201",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
@@ -439,7 +457,8 @@ export const PokeDB = {
 				{ "name": "Dunsparce",	"number": "206",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
 			],
 			[
-				{ "name": "Gligar",		"number": "207",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Gligar",		"number": "207",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Gliscor",	"number": "472",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Snubbull",	"number": "209",	"evolution": 1,	"candy": 50,	"meta": ""},
@@ -455,7 +474,8 @@ export const PokeDB = {
 				{ "name": "Heracross",	"number": "214",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
 			],
 			[
-				{ "name": "Sneasel",	"number": "215",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Sneasel",	"number": "215",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Weavile",	"number": "461",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Teddiursa",	"number": "216",	"evolution": 1,	"candy": 50,	"meta": ""},
@@ -467,7 +487,8 @@ export const PokeDB = {
 			],
 			[
 				{ "name": "Swinub",		"number": "220",	"evolution": 1,	"candy": 50,	"meta": ""},
-				{ "name": "Piloswine",	"number": "221",	"evolution": 2,	"candy": 0,		"meta": ""}
+				{ "name": "Piloswine",	"number": "221",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Mamoswine",	"number": "473",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Corsola",	"number": "222",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
@@ -480,7 +501,8 @@ export const PokeDB = {
 				{ "name": "Delibird",	"number": "225",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
 			],
 			[
-				{ "name": "Mantine",	"number": "226",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Mantyke",	"number": "458",	"evolution": 1,	"candy": 25,	"meta": "baby"},
+				{ "name": "Mantine",	"number": "226",	"evolution": 1,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Skarmory",	"number": "227",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
@@ -578,7 +600,8 @@ export const PokeDB = {
 			[
 				{ "name": "Ralts",		"number": "280",	"evolution": 1,	"candy": 25,	"meta": ""},
 				{ "name": "Kirlia",		"number": "281",	"evolution": 2,	"candy": 100,	"meta": ""},
-				{ "name": "Gardevoir",	"number": "282",	"evolution": 3,	"candy": 0,		"meta": ""}
+				{ "name": "Gardevoir",	"number": "282",	"evolution": 3,	"candy": 100,	"meta": ""},
+				{ "name": "Gallade",	"number": "475",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Surskit",	"number": "283",	"evolution": 1,	"candy": 50,	"meta": ""},
@@ -608,7 +631,8 @@ export const PokeDB = {
 				{ "name": "Hariyama",	"number": "297",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
-				{ "name": "Nosepass",	"number": "299",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Nosepass",	"number": "299",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Probopass",	"number": "476",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Skitty",		"number": "300",	"evolution": 1,	"candy": 50,	"meta": ""},
@@ -646,7 +670,9 @@ export const PokeDB = {
 				{ "name": "Illumise",	"number": "314",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
 			],
 			[
-				{ "name": "Roselia",	"number": "315",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Budew",		"number": "406",	"evolution": 1,	"candy": 25,	"meta": "baby"},
+				{ "name": "Roselia",	"number": "315",	"evolution": 2,	"candy": 50,	"meta": ""},
+				{ "name": "Roserade",	"number": "407",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Gulpin",		"number": "316",	"evolution": 1,	"candy": 50,	"meta": ""},
@@ -735,20 +761,23 @@ export const PokeDB = {
 			],
 			[
 				{ "name": "Duskull",	"number": "355",	"evolution": 1,	"candy": 50,	"meta": ""},
-				{ "name": "Dusclops",	"number": "356",	"evolution": 2,	"candy": 0,		"meta": ""}
+				{ "name": "Dusclops",	"number": "356",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Dusknoir",	"number": "477",	"evolution": 3,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Tropius",	"number": "357",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
 			],
 			[
-				{ "name": "Chimecho",	"number": "358",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+				{ "name": "Chingling",	"number": "433",	"evolution": 1,	"candy": 25,	"meta": ""},
+				{ "name": "Chimecho",	"number": "358",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Absol",		"number": "359",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
 			],
 			[
 				{ "name": "Snorunt",	"number": "361",	"evolution": 1,	"candy": 50,	"meta": ""},
-				{ "name": "Glalie",		"number": "362",	"evolution": 2,	"candy": 0,		"meta": ""}
+				{ "name": "Glalie",		"number": "362",	"evolution": 2,	"candy": 0,		"meta": ""},
+				{ "name": "Froslass",	"number": "478",	"evolution": 2,	"candy": 0,		"meta": ""}
 			],
 			[
 				{ "name": "Spheal",		"number": "363",	"evolution": 1,	"candy": 25,	"meta": ""},
@@ -805,6 +834,176 @@ export const PokeDB = {
 			],
 			[
 				{ "name": "Deoxys",		"number": "386",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			]
+		]},
+		{ "name": "Generation 4",	"families": [
+			[
+				{ "name": "Turtwig",	"number": "387",	"evolution": 1,	"candy": 25,	"meta": ""},
+				{ "name": "Grotle",		"number": "388",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Torterra",	"number": "389",	"evolution": 3,	"candy": 0,		"meta": ""}
+			],
+			[
+				{ "name": "Chimchar",	"number": "390",	"evolution": 1,	"candy": 25,	"meta": ""},
+				{ "name": "Monferno",	"number": "391",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Infernape",	"number": "392",	"evolution": 3,	"candy": 0,		"meta": ""}
+			],
+			[
+				{ "name": "Piplup",		"number": "393",	"evolution": 1,	"candy": 25,	"meta": ""},
+				{ "name": "Prinplup",	"number": "394",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Empoleon",	"number": "395",	"evolution": 3,	"candy": 0,		"meta": ""}
+			],
+			[
+				{ "name": "Starly",		"number": "396",	"evolution": 1,	"candy": 25,	"meta": ""},
+				{ "name": "Staravia",	"number": "397",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Staraptor",	"number": "398",	"evolution": 3,	"candy": 0,		"meta": ""}
+			],
+			[
+				{ "name": "Bidoof",		"number": "399",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Bibarel",	"number": "400",	"evolution": 2,	"candy": 0,		"meta": ""}
+			],
+			[
+				{ "name": "Kricketot",	"number": "401",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Kricketot",	"number": "402",	"evolution": 2,	"candy": 0,		"meta": ""}
+			],
+			[
+				{ "name": "Shinx",		"number": "403",	"evolution": 1,	"candy": 25,	"meta": ""},
+				{ "name": "Luxio",		"number": "404",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Luxray",		"number": "405",	"evolution": 3,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Cranidos",	"number": "408",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Rampardos",	"number": "409",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Shieldon",	"number": "410",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Bastiodon",	"number": "411",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Burmy",		"number": "412",	"evolution": 1,	"candy": 12,	"meta": ""},
+				{ "name": "Wormadam",	"number": "413",	"evolution": 2,	"candy": 50,	"meta": ""},
+				{ "name": "Mothim",		"number": "414",	"evolution": 3,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Combee",		"number": "415",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Vespiquen",	"number": "416",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Pachirisu",	"number": "417",	"evolution": 1,	"candy": 0	,	"meta": "nohigher"}
+			],
+			[
+				{ "name": "Buizel",		"number": "418",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Floatzel",	"number": "419",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Cherubi",	"number": "420",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Cherrim",	"number": "421",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Shellos",	"number": "422",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Gastrodon",	"number": "423",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Drifloon",	"number": "425",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Drifblim",	"number": "426",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Buneary",	"number": "427",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Lopunny",	"number": "428",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Glameow",	"number": "431",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Purugly",	"number": "432",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Stunky",		"number": "434",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Skuntank",	"number": "435",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Bronzor",	"number": "436",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Bronzong",	"number": "437",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Chatot",		"number": "441",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+			],
+			[
+				{ "name": "Spiritomb",	"number": "442",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+			],
+			[
+				{ "name": "Gible",		"number": "443",	"evolution": 1,	"candy": 25,	"meta": ""},
+				{ "name": "Gabite",		"number": "444",	"evolution": 2,	"candy": 100,	"meta": ""},
+				{ "name": "Garchomp",	"number": "445",	"evolution": 3,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Riolu",		"number": "447",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Lucario",	"number": "448",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Hippopotas",	"number": "449",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Hippowdon",	"number": "450",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Skorupi",	"number": "451",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Drapion",	"number": "452",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Croagunk",	"number": "453",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Toxicroak",	"number": "454",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Carnivine",	"number": "455",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+			],
+			[
+				{ "name": "Finneon",	"number": "456",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Lumineon",	"number": "457",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Snover",		"number": "459",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Abomasnow",	"number": "460",	"evolution": 2,	"candy": 0	,	"meta": ""}
+			],
+			[
+				{ "name": "Rotom",		"number": "479",	"evolution": 1,	"candy": 0,		"meta": "nohigher"}
+			],
+			[
+				{ "name": "Uxie",		"number": "480",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Mesprit",	"number": "481",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Azelf",		"number": "482",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Dialga",		"number": "483",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Palkia",		"number": "484",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Heatran",	"number": "485",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Regigigas",	"number": "486",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Giratina",	"number": "487",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Cresselia",	"number": "488",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Phione",		"number": "489",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Manaphy",	"number": "490",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Darkrai",	"number": "491",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Shaymin",	"number": "492",	"evolution": 1,	"candy": 0,		"meta": "legend"}
+			],
+			[
+				{ "name": "Arceus",		"number": "493",	"evolution": 1,	"candy": 0,		"meta": "legend"}
 			]
 		]}
 	],
