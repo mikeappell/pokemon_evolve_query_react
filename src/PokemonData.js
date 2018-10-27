@@ -304,7 +304,9 @@ export const PokeDB = {
 				{ "name": "Eevee",		"number": "133",	"evolution": 1,	"candy": 25,	"meta": ""},
 				{ "name": "Vaporeon",	"number": "134",	"evolution": 2,	"candy": 0,		"meta": "special"},
 				{ "name": "Jolteon",	"number": "135",	"evolution": 2,	"candy": 0,		"meta": "special"},
-				{ "name": "Flareon",	"number": "136",	"evolution": 2,	"candy": 0,		"meta": "special"},
+				{ "name": "Flareon",	"number": "136",	"evolution": 2,	"candy": 0,		"meta": "special"}
+			], // The Eevee family is so long that it makes the page ugly, hence the split.
+			[
 				{ "name": "Espeon",		"number": "196",	"evolution": 2,	"candy": 0,		"meta": "special"},
 				{ "name": "Umbreon",	"number": "197",	"evolution": 2,	"candy": 0,		"meta": "special"},
 				{ "name": "Leafeon",	"number": "470",	"evolution": 2,	"candy": 0,		"meta": "special"},
