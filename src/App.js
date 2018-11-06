@@ -21,7 +21,7 @@ class App extends Component {
       includeEvoItemPokemon: false,
       includeLegendaries: false,
       includeNoHigherEvolutions: false,
-      selectedPreCreatedQueryCheckbox: 'Compact',
+      selectedPreCreatedQueryCheckbox: 'Full',
       language: 'English',
     };
 
@@ -277,7 +277,7 @@ class App extends Component {
           value={individualPokemon.number}
           onClick={this.handleIndividualPokemonClick.bind(this, individualPokemon.number)}
         >
-          <img src={`${process.env.PUBLIC_URL}/pokemon_icons/${individualPokemon.number}.png`} alt={individualPokemon.name} className='PokemonIcon' />
+          <img src={`${process.env.PUBLIC_URL}/pokemon_icons/${individualPokemon.number}.png`} alt={`${individualPokemon.number} - ${individualPokemon.name}`} title={`${individualPokemon.number} - ${individualPokemon.name}`} className='PokemonIcon' />
         </button>
       )
     })
