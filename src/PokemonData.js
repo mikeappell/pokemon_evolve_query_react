@@ -378,7 +378,7 @@ export const PokeDB = {
 				{ "name": "Noctowl",	"number": "164",	"evolution": 2,	"candy": 0,		"meta": "nohigher"}
 			],
 			[
-				{ "name": "Ledyba",		"number": "165",	"evolution": 1,	"candy": 50,	"meta": ""},
+				{ "name": "Ledyba",		"number": "165",	"evolution": 1,	"candy": 25,	"meta": ""},
 				{ "name": "Ledian",		"number": "166",	"evolution": 2,	"candy": 0,		"meta": "nohigher"}
 			],
 			[
