@@ -46,14 +46,14 @@ class App extends Component {
   }
 
   metaTagsToSkip() {
-    let metaTagsToSkip = [];
-    if (!this.state.includeNoHigherEvolutions) metaTagsToSkip = metaTagsToSkip.concat('nohigher');
-    if (!this.state.includeEvoItemPokemon) metaTagsToSkip = metaTagsToSkip.concat('needevo', 'isevo');
-    if (!this.state.includeLegendaries) metaTagsToSkip = metaTagsToSkip.concat('legend');
-    if (!this.state.includeBabies) metaTagsToSkip = metaTagsToSkip.concat('baby');
-    if (!this.state.includeSpecial) metaTagsToSkip = metaTagsToSkip.concat('special');
+    let tagsToSkip = [];
+    if (!this.state.includeNoHigherEvolutions) tagsToSkip = tagsToSkip.concat('nohigher');
+    if (!this.state.includeEvoItemPokemon) tagsToSkip = tagsToSkip.concat('needevo', 'isevo');
+    if (!this.state.includeLegendaries) tagsToSkip = tagsToSkip.concat('legend');
+    if (!this.state.includeBabies) tagsToSkip = tagsToSkip.concat('baby');
+    if (!this.state.includeSpecial) tagsToSkip = tagsToSkip.concat('special');
 
-    return metaTagsToSkip;
+    return tagsToSkip;
   }
 
   // Returns array of Pokemon family arrays, e.g.
@@ -68,9 +68,13 @@ class App extends Component {
   getAllowedPokemonFamilies() {
     const pokemonFamilies = [];
     for (let generation of this.getAllowedPokemonFamiliesPerGeneration()) {
-      generation.families.forEach((pokemonFamily) =>
-        pokemonFamilies.push(pokemonFamily.filter(individualPokemon => !this.metaTagsToSkip().includes(individualPokemon.meta)))
-      )
+      generation.families.forEach(pokemonFamily => {
+        pokemonFamilies.push(pokemonFamily.filter(individualPokemon => {
+          let currentPokemonMetaTags = individualPokemon.meta.split(',');
+          let tagsToSkip = this.metaTagsToSkip();
+          return !tagsToSkip.some(e => currentPokemonMetaTags.includes(e));
+        }))
+      })
     }
 
     return pokemonFamilies.filter(pokemonFamily => pokemonFamily.length > 0);
@@ -95,17 +99,23 @@ class App extends Component {
     const pokemonFamiliesPerGeneration = [];
     const metaTagsToSkip = this.metaTagsToSkip(); // Caching the results of this function
 
-  	let pokemonGenerations = PokeDB.POKEMON_DB;
-  	let specialPokemon = ["117"]
+    let pokemonGenerations = PokeDB.POKEMON_DB;
+    let specialPokemon = [];
 
     for (let generation of pokemonGenerations) {
       const pokemonGeneration = { name: generation.name, families: [] };
       generation.families.forEach((pokemonFamily) => {
         let babyShouldBeFiltered = false;
         let filteredFamily = pokemonFamily.filter(individualPokemon => {
-          const skippingThisPokemon = metaTagsToSkip.includes(individualPokemon.meta) && !specialPokemon.includes(individualPokemon.number);
-          if (skippingThisPokemon && individualPokemon.meta === 'baby') babyShouldBeFiltered = true;
-          return !skippingThisPokemon;
+          try {
+            let currentPokemonMetaTags = individualPokemon.meta.split(',');
+            const skippingThisPokemon = metaTagsToSkip.some(e => currentPokemonMetaTags.includes(e)) && !specialPokemon.includes(individualPokemon.number);
+            if (skippingThisPokemon && currentPokemonMetaTags.includes('baby')) babyShouldBeFiltered = true;
+            return !skippingThisPokemon;
+          } catch (e) {
+            console.error(e);
+            console.error(individualPokemon);
+          }
         });
 
         // Specific to filtering baby pokemon, we decrement the evolution number of the subsequent evolutions if we're filtering babies
@@ -128,8 +138,18 @@ class App extends Component {
     let filteredPokemonList = [];
     this.getAllowedPokemonFamilies().forEach((pokemonFamily) => {
       pokemonFamily.forEach((individualPokemon) => {
-        if (individualPokemon[filterType] === filterCriteria || (filterType === 'candy' && filterCriteria === '>100' && individualPokemon['candy'] > 100)) {
-          filteredPokemonList.push(individualPokemon.number);
+        try {
+          let criteria = individualPokemon[filterType] === filterCriteria;
+          if (filterType === 'meta') {
+            let pokemonFilterTypes = individualPokemon[filterType].split(',');
+            criteria = pokemonFilterTypes.includes(filterCriteria)
+          }
+          if (criteria || (filterType === 'candy' && filterCriteria === '>100' && individualPokemon['candy'] > 100)) {
+            filteredPokemonList.push(individualPokemon.number);
+          }
+        } catch (e) {
+          console.error(e);
+          console.error(individualPokemon);
         }
       })
     })
@@ -377,7 +397,7 @@ class App extends Component {
             For comments or suggestions, message me <a href="https://www.reddit.com/user/mikeappell/">on Reddit.</a>
             <br />
             <br />
-            Pokémon And All Respective Names are Trademark & © of Nintendo 1996-2018
+            Pokémon And All Respective Names are Trademark & © of Nintendo 1996-2019
             Pokémon GO is Trademark & © of Niantic, Inc.
             <br />
             <br />
@@ -494,9 +514,9 @@ function SelectionList({ optionLabels, id, label, selectionClass, onChange }) {
 //   }
 function SelectDeselectEvolutionButtons({ onClick }) {
   const buttonsInfo = [
-    { label: 'First Evolutions:', value: 1 },
-    { label: 'Second Evolutions:', value: 2 },
-    { label: 'Third Evolutions:', value: 3 },
+    { label: 'First Evolutions', value: 1 },
+    { label: 'Second Evolutions', value: 2 },
+    { label: 'Third Evolutions', value: 3 },
   ]
 
   return (
